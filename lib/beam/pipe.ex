@@ -1,18 +1,48 @@
 defmodule Beam.Pipe do
-  def start([ current_step | next_steps ], callback) do
-    spawn_job(current_step, next_steps, callback)
+  require Logger
+  use GenServer
+
+  def start_link(deployment_id, state) do
+    GenServer.start_link(__MODULE__, state, name: ref(deployment_id))
   end
 
-  defp spawn_job(current_step, next_steps, callback) do
+  def init(state), do: {:ok, state}
+
+  def handle_cast({:start, event_handler}, state) do
+    start(state, event_handler)
+    {:noreply, state}
+  end
+
+  def handle_cast({:stop}, state) do
+    {:stop, :normal, state}
+  end
+
+  def terminate(reason, _state) do
+    Logger.info ["Terminating GenServer: #{__MODULE__}", "\n", "  Reason: #{reason}"]
+  end
+
+  def stop(pid) do
+    GenServer.cast(pid, {:stop})
+  end
+
+  defp start([current_step | next_steps], event_handler) do
+    spawn_job(current_step, next_steps, event_handler)
+  end
+
+  defp spawn_job(current_step, next_steps, event_handler) do
     [ cmd | args ] = String.split(current_step)
     result = System.cmd(cmd, args)
-    callback.({:data, elem(result, 0)})
+    event_handler.({:data, elem(result, 0)})
 
     if Enum.empty?(next_steps) do
-      callback.({:done})
+      event_handler.({:done})
     else
       [ next_step | more_steps ] = next_steps
-      spawn_job(next_step, more_steps, callback)
+      spawn_job(next_step, more_steps, event_handler)
     end
+  end
+
+  defp ref(deployment_id) do
+    {:global, deployment_id}
   end
 end
