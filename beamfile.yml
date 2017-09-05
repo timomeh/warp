@@ -1,0 +1,9 @@
+tasks:
+  - name: Create the file
+    cmd: touch /Users/timomaemecke/Desktop/test/testfile
+
+  - name: Move the file
+    cmd: mv /Users/timomaemecke/Desktop/test/testfile /Users/timomaemecke/Desktop/testfile
+
+  - name: Copy the file
+    cmd: cp /Users/timomaemecke/Desktop/testfile /Users/timomaemecke/Desktop/testfile_copy
