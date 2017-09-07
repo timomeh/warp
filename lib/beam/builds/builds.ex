@@ -10,12 +10,15 @@ defmodule Beam.Builds do
   alias Beam.Projects.Project
 
   def create_build(project_id, attrs \\ %{}) do
-    Repo.get!(Project, project_id)
-    |> Ecto.build_assoc(:builds, attrs)
+    %Build{}
+    |> Build.changeset(attrs)
+    |> Ecto.Changeset.put_change(:project_id, project_id)
     |> Repo.insert()
   end
 
   def list_builds(project_id) do
+    Repo.get!(Project, project_id) # raise if project does not exist
+
     from(p in Build, where: p.project_id == ^project_id)
     |> Repo.all()
   end

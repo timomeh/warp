@@ -25,11 +25,10 @@ defmodule Beam.Builds.Build do
   end
 
   @doc false
-  def changeset(%Build{} = build, attrs) do
+  def changeset(%Build{} = build, attrs \\ %{}) do
     build
     |> Repo.preload(:stages)
     |> cast(attrs, [:state, :started_at, :finished_at, :project_id])
-    |> validate_required([:state])
     |> assoc_constraint(:project)
     |> validate_inclusion(:state, @states)
     |> cast_assoc(:stages)

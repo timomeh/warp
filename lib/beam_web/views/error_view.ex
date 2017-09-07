@@ -5,6 +5,10 @@ defmodule BeamWeb.ErrorView do
     "Page not found"
   end
 
+  def render("404.json", _assigns) do
+    %{errors: [%{title: "Resource not found"}]}
+  end
+
   def render("500.html", _assigns) do
     "Internal server error"
   end
