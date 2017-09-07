@@ -1,56 +1,36 @@
 defmodule Beam.Projects.ProjectsTest do
   use Beam.DataCase
 
-  @valid_attrs %{
-    name: "project name",
-    root_directory: "/foo/bar",
-    builds: [
-      %{
-        stages: [
-          %{
-            name: "Commit Stage",
-            steps: [
-              %{
-                name: "Clone",
-                command: "git clone"
-              },
-              %{
-                name: "More",
-                command: "git clone somemore"
-              }
-            ]
-          },
-          %{
-            name: "Next Stage",
-            execution_type: "parallel",
-            steps: [
-              %{
-                name: "Something move",
-                command: "mv foo"
-              },
-              %{
-                name: "Something copy",
-                command: "cp some thing"
-              },
-              %{
-                name: "Something delete",
-                command: "rm test.md"
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
+  alias Beam.Projects
+  alias Beam.Projects.Project
+
+  @valid_attrs %{name: "project name", root_directory: "/foo/bar"}
+  @invalid_attrs %{foo: "bar"}
 
   describe "projects" do
-    alias Beam.Projects
-
     test "create_project/1 with valid data creates a project" do
-      insert = Projects.create_project(@valid_attrs)
-      IO.inspect insert
+      assert {:ok, %Project{} = project} = Projects.create_project(@valid_attrs)
+      assert project.name == @valid_attrs.name
+      assert project.root_directory == @valid_attrs.root_directory
+    end
 
-      true
+    test "create_project/1 with invalid data returns an error" do
+      assert {:error, %Ecto.Changeset{}} = Projects.create_project(@invalid_attrs)
+    end
+
+    test "list_projects/0 returns all projects" do
+      {:ok, project} = Projects.create_project(@valid_attrs)
+      assert Projects.list_projects() == [project]
+    end
+
+    test "get_project!/1 returns the project with the given id" do
+      {:ok, project} = Projects.create_project(@valid_attrs)
+      assert Projects.get_project!(project.id) == project
+    end
+
+    test "get_project!/1 throws an error with an invalid id" do
+      error = catch_error(Projects.get_project!(1337))
+      assert error.__struct__ == Ecto.NoResultsError
     end
   end
 end

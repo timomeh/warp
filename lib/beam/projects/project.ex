@@ -7,7 +7,6 @@ defmodule Beam.Projects.Project do
 
   import Ecto.Changeset
 
-  alias Beam.Repo
   alias Beam.Projects.Project
   alias Beam.Builds.Build
 
@@ -23,9 +22,7 @@ defmodule Beam.Projects.Project do
   @doc false
   def changeset(%Project{} = project, attrs) do
     project
-    |> Repo.preload(:builds)
     |> cast(attrs, [:name, :root_directory])
     |> validate_required([:name, :root_directory])
-    |> cast_assoc(:builds)
   end
 end

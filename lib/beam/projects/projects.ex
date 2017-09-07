@@ -8,7 +8,6 @@ defmodule Beam.Projects do
   alias Beam.Repo
   alias Beam.Projects.Project
 
-
   def create_project(attrs \\ %{}) do
     %Project{}
     |> Project.changeset(attrs)
@@ -19,6 +18,5 @@ defmodule Beam.Projects do
 
   def get_project!(id) do
     Repo.get!(Project, id)
-    |> Repo.preload([:builds])
   end
 end
