@@ -4,8 +4,10 @@ defmodule Beam.Projects do
   """
 
   import Ecto.Query, warn: false
+
   alias Beam.Repo
   alias Beam.Projects.Project
+
 
   def create_project(attrs \\ %{}) do
     %Project{}
