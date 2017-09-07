@@ -14,15 +14,14 @@ defmodule BeamWeb.Router do
   end
 
   scope "/", BeamWeb do
-    pipe_through :browser # Use the default browser stack
+    pipe_through :browser
 
-    get "/deploy", PipeController, :index
-    get "/deploy/trigger", PipeController, :send
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", BeamWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", BeamWeb do
+    pipe_through :api
+
+    resources "/projects", API.ProjectController
+  end
 end
