@@ -3,6 +3,18 @@ defmodule BeamWeb.API.ProjectController do
 
   alias Beam.Projects
 
+
+  def index(conn, _params) do
+    projects = Projects.list_projects()
+    render(conn, "list.json", projects: projects)
+  end
+
+  def show(conn, %{"id" => id}) do
+    project = Projects.get_project!(id)
+    IO.inspect project
+    render(conn, "show.json", project: project)
+  end
+
   def create(conn, %{"data" => project_params}) do
     case Projects.create_project(project_params) do
       {:ok, project} ->

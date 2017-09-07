@@ -14,4 +14,11 @@ defmodule Beam.Projects do
     |> Project.changeset(attrs)
     |> Repo.insert()
   end
+
+  def list_projects(), do: Repo.all(Project)
+
+  def get_project!(id) do
+    Repo.get!(Project, id)
+    |> Repo.preload([:builds])
+  end
 end
