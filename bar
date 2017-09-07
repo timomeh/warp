@@ -1,3 +1,0 @@
-echo "bar says hello..."
-sleep 4
-echo "bar finished"

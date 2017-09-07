@@ -1,3 +1,0 @@
-echo "foobar says hello..."
-sleep 2
-echo "foobar finished"

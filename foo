@@ -1,3 +1,0 @@
-echo "foo says hello..."
-sleep 1
-echo "foo finished"
