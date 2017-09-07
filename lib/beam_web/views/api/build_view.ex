@@ -12,5 +12,4 @@ defmodule BeamWeb.API.BuildView do
       finished_at: build.finished_at
     }
   end
-
 end
