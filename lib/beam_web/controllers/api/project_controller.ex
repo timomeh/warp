@@ -11,7 +11,6 @@ defmodule BeamWeb.API.ProjectController do
 
   def show(conn, %{"id" => id}) do
     project = Projects.get_project!(id)
-    IO.inspect project
     render(conn, "show.json", project: project)
   end
 
