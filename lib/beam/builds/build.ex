@@ -14,7 +14,6 @@ defmodule Beam.Builds.Build do
 
   @states ~W(pending active finished errored)
 
-
   schema "builds" do
     field :state, :string, default: "pending"
     field :started_at, :utc_datetime

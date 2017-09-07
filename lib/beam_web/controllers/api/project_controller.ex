@@ -3,7 +3,6 @@ defmodule BeamWeb.API.ProjectController do
 
   alias Beam.Projects
 
-
   def index(conn, _params) do
     projects = Projects.list_projects()
     render(conn, "list.json", projects: projects)

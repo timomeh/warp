@@ -15,7 +15,6 @@ defmodule Beam.Stages.Stage do
   @states ~W(pending active finished errored)
   @execution_types ~W(series parallel)
 
-
   schema "stages" do
     field :name, :string
     field :state, :string, default: "pending"

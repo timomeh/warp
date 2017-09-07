@@ -9,7 +9,6 @@ defmodule Beam.Builds do
   alias Beam.Builds.Build
   alias Beam.Projects.Project
 
-
   def create_build(project_id, attrs \\ %{}) do
     Repo.get!(Project, project_id)
     |> Ecto.build_assoc(:builds, attrs)

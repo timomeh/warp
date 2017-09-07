@@ -10,7 +10,6 @@ defmodule Beam.Projects.Project do
   alias Beam.Projects.Project
   alias Beam.Builds.Build
 
-
   schema "projects" do
     field :name, :string
     field :root_directory, :string

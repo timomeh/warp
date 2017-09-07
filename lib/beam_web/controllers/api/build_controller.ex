@@ -3,7 +3,6 @@ defmodule BeamWeb.API.BuildController do
 
   alias Beam.Builds
 
-
   def index(conn, %{"project_id" => project_id}) do
     builds = Builds.list_builds(project_id)
     render(conn, "list.json", builds: builds)
