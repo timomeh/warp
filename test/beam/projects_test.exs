@@ -19,12 +19,12 @@ defmodule Beam.Projects.ProjectsTest do
     end
 
     test "list_projects/0 returns all projects" do
-      {:ok, project} = Projects.create_project(@valid_attrs)
+      {:ok, %Project{} = project} = Projects.create_project(@valid_attrs)
       assert Projects.list_projects() == [project]
     end
 
     test "get_project!/1 returns the project with the given id" do
-      {:ok, project} = Projects.create_project(@valid_attrs)
+      {:ok, %Project{} = project} = Projects.create_project(@valid_attrs)
       assert Projects.get_project!(project.id) == project
     end
 
