@@ -25,6 +25,6 @@ defmodule Beam.Builds do
 
   def get_build!(id) do
     Repo.get!(Build, id)
-    |> Repo.preload([:stages])
+    |> Repo.preload([:stages, stages: :steps])
   end
 end
