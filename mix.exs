@@ -20,7 +20,7 @@ defmodule Beam.Mixfile do
   def application do
     [
       mod: {Beam.Application, []},
-      extra_applications: [:logger, :runtime_tools, :yamerl]
+      extra_applications: [:logger, :runtime_tools, :yaml_elixir]
     ]
   end
 
@@ -41,7 +41,7 @@ defmodule Beam.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
-      {:yamerl, "~> 0.4.0"}
+      {:yaml_elixir, "~> 1.3.1"}
     ]
   end
 

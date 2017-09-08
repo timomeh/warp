@@ -2,6 +2,10 @@ defmodule BeamWeb.API.BuildController do
   use BeamWeb, :controller
 
   alias Beam.Builds
+  alias Beam.Projects
+  alias Beam.ConfigParser
+
+  @config_file_name "beamfile.yml"
 
   def index(conn, %{"project_id" => project_id}) do
     builds = Builds.list_builds(project_id)
@@ -13,8 +17,15 @@ defmodule BeamWeb.API.BuildController do
     render(conn, "show.json", build: build)
   end
 
-  def create(conn, %{"project_id" => project_id, "data" => build_params}) do
-    case Builds.create_build(project_id, build_params) do
+  def create(conn, %{"project_id" => project_id}) do
+    create_pipe =
+      Projects.get_project!(project_id)
+      |> Map.fetch!(:root_directory)
+      |> Path.join(@config_file_name)
+      |> ConfigParser.get_stages_from_file()
+      |> Builds.create_build(project_id)
+
+    case create_pipe do
       {:ok, build} ->
         conn
         |> put_status(:created)

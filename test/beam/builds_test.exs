@@ -29,7 +29,7 @@ defmodule Beam.Builds.BuildsTest do
       %{name: "project name", root_directory: "/foo/bar"}
       |> Projects.create_project
 
-    build = Builds.create_build(project.id, attrs)
+    build = Builds.create_build(attrs, project.id)
 
     {build, project}
   end

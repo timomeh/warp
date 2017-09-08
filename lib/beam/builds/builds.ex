@@ -9,10 +9,11 @@ defmodule Beam.Builds do
   alias Beam.Builds.Build
   alias Beam.Projects.Project
 
-  def create_build(project_id, attrs \\ %{}) do
+  def create_build(attrs, project_id) do
     %Build{}
     |> Build.changeset(attrs)
-    |> Ecto.Changeset.put_change(:project_id, project_id)
+    |> Ecto.Changeset.merge(Build.changeset(%Build{}, %{project_id: project_id}))
+    |> IO.inspect
     |> Repo.insert()
   end
 

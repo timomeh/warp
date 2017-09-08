@@ -1,9 +1,31 @@
-tasks:
-  - name: Create the file
-    cmd: touch /Users/timomaemecke/Desktop/test/testfile
+---
+env: default
+stages:
+  - name: Prepare Environment
+    steps:
+      - name: Cleanup
+        command: rm sth
 
-  - name: Move the file
-    cmd: mv /Users/timomaemecke/Desktop/test/testfile /Users/timomaemecke/Desktop/testfile
+      - name: Checkout
+        command: git clone sth
 
-  - name: Copy the file
-    cmd: cp /Users/timomaemecke/Desktop/testfile /Users/timomaemecke/Desktop/testfile_copy
+  - name: Build
+    steps:
+      - name: install dependencies
+        command: npm install
+
+      - name: run unit tests
+        command: npm test
+
+      - name: build executable
+        command: npm run build
+
+  - name: Transfer
+    steps:
+      - name: transfer files to aws
+        command: mv sth sth2
+
+  - name: Testing
+    steps:
+      - name: smoke test
+        command: smoketest sth
