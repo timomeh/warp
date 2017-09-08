@@ -1,7 +1,6 @@
 defmodule BeamWeb.API.BuildView do
   use BeamWeb, :view
 
-  alias BeamWeb.API.Stages.Stage
   alias BeamWeb.API.StageView
 
   def render("show.json", %{build: build}) do
