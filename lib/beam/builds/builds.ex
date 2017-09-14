@@ -7,6 +7,7 @@ defmodule Beam.Builds do
 
   alias Beam.Repo
   alias Beam.Builds.Build
+  alias Beam.Steps.Step
   alias Beam.Projects.Project
 
   def create_build(attrs, project_id) do
@@ -26,7 +27,7 @@ defmodule Beam.Builds do
 
   def get_build!(id) do
     Repo.get!(Build, id)
-    |> Repo.preload([:stages, stages: :steps])
+    |> Repo.preload([:stages, stages: [steps: from(s in Step, order_by: s.id)]])
   end
 
   def update_build(%Build{} = build, attrs) do
@@ -43,7 +44,7 @@ defmodule Beam.Builds do
     update_build(build, %{started_at: DateTime.utc_now()})
   end
 
-  def set_finished(%Build{} = build) do
-    update_build(build, %{finished_at: DateTime.utc_now()})
+  def set_finished(%Build{} = build, state \\ "finished") do
+    update_build(build, %{finished_at: DateTime.utc_now(), state: state})
   end
 end

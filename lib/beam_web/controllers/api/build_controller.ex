@@ -4,6 +4,7 @@ defmodule BeamWeb.API.BuildController do
   alias Beam.Builds
   alias Beam.Projects
   alias Beam.ConfigParser
+  alias Beam.Pipeline.Conductor
 
   @config_file_name "beamfile.yml"
 
@@ -18,15 +19,17 @@ defmodule BeamWeb.API.BuildController do
   end
 
   def create(conn, %{"project_id" => project_id}) do
-    create_pipe =
+    parse_and_create_build =
       Projects.get_project!(project_id)
       |> Map.fetch!(:root_directory)
       |> Path.join(@config_file_name)
       |> ConfigParser.get_stages_from_file()
       |> Builds.create_build(project_id)
 
-    case create_pipe do
+    case parse_and_create_build do
       {:ok, build} ->
+        start_pipeline(build)
+
         conn
         |> put_status(:created)
         |> render("show.json", build: build)
@@ -35,5 +38,10 @@ defmodule BeamWeb.API.BuildController do
         |> put_status(:bad_request)
         |> render(BeamWeb.API.ChangesetView, "error.json", changeset: changeset)
     end
+  end
+
+  defp start_pipeline(build) do
+    {:ok, pid} = Conductor.start(build)
+    Conductor.run(pid)
   end
 end

@@ -4,7 +4,7 @@ defmodule Beam.Pipeline.Runner do
   series or in parallel.
   Stage needs to be preloaded with steps.
 
-  Terminates with :ok or :failed.
+  Terminates with :normal or :error.
 
   ## Example
 
@@ -39,29 +39,29 @@ defmodule Beam.Pipeline.Runner do
 
   @doc false
   def run(pid) do
-    GenServer.call(pid, :run)
+    GenServer.cast(pid, :run)
   end
 
   # Server callbacks
 
   @doc false
-  def handle_call(:run, _from, %{type: type} = state)
+  def handle_cast(:run, %{type: type} = state)
       when type == "series"
   do
     log(state, "START, in series mode")
     Stages.set_started(state.stage)
     state = run_next_step(state)
-    {:reply, state, state}
+    {:noreply, state}
   end
 
   @doc false
-  def handle_call(:run, _from, %{type: type} = state)
+  def handle_cast(:run, %{type: type} = state)
       when type == "parallel"
   do
     log(state, "START, in parallel mode")
     Stages.set_started(state.stage)
     state = run_all_steps(state)
-    {:reply, state, state}
+    {:noreply, state}
   end
 
   @doc false
@@ -71,7 +71,7 @@ defmodule Beam.Pipeline.Runner do
       state
       |> deregister_task_in_state(ref)
 
-    {:stop, :failed, state}
+    {:stop, :error, state}
   end
 
   @doc false
@@ -95,7 +95,7 @@ defmodule Beam.Pipeline.Runner do
   do
     log(state, "EVENT, worker finished. all done")
     state = deregister_task_in_state(state, ref)
-    {:stop, :ok, state}
+    {:stop, :normal, state}
   end
 
   @doc false
@@ -106,7 +106,7 @@ defmodule Beam.Pipeline.Runner do
 
     if length(state.finished_tasks) == length(state.stage.steps) do
       log(state, "EVENT, worker finished. all done")
-      {:stop, :ok, state}
+      {:stop, :normal, state}
     else
       log(state, "EVENT, worker finished. waiting for other workers to finish")
       {:noreply, state}
@@ -114,9 +114,9 @@ defmodule Beam.Pipeline.Runner do
   end
 
   @doc false
-  def handle_info({:DOWN, _ref, :process, _pid, :normal}, state) do
+  def handle_info({:DOWN, _ref, :process, _pid, _reason}, state) do
     # This just means that the worker died, either good or bad.
-    # Will be catched in handle_info({ref, :ok | :error}).
+    # Will be catched in handle_info({ref, :normal | :error}).
     # So no reason to execute something here.
     {:noreply, state}
   end
@@ -130,8 +130,8 @@ defmodule Beam.Pipeline.Runner do
   def terminate(reason, state) do
     stop_running_tasks(state.running_tasks)
     case reason do
-      :ok -> Stages.set_finished(state.stage)
-      :failed ->
+      :normal -> Stages.set_finished(state.stage)
+      :error ->
         Stages.set_finished(state.stage, "errored")
         Steps.stop_active_steps_in_stage(state.stage.id)
     end
@@ -150,7 +150,7 @@ defmodule Beam.Pipeline.Runner do
   end
 
   defp get_next_step(state) do
-    index = Enum.count(state.running_tasks)
+    index = Enum.count(state.finished_tasks)
     Enum.at(state.stage.steps, index)
   end
 
