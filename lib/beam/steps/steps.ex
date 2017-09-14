@@ -19,10 +19,10 @@ defmodule Beam.Steps do
   end
 
   def set_started(%Step{} = step) do
-    update_step(step, %{started_at: DateTime.utc_now()})
+    update_step(step, %{started_at: DateTime.utc_now(), state: "active"})
   end
 
-  def set_finished(%Step{} = step) do
-    update_step(step, %{finished_at: DateTime.utc_now()})
+  def set_finished(%Step{} = step, log \\ nil, state \\ "finished") do
+    update_step(step, %{finished_at: DateTime.utc_now(), state: state, log: log})
   end
 end
