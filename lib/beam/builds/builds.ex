@@ -13,7 +13,6 @@ defmodule Beam.Builds do
     %Build{}
     |> Build.changeset(attrs)
     |> Ecto.Changeset.merge(Build.changeset(%Build{}, %{project_id: project_id}))
-    |> IO.inspect
     |> Repo.insert()
   end
 
