@@ -30,7 +30,7 @@ defmodule Beam.Steps.Step do
   def changeset(%Step{} = build, attrs) do
     build
     |> Repo.preload(:stage)
-    |> cast(attrs, [:name, :command, :state, :started_at, :finished_at, :stage_id])
+    |> cast(attrs, [:name, :command, :state, :log, :started_at, :finished_at, :stage_id])
     |> validate_required([:name, :command, :state])
     |> validate_inclusion(:state, @states)
     |> assoc_constraint(:stage)
