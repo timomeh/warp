@@ -19,10 +19,10 @@ defmodule Beam.Stages do
   end
 
   def set_started(%Stage{} = stage) do
-    update_stage(stage, %{started_at: DateTime.utc_now()})
+    update_stage(stage, %{started_at: DateTime.utc_now(), state: "active"})
   end
 
-  def set_finished(%Stage{} = stage) do
-    update_stage(stage, %{finished_at: DateTime.utc_now()})
+  def set_finished(%Stage{} = stage, state \\ "finished") do
+    update_stage(stage, %{finished_at: DateTime.utc_now(), state: state})
   end
 end

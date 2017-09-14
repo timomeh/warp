@@ -11,7 +11,7 @@ defmodule Beam.Steps.Step do
   alias Beam.Steps.Step
   alias Beam.Stages.Stage
 
-  @states ~W(pending active finished errored)
+  @states ~W(pending active finished errored stopped)
 
 
   schema "steps" do

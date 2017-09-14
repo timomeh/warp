@@ -1,17 +1,28 @@
 defmodule Beam.Pipeline.Worker do
-  use Task
+  @moduledoc """
+  Executes the command of a step and handles its state in the database.
+  Returns :ok or :error depending on exit status of command.
+
+  ## Example
+    iex> Worker.run(step)
+    :ok
+  """
 
   alias Beam.Steps
 
-  def start_link(step) do
-    Task.start_link(__MODULE__, :run, [step])
-  end
-
+  @doc false
   def run(step) do
-    step
-    |> set_started()
-    |> execute()
-    |> set_finished()
+    {step, output, exit_status} =
+      step
+      |> set_started()
+      |> execute()
+
+    set_finished(step, output, exit_status)
+
+    case exit_status do
+      0 -> :ok
+      _ -> :error
+    end
   end
 
   defp set_started(step) do
@@ -20,7 +31,7 @@ defmodule Beam.Pipeline.Worker do
     |> elem(1)
   end
 
-  defp set_finished({step, output, exit_status}) do
+  defp set_finished(step, output, exit_status) do
     state = if (exit_status == 0), do: "finished", else: "errored"
 
     step

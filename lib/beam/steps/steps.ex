@@ -18,6 +18,15 @@ defmodule Beam.Steps do
     update_step(step, %{state: state})
   end
 
+  def stop_active_steps_in_stage(stage_id) do
+    from(
+      s in Step,
+      where: s.stage_id == ^stage_id,
+      where: s.state == "active"
+    )
+    |> Repo.update_all(set: [state: "stopped", finished_at: DateTime.utc_now()])
+  end
+
   def set_started(%Step{} = step) do
     update_step(step, %{started_at: DateTime.utc_now(), state: "active"})
   end
