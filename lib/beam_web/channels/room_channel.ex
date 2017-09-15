@@ -24,9 +24,14 @@ defmodule BeamWeb.RoomChannel do
     {:noreply, socket}
   end
 
+  defp convert_to_event(%{step_id: step_id, line: line}, type) when type == "log" do
+    %{event: "log", step_id: step_id, data: line}
+  end
+
   defp convert_to_event(data, type) do
     %{
       event: "change",
+      status: data.state,
       type: type,
       data: data
     }
@@ -42,5 +47,9 @@ defmodule BeamWeb.RoomChannel do
 
   defp strip_keys_for(data, type) when type == "step" do
     Map.take(data, [:id, :name, :started_at, :finished_at, :state, :command])
+  end
+
+  defp strip_keys_for(data, _type) do
+    data
   end
 end

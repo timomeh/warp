@@ -9,6 +9,7 @@ defmodule Beam.Pipeline.Worker do
   """
 
   alias Beam.Steps
+  alias Beam.LogCollector
   alias Phoenix.PubSub
 
   @doc false
@@ -28,7 +29,8 @@ defmodule Beam.Pipeline.Worker do
 
   defp set_finished({step, output, exit_status}) do
     state = if (exit_status == 0), do: "finished", else: "errored"
-    {:ok, step} = Steps.set_finished(step, output, state)
+    log = Enum.join(output.lines)
+    {:ok, step} = Steps.set_finished(step, log, state)
     broadcast(step)
 
     {step, output, exit_status}
@@ -52,7 +54,7 @@ defmodule Beam.Pipeline.Worker do
 
   defp execute(step) do
     [ command | args ] = String.split(step.command)
-    {output, exit_status} = System.cmd(command, args, [stderr_to_stdout: true])
+    {output, exit_status} = System.cmd(command, args, [stderr_to_stdout: true, into: %LogCollector{step_id: step.id}])
     {step, output, exit_status}
   end
 end
