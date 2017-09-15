@@ -9,34 +9,45 @@ defmodule Beam.Pipeline.Worker do
   """
 
   alias Beam.Steps
+  alias Phoenix.PubSub
 
   @doc false
   def run(step) do
-    {step, output, exit_status} =
-      step
-      |> set_started()
-      |> execute()
+    step
+    |> set_started()
+    |> execute()
+    |> set_finished()
+    |> handle_exit()
+  end
 
-    set_finished(step, output, exit_status)
+  defp set_started(step) do
+    {:ok, step} = Steps.set_started(step)
+    broadcast(step)
+    step
+  end
 
+  defp set_finished({step, output, exit_status}) do
+    state = if (exit_status == 0), do: "finished", else: "errored"
+    {:ok, step} = Steps.set_finished(step, output, state)
+    broadcast(step)
+
+    {step, output, exit_status}
+  end
+
+  defp handle_exit({_step, _output, exit_status}) do
     case exit_status do
       0 -> :ok
       _ -> :error
     end
   end
 
-  defp set_started(step) do
-    step
-    |> Steps.set_started()
-    |> elem(1)
-  end
-
-  defp set_finished(step, output, exit_status) do
-    state = if (exit_status == 0), do: "finished", else: "errored"
-
-    step
-    |> Steps.set_finished(output, state)
-    |> elem(1)
+  defp broadcast(step) do
+    topic = "build:x"
+    message = %{
+      type: "step",
+      data: step
+    }
+    PubSub.broadcast(Beam.PubSub, topic, message)
   end
 
   defp execute(step) do

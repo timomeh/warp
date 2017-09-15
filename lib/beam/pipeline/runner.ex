@@ -19,6 +19,7 @@ defmodule Beam.Pipeline.Runner do
   alias Beam.Pipeline.Worker
   alias Beam.Steps
   alias Beam.Stages
+  alias Phoenix.PubSub
 
   require Logger
 
@@ -49,7 +50,10 @@ defmodule Beam.Pipeline.Runner do
       when type == "series"
   do
     log(state, "START, in series mode")
-    Stages.set_started(state.stage)
+
+    {:ok, stage} = Stages.set_started(state.stage)
+    broadcast(state, stage)
+
     state = run_next_step(state)
     {:noreply, state}
   end
@@ -59,7 +63,10 @@ defmodule Beam.Pipeline.Runner do
       when type == "parallel"
   do
     log(state, "START, in parallel mode")
-    Stages.set_started(state.stage)
+
+    {:ok, stage} = Stages.set_started(state.stage)
+    broadcast(state, stage)
+
     state = run_all_steps(state)
     {:noreply, state}
   end
@@ -130,9 +137,12 @@ defmodule Beam.Pipeline.Runner do
   def terminate(reason, state) do
     stop_running_tasks(state.running_tasks)
     case reason do
-      :normal -> Stages.set_finished(state.stage)
+      :normal ->
+        {:ok, stage} = Stages.set_finished(state.stage)
+        broadcast(state, stage)
       :error ->
-        Stages.set_finished(state.stage, "errored")
+        {:ok, stage} = Stages.set_finished(state.stage, "errored")
+        broadcast(state, stage)
         Steps.stop_active_steps_in_stage(state.stage.id)
     end
   end
@@ -174,6 +184,15 @@ defmodule Beam.Pipeline.Runner do
     state
     |> Map.put(:running_tasks, state.running_tasks -- [task])
     |> Map.put(:finished_tasks, state.finished_tasks ++ [task])
+  end
+
+  defp broadcast(_state, stage) do
+    topic = "build:x"
+    message = %{
+      type: "stage",
+      data: stage
+    }
+    PubSub.broadcast(Beam.PubSub, topic, message)
   end
 
   defp log(%{debug_name: name}, text) do

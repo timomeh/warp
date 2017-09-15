@@ -3,6 +3,7 @@ defmodule Beam.Pipeline.Conductor do
 
   alias Beam.Pipeline.Runner
   alias Beam.Builds
+  alias Phoenix.PubSub
 
   require Logger
 
@@ -26,7 +27,10 @@ defmodule Beam.Pipeline.Conductor do
 
   def handle_cast(:run, state) do
     log(state, "START")
-    Builds.set_started(state.build)
+
+    {:ok, build} = Builds.set_started(state.build)
+    broadcast(state, build)
+
     state = run_next_stage(state)
     {:noreply, state}
   end
@@ -60,8 +64,12 @@ defmodule Beam.Pipeline.Conductor do
 
   def terminate(reason, state) do
     case reason do
-      :normal -> Builds.set_finished(state.build)
-      :error -> Builds.set_finished(state.build, "errored")
+      :normal ->
+        {:ok, build} = Builds.set_finished(state.build)
+        broadcast(state, build)
+      :error ->
+        {:ok, build} = Builds.set_finished(state.build, "errored")
+        broadcast(state, build)
     end
   end
 
@@ -78,6 +86,15 @@ defmodule Beam.Pipeline.Conductor do
   defp run_stage(stage) do
     {:ok, pid} = Runner.start_link(stage)
     Runner.run(pid)
+  end
+
+  defp broadcast(_state, build) do
+    topic = "build:x"
+    message = %{
+      type: "build",
+      data: build
+    }
+    PubSub.broadcast(Beam.PubSub, topic, message)
   end
 
   defp log(%{debug_name: name}, text) do
