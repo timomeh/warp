@@ -4,7 +4,6 @@ defmodule BeamWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
-    plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
@@ -16,7 +15,7 @@ defmodule BeamWeb.Router do
   scope "/", BeamWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    # Insert route to static serve app's index.html
   end
 
   scope "/api", BeamWeb do
