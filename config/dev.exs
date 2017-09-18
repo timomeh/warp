@@ -11,8 +11,7 @@ config :beam, BeamWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
-                    cd: Path.expand("../assets", __DIR__)]]
+  watchers: [node: []]
 
 # ## SSL Support
 #
@@ -32,14 +31,7 @@ config :beam, BeamWeb.Endpoint,
 
 # Watch static and templates for browser reloading.
 config :beam, BeamWeb.Endpoint,
-  live_reload: [
-    patterns: [
-      ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
-      ~r{priv/gettext/.*(po)$},
-      ~r{lib/beam_web/views/.*(ex)$},
-      ~r{lib/beam_web/templates/.*(eex)$}
-    ]
-  ]
+  live_reload: []
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
