@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import glamorous from 'glamorous'
 
 import Title from 'components/Title'
+import StatusIndicator from 'components/StatusIndicator'
 
 
 const Card = glamorous.div({
@@ -14,14 +15,27 @@ const Info = glamorous.div({
   marginTop: 8
 })
 
+const BuildItem = glamorous.div({
+  marginTop: 8,
+  display: 'flex',
+  flexFlow: 'row nowrap'
+})
+
 const ProjectOverview = props => {
-  const { name } = props
+  const { name, builds } = props
 
   return (
     <Card>
       <Title>{name}</Title>
       <Info>
-        Lolo!
+        {builds.map((build, i) => (
+          <BuildItem key={i}>
+            <StatusIndicator type={build.state} />
+            <div>
+              {build.type}: Datum
+            </div>
+          </BuildItem>
+        ))}
       </Info>
     </Card>
   )
