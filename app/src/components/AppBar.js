@@ -1,7 +1,7 @@
 import React from 'react'
 import { Div } from 'glamorous'
 
-import Logo from './Logo'
+import Logo from 'components/Logo'
 
 const AppBar = props => {
   return (

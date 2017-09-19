@@ -1,4 +1,9 @@
 import React from 'react'
+import glamorous from 'glamorous'
+
+const Item = glamorous.div({
+  borderBottom: '1px solid #EBE8DC'
+})
 
 const ProjectOverviewList = props => {
   const { items, renderItem } = props
@@ -6,7 +11,7 @@ const ProjectOverviewList = props => {
   return (
     <div>
       {items.map((item, i) => (
-        <div key={i}>{renderItem(item)}</div>
+        <Item key={i}>{renderItem(item)}</Item>
       ))}
     </div>
   )

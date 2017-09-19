@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import glamorous from 'glamorous'
 
-import Scrollable from './Scrollable'
+import Scrollable from 'components/Scrollable'
 
 const AppFrame = glamorous.div({
   position: 'absolute',

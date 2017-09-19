@@ -1,6 +1,7 @@
 import React from 'react'
 import glamorous from 'glamorous'
-import { fontWeight, fontFamily } from '../styles'
+
+import { fontWeight, fontFamily } from 'bits/styles'
 
 const Title = glamorous.div({
   fontFamily,

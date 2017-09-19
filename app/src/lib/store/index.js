@@ -1,11 +1,14 @@
 import { combineReducers, createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
+
+import * as schema from 'lib/schema'
+import api from 'lib/api'
 import projects from './projects'
-import * as schema from '../schema'
-import api from '../api'
+import builds from './builds'
 
 const rootReducer = combineReducers({
-  projects
+  projects,
+  builds
 })
 
 const store = createStore(

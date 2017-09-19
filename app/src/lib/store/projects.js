@@ -1,5 +1,5 @@
 import { normalize } from 'normalizr'
-import { addEntities, ADD_ENTITIES } from '../store'
+import { addEntities, ADD_ENTITIES } from 'lib/store'
 
 const SELECT_PROJECT = 'beam/projects/SELECT_PROJECT'
 const REQUEST_PROJECTS = 'beam/projects/REQUEST_PROJECTS'

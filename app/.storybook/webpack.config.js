@@ -9,6 +9,15 @@
 const paths = require('../config/paths')
 
 module.exports = {
+  resolve: {
+    alias: {
+      'bits': paths.appBits,
+      'components': paths.appComponents,
+      'containers': paths.appContainers,
+      'lib': paths.appLib,
+      'screens': paths.appScreens
+    },
+  },
   plugins: [
     // your custom plugins
   ],

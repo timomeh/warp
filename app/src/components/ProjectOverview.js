@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import glamorous from 'glamorous'
-import Title from './Title'
+
+import Title from 'components/Title'
 
 
 const Card = glamorous.div({
