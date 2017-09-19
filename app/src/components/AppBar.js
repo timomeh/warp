@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Div } from 'glamorous'
 
 import Logo from './Logo'
@@ -7,7 +6,7 @@ import Logo from './Logo'
 const AppBar = props => {
   return (
     <Div
-      background="linear-gradient(to left top, #F9F7EE, #F8F7F2)"
+      background="linear-gradient(to left top, rgba(248, 247, 242, 0.95), rgba(249, 247, 238, 0.95))"
       borderBottom="1px solid #EBE8DC"
       width="100%"
       height={60}
@@ -18,10 +17,6 @@ const AppBar = props => {
       <Logo />
     </Div>
   )
-}
-
-AppBar.propTypes = {
-
 }
 
 export default AppBar
