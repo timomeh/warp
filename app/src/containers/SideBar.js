@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { fetchProjects } from '../lib/store'
 
 import ProjectOverviewList from '../components/ProjectOverviewList'
+import ProjectOverview from '../components/ProjectOverview'
 
 class SideBar extends Component {
   componentDidMount() {
@@ -12,19 +13,23 @@ class SideBar extends Component {
   render() {
     const { projects } = this.props
 
-    if (projects.result == null) return <div>Loading</div>
+    if (projects.isFetching) return <div>Loading</div>
 
     return (
       <ProjectOverviewList
-        items={projects.result.map(id => projects.entities.projects[id])}
-        renderItem={item => <div>{item.id}</div>}
+        items={projects.items.map(id => projects.entities[id])}
+        renderItem={item =>
+          <ProjectOverview
+            name={item.name}
+          />
+        }
       />
     )
   }
 }
 
 const mapStateToProps = state => ({
-  projects: state.projects.items
+  projects: state.projects
 })
 
 export default connect(mapStateToProps)(SideBar)

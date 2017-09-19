@@ -1,5 +1,7 @@
 import { schema } from 'normalizr'
 
-export const project = new schema.Entity('projects')
+export const build = new schema.Entity('builds')
 
-export const projectList = [ project ]
+export const project = new schema.Entity('projects', {
+  latest_builds: [ build ]
+})
