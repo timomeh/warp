@@ -20,9 +20,20 @@ defmodule Beam.Builds do
   def list_builds(project_id) do
     Repo.get!(Project, project_id) # raise if project does not exist
 
-    from(p in Build, where: p.project_id == ^project_id)
+    from(b in Build, where: b.project_id == ^project_id)
     |> Repo.all()
     |> Repo.preload([:stages, stages: :steps])
+  end
+
+  def list_distinct_builds(project_id) do
+    from(
+      b in Build,
+      where: b.project_id == ^project_id,
+      distinct: b.type,
+      order_by: [desc: b.started_at] # latest distinct record
+    )
+    |> Repo.all()
+    |> Enum.sort(&(&1.started_at >= &2.started_at)) # sort from latest
   end
 
   def get_build!(id) do

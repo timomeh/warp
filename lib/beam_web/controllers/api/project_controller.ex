@@ -4,7 +4,7 @@ defmodule BeamWeb.API.ProjectController do
   alias Beam.Projects
 
   def index(conn, _params) do
-    projects = Projects.list_projects()
+    projects = Projects.list_projects_latest_builds()
     render(conn, "list.json", projects: projects)
   end
 
