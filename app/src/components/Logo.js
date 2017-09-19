@@ -21,7 +21,7 @@ Logo.propTypes = {
 
 export default Logo
 
-export function addToStorybook({ storiesOf }) {
+export function stories({ storiesOf }) {
   storiesOf('Logo')
     .add('with default color', () => <Logo />)
     .add('with custom color', () => <Logo color="red" />)

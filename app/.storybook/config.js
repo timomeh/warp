@@ -5,7 +5,7 @@ const req = require.context('../src/components', true, /\.js$/)
 function loadStories() {
   req.keys().forEach((filename) => {
     const mod = req(filename)
-    if (mod.addToStorybook) return mod.addToStorybook(storybook)
+    if (mod.stories) return mod.stories(storybook)
   })
 }
 

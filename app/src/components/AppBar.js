@@ -21,7 +21,7 @@ const AppBar = props => {
 
 export default AppBar
 
-export function addToStorybook({ storiesOf }) {
+export function stories({ storiesOf }) {
   storiesOf('AppBar', module)
     .add('AppBar', () => <AppBar />)
 }
