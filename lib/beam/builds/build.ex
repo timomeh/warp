@@ -15,6 +15,7 @@ defmodule Beam.Builds.Build do
   @states ~W(pending active finished errored)
 
   schema "builds" do
+    field :type, :string
     field :state, :string, default: "pending"
     field :started_at, :utc_datetime
     field :finished_at, :utc_datetime
@@ -28,7 +29,7 @@ defmodule Beam.Builds.Build do
   def changeset(%Build{} = build, attrs \\ %{}) do
     build
     |> Repo.preload(:stages)
-    |> cast(attrs, [:state, :started_at, :finished_at, :project_id])
+    |> cast(attrs, [:type, :state, :started_at, :finished_at, :project_id])
     |> assoc_constraint(:project)
     |> validate_inclusion(:state, @states)
     |> cast_assoc(:stages)

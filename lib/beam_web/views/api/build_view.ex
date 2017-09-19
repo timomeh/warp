@@ -14,6 +14,7 @@ defmodule BeamWeb.API.BuildView do
   def render("build.json", %{build: build}) do
     output = %{
       id: build.id,
+      type: build.type,
       state: build.state,
       started_at: build.started_at,
       finished_at: build.finished_at

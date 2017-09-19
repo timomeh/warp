@@ -1,5 +1,5 @@
 ---
-env: default
+type: Build
 stages:
   - name: Stage 1
     steps:

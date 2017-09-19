@@ -7,6 +7,7 @@ defmodule Beam.Builds.BuildsTest do
 
   @invalid_attrs %{state: "foo"}
   @full_build_attrs %{
+    type: "foo",
     stages: [
       %{
         name: "stage_1_name",
@@ -37,6 +38,7 @@ defmodule Beam.Builds.BuildsTest do
   describe "builds" do
     test "create_build/1 with valid data creates a full build" do
       assert {{:ok, %Build{} = build}, project} = fixture(@full_build_attrs)
+      assert build.type == "foo"
       assert build.state == "pending"
       assert build.project_id == project.id
       [stage_1, stage_2] = build.stages
