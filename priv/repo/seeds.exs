@@ -9,3 +9,8 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+Beam.Repo.insert!(%Beam.Projects.Project{
+  name: "timomeh/beam",
+  root_directory: "/Users/timomaemecke/Documents/dev/beam/"
+})
