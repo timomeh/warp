@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { fetchProjects } from 'lib/store'
 
 import Socket from 'lib/socket'
 import AppBar from 'components/AppBar'
-import SideBar from 'containers/SideBar'
+import Sidebar from 'containers/Sidebar'
 import PageLayout from 'components/PageLayout'
 import Home from 'screens/Home'
 
@@ -27,12 +27,19 @@ class App extends Component {
       <Router>
         <PageLayout
           top={<AppBar />}
-          aside={<SideBar />}
-          main={
-            <Route exact path="/" component={Home} />
-          }
+          aside={<Sidebar />}
+          main={this.renderMain()}
         />
       </Router>
+    )
+  }
+
+  renderMain() {
+    return (
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/projects/:id" component={Home} />
+      </Switch>
     )
   }
 }

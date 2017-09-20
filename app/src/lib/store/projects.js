@@ -1,7 +1,6 @@
 import { normalize } from 'normalizr'
 import { addEntities, ADD_ENTITIES } from 'lib/store'
 
-const SELECT_PROJECT = 'beam/projects/SELECT_PROJECT'
 const REQUEST_PROJECTS = 'beam/projects/REQUEST_PROJECTS'
 const RECEIVE_PROJECTS = 'beam/projects/RECEIVE_PROJECTS'
 
@@ -23,12 +22,6 @@ export default function reducer(state = initialState, action) {
         }
       }
 
-    case SELECT_PROJECT:
-      return {
-        ...state,
-        selected: action.id
-      }
-
     case REQUEST_PROJECTS:
       return {
         ...state,
@@ -46,11 +39,6 @@ export default function reducer(state = initialState, action) {
       return state
   }
 }
-
-export const selectProject = id => ({
-  type: SELECT_PROJECT,
-  id
-})
 
 export const requestProjects = () => ({
   type: REQUEST_PROJECTS

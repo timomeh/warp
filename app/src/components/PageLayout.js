@@ -34,7 +34,8 @@ const Aside = glamorous(Scrollable)({
 })
 
 const Main = glamorous(Scrollable)({
-  flex: 1
+  flex: 1,
+  padding: 64
 })
 
 const PageLayout = props => {
