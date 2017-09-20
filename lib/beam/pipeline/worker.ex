@@ -54,8 +54,7 @@ defmodule Beam.Pipeline.Worker do
   end
 
   defp execute(step) do
-    [ command | args ] = String.split(step.command)
-    {output, exit_status} = System.cmd(command, args, [stderr_to_stdout: true, into: %LogCollector{step_id: step.id}])
+    {output, exit_status} = System.cmd("sh", ["-c", step.command], [stderr_to_stdout: true, into: %LogCollector{step_id: step.id}])
     {step, output, exit_status}
   end
 end
