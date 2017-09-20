@@ -29,6 +29,7 @@ defmodule Beam.Pipeline.Conductor do
     log(state, "START")
 
     {:ok, build} = Builds.set_started(state.build)
+    state = Map.put(state, :build, build)
     broadcast(state, build)
 
     state = run_next_stage(state)
@@ -66,9 +67,11 @@ defmodule Beam.Pipeline.Conductor do
     case reason do
       :normal ->
         {:ok, build} = Builds.set_finished(state.build)
+        state = Map.put(state, :build, build)
         broadcast(state, build)
       :error ->
         {:ok, build} = Builds.set_finished(state.build, "errored")
+        state = Map.put(state, :build, build)
         broadcast(state, build)
     end
   end
