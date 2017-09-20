@@ -23,7 +23,7 @@ const BuildInfoText = props => {
 
 BuildInfoText.propTypes = {
   description: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired
+  value: PropTypes.oneOfType([ PropTypes.node, PropTypes.string ]).isRequired
 }
 
 export default BuildInfoText
