@@ -15,7 +15,8 @@ defmodule BeamWeb.API.ProjectView do
     output = %{
       id: project.id,
       name: project.name,
-      root_directory: project.root_directory
+      root_directory: project.root_directory,
+      latest_builds: []
     }
 
     case project do
