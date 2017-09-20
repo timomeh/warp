@@ -1,15 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { fetchProjects } from 'lib/store'
+import { selectProject } from 'lib/store'
 
 import ProjectOverviewList from 'components/ProjectOverviewList'
 import ProjectOverview from 'components/ProjectOverview'
 
 class SideBar extends Component {
-  componentDidMount() {
-    this.props.dispatch(fetchProjects())
-  }
-
   render() {
     const { projects, builds } = this.props
 
@@ -17,7 +13,9 @@ class SideBar extends Component {
 
     return (
       <ProjectOverviewList
-        items={projects.items.map(id => projects.entities[id])}
+        projects={projects.items.map(id => projects.entities[id])}
+        selectedProject={projects.selected}
+        onItemClick={this.handleProjectClick}
         renderItem={item =>
           <ProjectOverview
             name={item.name}
@@ -27,6 +25,11 @@ class SideBar extends Component {
       />
     )
   }
+
+  handleProjectClick = id => {
+    console.log(id)
+    this.props.onProjectClick(id)
+  }
 }
 
 const mapStateToProps = state => ({
@@ -34,4 +37,8 @@ const mapStateToProps = state => ({
   builds: state.builds
 })
 
-export default connect(mapStateToProps)(SideBar)
+const mapDispatchToProps = dispatch => ({
+  onProjectClick(id) { dispatch(selectProject(id)) }
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(SideBar)

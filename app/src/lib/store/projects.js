@@ -26,7 +26,7 @@ export default function reducer(state = initialState, action) {
     case SELECT_PROJECT:
       return {
         ...state,
-        selected: action.project.id
+        selected: action.id
       }
 
     case REQUEST_PROJECTS:
@@ -47,9 +47,9 @@ export default function reducer(state = initialState, action) {
   }
 }
 
-export const selectProject = project => ({
+export const selectProject = id => ({
   type: SELECT_PROJECT,
-  project
+  id
 })
 
 export const requestProjects = () => ({

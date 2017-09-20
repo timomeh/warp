@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { fetchProjects } from 'lib/store'
 
 import Socket from 'lib/socket'
 import AppBar from 'components/AppBar'
@@ -18,6 +19,7 @@ class App extends Component {
   componentWillMount() {
     this.socket.connect()
     this.socket.join("room:lobby")
+    this.props.dispatch(fetchProjects())
   }
 
   render() {
