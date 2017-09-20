@@ -70,3 +70,11 @@ export const fetchProjects = () => (dispatch, getState, { api, schema }) => {
       dispatch(receiveProjects(result))
     })
 }
+
+export const fetchProject = id => (dispatch, getState, { api, schema }) => {
+  return api.projects.getById(id)
+    .then(response => {
+      const { entities } = normalize(response.data, schema.project)
+      dispatch(addEntities(entities))
+    })
+}

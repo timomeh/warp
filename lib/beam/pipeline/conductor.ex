@@ -30,7 +30,7 @@ defmodule Beam.Pipeline.Conductor do
 
     {:ok, build} = Builds.set_started(state.build)
     state = Map.put(state, :build, build)
-    broadcast(state, build)
+    broadcast(state, build, "create")
 
     state = run_next_stage(state)
     {:noreply, state}
@@ -91,9 +91,10 @@ defmodule Beam.Pipeline.Conductor do
     Runner.run(pid)
   end
 
-  defp broadcast(_state, build) do
+  defp broadcast(_state, build, event \\ "change") do
     topic = "build:x"
     message = %{
+      event: event,
       type: "build",
       data: build
     }

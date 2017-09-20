@@ -1,7 +1,7 @@
 import { Socket as WebSocket } from 'phoenix'
 import { normalize } from 'normalizr'
 import * as schema from 'lib/schema'
-import { addEntities } from 'lib/store'
+import { addEntities, fetchProject } from 'lib/store'
 
 class Socket {
   static instance
@@ -24,18 +24,22 @@ class Socket {
     channel.join()
       .receive("ok", () => console.log(`[WS] Joined Channel: ${room}`))
       .receive("error", () => console.log(`[WS] Failed to join Channel: ${room}`))
-      .receive("timeout", () => console.log(`[WS] Still wairing to join Channel: ${room}`))
+      .receive("timeout", () => console.log(`[WS] Still waiting to join Channel: ${room}`))
 
     channel.on("event", payload => {
       const { event, data: response } = payload
 
-      const match = /entity:change:(.*)$/.exec(event)
-      const matchedSchema = this._getSchemaFromString(match[1])
+      const [ , eventType, entityName ] = /entity:(.*):(.*)$/.exec(event)
+      const matchedSchema = this._getSchemaFromString(entityName)
       if (matchedSchema == null) return
 
       const data = normalize(response, matchedSchema)
-      console.log(data.entities)
+
       this.dispatch(addEntities(data.entities))
+
+      if (eventType === "create" && entityName === "build") {
+        this.dispatch(fetchProject(data.entities.builds[data.result].project_id))
+      }
     })
   }
 

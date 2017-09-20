@@ -5,6 +5,10 @@ const api = {
     getAll() {
       return fetch(`${API_URL}/projects/`)
         .then(response => response.json())
+    },
+    getById(id) {
+      return fetch(`${API_URL}/projects/${id}`)
+        .then(response => response.json())
     }
   }
 }

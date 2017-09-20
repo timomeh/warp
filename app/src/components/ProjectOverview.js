@@ -32,13 +32,13 @@ const ProjectOverview = props => {
       <Info>
         {builds.map((build, i) => {
           return (
-            <BuildItem key={i}>
+            <BuildItem key={build.id}>
               <Div marginRight={8}>
                 <StatusIndicator type={build.state} />
               </Div>
               <Div>
                 <BuildInfoText
-                  description={build.type}
+                  description={`${build.type} #${build.id}`}
                   value={<TimeFromNow datetime={build.started_at} />}
                 />
               </Div>

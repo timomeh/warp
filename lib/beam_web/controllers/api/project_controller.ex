@@ -9,7 +9,7 @@ defmodule BeamWeb.API.ProjectController do
   end
 
   def show(conn, %{"id" => id}) do
-    project = Projects.get_project!(id)
+    project = Projects.get_project_with_latest_builds!(id)
     render(conn, "show.json", project: project)
   end
 

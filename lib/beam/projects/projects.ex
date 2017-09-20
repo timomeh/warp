@@ -32,4 +32,9 @@ defmodule Beam.Projects do
   def get_project!(id) do
     Repo.get!(Project, id)
   end
+
+  def get_project_with_latest_builds!(id) do
+    project = Repo.get!(Project, id)
+    Map.put(project, :latest_builds, Builds.list_distinct_builds(project.id))
+  end
 end

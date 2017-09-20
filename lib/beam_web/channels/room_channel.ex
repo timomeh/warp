@@ -13,11 +13,11 @@ defmodule BeamWeb.RoomChannel do
     {:noreply, socket}
   end
 
-  def handle_info(%{type: type, data: data}, socket) do
+  def handle_info(%{type: type, data: data, event: event}, socket) do
     payload =
       data
       |> strip_keys_for(type)
-      |> convert_to_event(type)
+      |> convert_to_event(type, event)
 
     BeamWeb.Endpoint.broadcast("room:lobby", "event", payload)
 
@@ -28,15 +28,15 @@ defmodule BeamWeb.RoomChannel do
     %{event: "log", step_id: step_id, data: line}
   end
 
-  defp convert_to_event(data, type) do
+  defp convert_to_event(data, type, event \\ "change") do
     %{
-      event: "entity:change:#{type}",
+      event: "entity:#{event}:#{type}",
       data: data
     }
   end
 
   defp strip_keys_for(data, type) when type == "build" do
-    Map.take(data, [:id, :type, :started_at, :finished_at, :state])
+    Map.take(data, [:id, :type, :started_at, :finished_at, :state, :project_id])
   end
 
   defp strip_keys_for(data, type) when type == "stage" do

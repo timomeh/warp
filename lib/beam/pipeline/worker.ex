@@ -43,9 +43,10 @@ defmodule Beam.Pipeline.Worker do
     end
   end
 
-  defp broadcast(step) do
+  defp broadcast(step, event \\ "change") do
     topic = "build:x"
     message = %{
+      event: event,
       type: "step",
       data: step
     }

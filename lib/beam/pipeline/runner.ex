@@ -186,9 +186,10 @@ defmodule Beam.Pipeline.Runner do
     |> Map.put(:finished_tasks, state.finished_tasks ++ [task])
   end
 
-  defp broadcast(_state, stage) do
+  defp broadcast(_state, stage, event \\ "change") do
     topic = "build:x"
     message = %{
+      event: event,
       type: "stage",
       data: stage
     }
