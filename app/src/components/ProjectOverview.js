@@ -1,9 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import glamorous from 'glamorous'
+import glamorous, { Div } from 'glamorous'
+import moment from 'moment'
 
 import Title from 'components/Title'
 import StatusIndicator from 'components/StatusIndicator'
+import BuildInfoText from 'components/BuildInfoText'
 
 
 const Card = glamorous.div({
@@ -28,14 +30,22 @@ const ProjectOverview = props => {
     <Card>
       <Title>{name}</Title>
       <Info>
-        {builds.map((build, i) => (
-          <BuildItem key={i}>
-            <StatusIndicator type={build.state} />
-            <div>
-              {build.type}: Datum
-            </div>
-          </BuildItem>
-        ))}
+        {builds.map((build, i) => {
+          const when = moment(build.started_at).fromNow()
+          return (
+            <BuildItem key={i}>
+              <Div marginRight={8}>
+                <StatusIndicator type={build.state} />
+              </Div>
+              <Div>
+                <BuildInfoText
+                  description={build.type}
+                  value={when}
+                />
+              </Div>
+            </BuildItem>
+          )
+        })}
       </Info>
     </Card>
   )
