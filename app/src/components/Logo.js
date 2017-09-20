@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const Logo = props => {
   const {
-    color = "#4E4A3B"
+    color = "black"
   } = props
 
   return (

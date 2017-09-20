@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Div } from 'glamorous'
 
 import Logo from 'components/Logo'
@@ -6,15 +7,17 @@ import Logo from 'components/Logo'
 const AppBar = props => {
   return (
     <Div
-      background="linear-gradient(to left top, rgba(248, 247, 242, 0.95), rgba(249, 247, 238, 0.95))"
-      borderBottom="1px solid #EBE8DC"
+      background="#491A56"
       width="100%"
       height={60}
       display="flex"
       alignItems="center"
-      padding="0 24px"
+      justifyContent="center"
+      boxShadow="0 4px 5px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.14)"
     >
-      <Logo />
+      <Link to="/">
+        <Logo color="white" />
+      </Link>
     </Div>
   )
 }

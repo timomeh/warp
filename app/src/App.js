@@ -5,7 +5,6 @@ import { fetchProjects } from 'lib/store'
 
 import Socket from 'lib/socket'
 import AppBar from 'components/AppBar'
-import Sidebar from 'containers/Sidebar'
 import PageLayout from 'components/PageLayout'
 import Home from 'screens/Home'
 
@@ -27,7 +26,6 @@ class App extends Component {
       <Router>
         <PageLayout
           top={<AppBar />}
-          aside={<Sidebar />}
           main={this.renderMain()}
         />
       </Router>
