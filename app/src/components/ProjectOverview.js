@@ -2,64 +2,59 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import glamorous, { Div } from 'glamorous'
 
-import Title from 'components/Title'
-import StatusIndicator from 'components/StatusIndicator'
-import BuildInfoText from 'components/BuildInfoText'
+import { fontWeight } from 'bits/styles'
+import Card from 'components/Card'
+import StatusList from 'components/StatusList'
+import StatusItem from 'components/StatusItem'
+import Link from 'components/Link'
 import TimeFromNow from 'components/TimeFromNow'
 
-
-const Card = glamorous.div({
-  padding: 16,
-  paddingLeft: 24
+const Title = glamorous.h3({
+  fontSize: 20,
+  color: '#491A56',
+  fontWeight: fontWeight.semibold,
+  marginTop: 0,
+  marginBottom: 16
 })
 
-const Info = glamorous.div({
-  marginTop: 8
-})
-
-const BuildItem = glamorous.div({
-  marginTop: 8,
-  display: 'flex',
-  flexFlow: 'row nowrap'
+const Meta = glamorous.div({
+  fontSize: 14,
+  color: '#929292',
+  marginBottom: 16
 })
 
 const ProjectOverview = props => {
-  const { name, builds } = props
+  const { title, builds, projectId } = props
 
   return (
     <Card>
-      <Title>{name}</Title>
-      <Info>
-        {builds.map((build, i) => {
-          return (
-            <BuildItem key={build.id}>
-              <Div marginRight={8}>
-                <StatusIndicator type={build.state} />
-              </Div>
-              <Div>
-                <BuildInfoText
-                  description={`${build.type} #${build.id}`}
-                  value={<TimeFromNow datetime={build.started_at} />}
-                />
-              </Div>
-            </BuildItem>
-          )
-        })}
-      </Info>
+      <Div padding={32}>
+        <Link blank to={`/project/${projectId}`}>
+          <Title>{title}</Title>
+        </Link>
+        <Meta>Environment Overview</Meta>
+        <StatusList
+          items={builds}
+          renderItem={build => (
+            <Link blank to={`/project/${projectId}/build/${build.id}`}>
+              <StatusItem
+                status={build.state}
+                title={build.type}
+                version={`Version: #${build.id}`}
+                right={<TimeFromNow datetime={build.started_at} />}
+              />
+            </Link>
+          )}
+        />
+      </Div>
     </Card>
   )
 }
 
 ProjectOverview.propTypes = {
-  name: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  builds: PropTypes.array.isRequired,
+  projectId: PropTypes.number.isRequired
 }
 
 export default ProjectOverview
-
-export function stories({ storiesOf }) {
-  storiesOf('ProjectOverview', module)
-    .addDecorator(story => (
-      <div style={{ width: 302, border: '1px dashed #E6E6E6' }}>{story()}</div>
-    ))
-    .add('Card', () => <ProjectOverview name="timomeh/beam" />)
-}

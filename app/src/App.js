@@ -6,7 +6,7 @@ import { fetchProjects } from 'lib/store'
 import Socket from 'lib/socket'
 import AppBar from 'components/AppBar'
 import PageLayout from 'components/PageLayout'
-import Home from 'screens/Home'
+import ProjectsList from 'containers/ProjectsList'
 
 class App extends Component {
   constructor(props) {
@@ -35,8 +35,8 @@ class App extends Component {
   renderMain() {
     return (
       <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/projects/:id" component={Home} />
+        <Route exact path="/" component={ProjectsList} />
+        <Route path="/projects/:id" component={ProjectsList} />
       </Switch>
     )
   }

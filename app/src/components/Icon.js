@@ -17,7 +17,10 @@ const Icon = props => {
 }
 
 Icon.propTypes = {
-  icon: PropTypes.string.isRequired,
+  icon: PropTypes.shape({
+    viewBox: PropTypes.string.isRequired,
+    path: PropTypes.node.isRequired
+  }).isRequired,
   width: PropTypes.number,
   height: PropTypes.number
 }

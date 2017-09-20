@@ -1,7 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { Div } from 'glamorous'
 
+import Link from 'components/Link'
 import Logo from 'components/Logo'
 
 const AppBar = props => {
@@ -15,7 +15,7 @@ const AppBar = props => {
       justifyContent="center"
       boxShadow="0 4px 5px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.14)"
     >
-      <Link to="/">
+      <Link blank to="/">
         <Logo color="white" />
       </Link>
     </Div>

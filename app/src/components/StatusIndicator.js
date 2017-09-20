@@ -3,17 +3,12 @@ import PropTypes from 'prop-types'
 import glamorous from 'glamorous'
 import { css } from 'glamor'
 
+import Icon from 'components/Icon'
+import icons from 'bits/icons'
+
 const rotate = css.keyframes({
   'from': { transform: 'rotate(0deg)' },
   'to': { transform: 'rotate(360deg)' }
-})
-
-const Finished = glamorous.div({
-  display: 'inline-block',
-  width: 16,
-  height: 16,
-  borderRadius: '50%',
-  backgroundColor: '#9CCC65'
 })
 
 const Pending = glamorous.div({
@@ -21,7 +16,7 @@ const Pending = glamorous.div({
   width: 16,
   height: 16,
   borderRadius: '50%',
-  border: '3px solid #FDD835'
+  border: '3px solid white'
 })
 
 const Active = glamorous.div({
@@ -29,13 +24,13 @@ const Active = glamorous.div({
   width: 16,
   height: 16,
   borderRadius: '50%',
-  border: '3px solid #FFEEA1',
-  borderLeft: '3px solid #FFD61F',
+  border: '3px solid rgba(255, 255, 255, 0.5)',
+  borderLeft: '3px solid #FFFFFF',
   animation: `${rotate} 1s infinite linear`
 })
 
 const Errored = () => (
-  <svg width="16px" height="16px" viewBox="0 0 16 16" fill="#D0021B">
+  <svg width="16px" height="16px" viewBox="0 0 16 16" fill="white">
     <polygon points="5 0 11 0 16 5 16 11 11.0527372 16 5 16 0 11 0 5"></polygon>
   </svg>
 )
@@ -45,7 +40,7 @@ const StatusIndicator = props => {
 
   switch (type) {
     case "finished":
-      return <Finished />
+      return <Icon icon={icons.checkmark} width={16} height={13} style={{ fill: 'white' }} />
     case "pending":
       return <Pending />
     case "active":
