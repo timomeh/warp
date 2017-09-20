@@ -52,7 +52,7 @@ defmodule Beam.Builds do
   end
 
   def set_started(%Build{} = build) do
-    update_build(build, %{started_at: DateTime.utc_now()})
+    update_build(build, %{started_at: DateTime.utc_now(), state: "active"})
   end
 
   def set_finished(%Build{} = build, state \\ "finished") do
