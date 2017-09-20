@@ -8,7 +8,7 @@ defimpl Collectable, for: Beam.LogCollector do
   def into(original) do
     collector_fun = fn
       log, {:cont, line} ->
-        PubSub.broadcast(Beam.PubSub, "build:x", %{type: "log", data: %{step_id: log.step_id, line: line}})
+        PubSub.broadcast(Beam.PubSub, "build:x", %{event: "update", type: "log", data: %{step_id: log.step_id, line: line}})
         %Beam.LogCollector{log | lines: log.lines ++ [line]}
       log, :done -> log
       _log, :halt -> :ok
