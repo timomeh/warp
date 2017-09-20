@@ -8,8 +8,8 @@ defmodule BeamWeb.RoomChannel do
     {:ok, socket}
   end
 
-  def handle_out("new_msg", payload, socket) do
-    push socket, "new_msg", payload
+  def handle_out("event", payload, socket) do
+    push socket, "event", payload
     {:noreply, socket}
   end
 
@@ -19,7 +19,7 @@ defmodule BeamWeb.RoomChannel do
       |> strip_keys_for(type)
       |> convert_to_event(type)
 
-    BeamWeb.Endpoint.broadcast("room:lobby", "new_msg", payload)
+    BeamWeb.Endpoint.broadcast("room:lobby", "event", payload)
 
     {:noreply, socket}
   end
@@ -30,15 +30,13 @@ defmodule BeamWeb.RoomChannel do
 
   defp convert_to_event(data, type) do
     %{
-      event: "change",
-      status: data.state,
-      type: type,
+      event: "entity:change:#{type}",
       data: data
     }
   end
 
   defp strip_keys_for(data, type) when type == "build" do
-    Map.take(data, [:id, :started_at, :finished_at, :state])
+    Map.take(data, [:id, :type, :started_at, :finished_at, :state])
   end
 
   defp strip_keys_for(data, type) when type == "stage" do
