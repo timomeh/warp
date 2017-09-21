@@ -2,25 +2,18 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import glamorous, { Div } from 'glamorous'
 
-import { fontWeight } from 'bits/styles'
+import Title from 'components/Title'
 import Card from 'components/Card'
 import StatusList from 'components/StatusList'
 import StatusItem from 'components/StatusItem'
 import Link from 'components/Link'
 import TimeFromNow from 'components/TimeFromNow'
 
-const Title = glamorous.h3({
-  fontSize: 20,
-  color: '#491A56',
-  fontWeight: fontWeight.semibold,
-  marginTop: 0,
-  marginBottom: 16
-})
-
 const Meta = glamorous.div({
   fontSize: 14,
   color: '#929292',
-  marginBottom: 16
+  marginBottom: 16,
+  marginTop: 16
 })
 
 const ProjectOverview = props => {
@@ -29,14 +22,14 @@ const ProjectOverview = props => {
   return (
     <Card>
       <Div padding={32}>
-        <Link blank to={`/project/${projectId}`}>
+        <Link blank to={`/projects/${projectId}`}>
           <Title>{title}</Title>
         </Link>
         <Meta>Environment Overview</Meta>
         <StatusList
           items={builds}
           renderItem={build => (
-            <Link blank to={`/project/${projectId}/build/${build.id}`}>
+            <Link blank to={`/projects/${projectId}/build/${build.id}`}>
               <StatusItem
                 status={build.state}
                 title={build.type}

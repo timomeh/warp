@@ -3,10 +3,11 @@ import glamorous from 'glamorous'
 
 import { fontWeight } from 'bits/styles'
 
-const Title = glamorous.div({
-  fontSize: 16,
+const Title = glamorous.h3({
+  fontSize: 20,
   fontWeight: fontWeight.semibold,
-  color: '#4E4A3B'
+  color: '#491A56',
+  margin: 0
 })
 
 export default Title
