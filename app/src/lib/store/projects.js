@@ -5,7 +5,6 @@ const REQUEST_PROJECTS = 'beam/projects/REQUEST_PROJECTS'
 const RECEIVE_PROJECTS = 'beam/projects/RECEIVE_PROJECTS'
 
 const initialState = {
-  selected: -1,
   isFetching: false,
   items: [],
   entities: {}
