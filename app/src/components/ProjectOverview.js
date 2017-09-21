@@ -41,7 +41,7 @@ const ProjectOverview = props => {
                 status={build.state}
                 title={build.type}
                 version={`Version: #${build.id}`}
-                right={<TimeFromNow datetime={build.started_at} />}
+                right={<TimeFromNow datetime={build.started_at} key={build.id} />}
               />
             </Link>
           )}
