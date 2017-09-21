@@ -14,17 +14,27 @@ defmodule Beam.Steps do
     |> Repo.update()
   end
 
-  def update_step_state(%Step{} = step, state) do
-    update_step(step, %{state: state})
-  end
-
-  def stop_active_steps_in_stage(stage_id) do
+  def stop_pending_steps_in_stage(stage_id) do
     from(
       s in Step,
-      where: s.stage_id == ^stage_id,
-      where: s.state == "active"
+      where: s.stage_id == ^stage_id and s.status == "pending",
+      order_by: s.ordinal_rank
     )
     |> Repo.update_all(set: [state: "stopped", finished_at: DateTime.utc_now()])
+  end
+
+  def fill_substeps(steps) do
+    steps
+    |> Enum.map(&(get_substeps(&1)))
+  end
+
+  def get_substeps(step) do
+    substeps =
+      from(s in Step, where: s.parent_step_id == ^step.id)
+      |> Repo.all()
+      |> Enum.map(&(get_substeps(&1)))
+
+    Map.put(step, :substeps, substeps)
   end
 
   def set_started(%Step{} = step) do

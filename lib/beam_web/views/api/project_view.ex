@@ -2,6 +2,7 @@ defmodule BeamWeb.API.ProjectView do
   use BeamWeb, :view
 
   alias BeamWeb.API.BuildView
+  alias BeamWeb.API.PipelineView
 
   def render("show.json", %{project: project}) do
     %{data: render_one(project, __MODULE__, "project.json")}
@@ -16,15 +17,7 @@ defmodule BeamWeb.API.ProjectView do
       id: project.id,
       name: project.name,
       root_directory: project.root_directory,
-      latest_builds: []
+      pipelines: render_many(project.pipelines, PipelineView, "pipeline.json")
     }
-
-    case project do
-      %{builds: [_ | _]} ->
-        Map.put(output, :builds, render_many(project.builds, BuildView, "build.json"))
-      %{latest_builds: [_ | _]} ->
-        Map.put(output, :latest_builds, render_many(project.latest_builds, BuildView, "build.json"))
-      _ -> output
-    end
   end
 end

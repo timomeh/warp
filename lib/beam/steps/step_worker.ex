@@ -1,4 +1,4 @@
-defmodule Beam.Pipeline.Worker do
+defmodule Beam.Steps.StepWorker do
   @moduledoc """
   Executes the command of a step and handles its state in the database.
   Returns :ok or :error depending on exit status of command.

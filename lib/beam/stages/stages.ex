@@ -14,15 +14,19 @@ defmodule Beam.Stages do
     |> Repo.update()
   end
 
-  def update_stage_state(%Stage{} = stage, state) do
-    update_stage(stage, %{state: state})
+  def stop_pending_stages_in_pipeline(pipeline_id) do
+    from(
+      s in Stage,
+      where: s.pipeline_id == ^pipeline_id and s.status == "pending"
+    )
+    |> Repo.update_all(set: [state: "stopped", finished_at: DateTime.utc_now()])
   end
 
-  def set_started(%Stage{} = stage) do
+  def set_stage_started(%Stage{} = stage) do
     update_stage(stage, %{started_at: DateTime.utc_now(), state: "active"})
   end
 
-  def set_finished(%Stage{} = stage, state \\ "finished") do
+  def set_stage_finished(%Stage{} = stage, state \\ "success") do
     update_stage(stage, %{finished_at: DateTime.utc_now(), state: state})
   end
 end

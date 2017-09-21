@@ -1,4 +1,4 @@
-defmodule Beam.Pipeline.Runner do
+defmodule Beam.Stages.StageWorker do
   @moduledoc """
   GenServer which executes one stage of a pipeline. Calls each step, either in
   series or in parallel.
@@ -16,7 +16,7 @@ defmodule Beam.Pipeline.Runner do
 
   use GenServer
 
-  alias Beam.Pipeline.Worker
+  alias Beam.Pipeline.PipelineWorker
   alias Beam.Steps
   alias Beam.Stages
   alias Phoenix.PubSub

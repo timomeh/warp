@@ -1,7 +1,7 @@
-defmodule Beam.Pipeline.Conductor do
+defmodule Beam.Pipelines.PipelineWorker do
   use GenServer
 
-  alias Beam.Pipeline.Runner
+  alias Beam.Stages.StageWorker
   alias Beam.Builds
   alias Phoenix.PubSub
 

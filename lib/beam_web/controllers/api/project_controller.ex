@@ -4,12 +4,12 @@ defmodule BeamWeb.API.ProjectController do
   alias Beam.Projects
 
   def index(conn, _params) do
-    projects = Projects.list_projects_latest_builds()
+    projects = Projects.list_projects()
     render(conn, "list.json", projects: projects)
   end
 
   def show(conn, %{"id" => id}) do
-    project = Projects.get_project_with_latest_builds!(id)
+    project = Projects.get_project!(id)
     render(conn, "show.json", project: project)
   end
 

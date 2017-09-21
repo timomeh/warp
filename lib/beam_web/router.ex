@@ -21,8 +21,9 @@ defmodule BeamWeb.Router do
   scope "/api", BeamWeb do
     pipe_through :api
 
-    resources "/projects", API.ProjectController do
-      resources "/builds", API.BuildController
+    resources "/projects", API.ProjectController
+    resources "/pipelines", API.PipelineController do
+      resources "/instances", API.PipelineInstanceController
     end
   end
 end

@@ -8,12 +8,15 @@ defmodule Beam.Projects.Project do
   import Ecto.Changeset
 
   alias Beam.Projects.Project
-  alias Beam.Builds.Build
+  alias Beam.Pipelines.Pipeline
+
+  @timestamps_opts [type: :utc_datetime]
 
   schema "projects" do
     field :name, :string
     field :root_directory, :string
-    has_many :builds, Build
+    field :git, :string
+    has_many :pipelines, Pipeline
 
     timestamps()
   end
