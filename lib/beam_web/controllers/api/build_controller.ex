@@ -28,6 +28,7 @@ defmodule BeamWeb.API.BuildController do
 
     case parse_and_create_build do
       {:ok, build} ->
+        {:ok, build} = Builds.set_started(build)
         start_pipeline(build)
 
         conn
