@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 
 import ProjectHeader from 'components/ProjectHeader'
 import SectionTitle from 'components/SectionTitle'
+import BuildOverview from 'components/BuildOverview'
+import BuildOverviewList from 'components/BuildOverviewList'
 
 class Project extends Component {
   render() {
@@ -19,6 +21,10 @@ class Project extends Component {
           secondary={`Root Directory: ${project.root_directory}`}
         />
         <SectionTitle>Environment Overview</SectionTitle>
+        <BuildOverviewList
+          items={project.latest_builds.map(buildId => builds.entities[buildId])}
+          renderItem={build => <BuildOverview build={build} />}
+        />
       </div>
     )
   }
