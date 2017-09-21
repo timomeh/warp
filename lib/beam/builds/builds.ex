@@ -33,7 +33,7 @@ defmodule Beam.Builds do
       order_by: [desc: b.started_at] # latest distinct record
     )
     |> Repo.all()
-    |> Enum.sort(&(&1.started_at >= &2.started_at)) # sort from latest
+    |> Enum.sort(&(DateTime.compare(&1.started_at, &2.started_at) == :gt)) # sort from latest
   end
 
   def get_build!(id) do
