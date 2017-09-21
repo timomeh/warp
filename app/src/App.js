@@ -7,6 +7,7 @@ import Socket from 'lib/socket'
 import AppBar from 'components/AppBar'
 import PageLayout from 'components/PageLayout'
 import ProjectsList from 'containers/ProjectsList'
+import Project from 'containers/Project'
 
 class App extends Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class App extends Component {
     return (
       <Switch>
         <Route exact path="/" component={ProjectsList} />
-        <Route path="/projects/:id" component={ProjectsList} />
+        <Route path="/projects/:projectId" component={Project} />
       </Switch>
     )
   }
