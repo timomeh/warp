@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import glamorous from 'glamorous'
 
-import StatusIndicator from 'components/StatusIndicator'
+import StatusBox from 'components/StatusBox'
 import { fontWeight } from 'bits/styles'
 
 const Box = glamorous.div({
@@ -14,24 +14,6 @@ const Box = glamorous.div({
   flexFlow: 'row nowrap',
   alignItems: 'center',
   overflow: 'hidden'
-})
-
-const StatusBox = glamorous.div(({ type }) => {
-  const colors = {
-    finished: '#8BC34A',
-    active: '#FBC02D',
-    errored: '#D32F2F',
-    pending: '#C8C7C7'
-  }
-
-  return {
-    width: 36,
-    height: 36,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors[type]
-  }
 })
 
 const PrimaryText = glamorous.div({
@@ -57,9 +39,7 @@ const StatusItem = props => {
 
   return (
     <Box>
-      <StatusBox type={status}>
-        <StatusIndicator type={status} />
-      </StatusBox>
+      <StatusBox type={status} />
       <PrimaryText>{title}</PrimaryText>
       <SecondaryText>{version}</SecondaryText>
       <SecondaryText alignRight>{right}</SecondaryText>
