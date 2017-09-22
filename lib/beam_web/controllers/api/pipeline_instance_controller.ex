@@ -2,6 +2,7 @@ defmodule BeamWeb.API.PipelineInstanceController do
   use BeamWeb, :controller
 
   alias Beam.Pipelines
+  alias Beam.Pipelines.PipelineWorker
   alias Beam.Projects
   alias Beam.ConfigParser
 
@@ -33,6 +34,8 @@ defmodule BeamWeb.API.PipelineInstanceController do
 
     case create_pipeline_instance do
       {:ok, pipeline_instance} ->
+        start_pipeline(pipeline_instance)
+
         conn
         |> put_status(:created)
         |> render("show.json", pipeline_instance: pipeline_instance)
@@ -43,8 +46,8 @@ defmodule BeamWeb.API.PipelineInstanceController do
     end
   end
 
-  # defp start_pipeline(build) do
-  #   {:ok, pid} = Conductor.start(build)
-  #   Conductor.run(pid)
-  # end
+  defp start_pipeline(pipeline) do
+    {:ok, pid} = PipelineWorker.start(pipeline)
+    PipelineWorker.run(pid)
+  end
 end

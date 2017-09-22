@@ -35,7 +35,7 @@ defmodule BeamWeb.RoomChannel do
     }
   end
 
-  defp strip_keys_for(data, type) when type == "build" do
+  defp strip_keys_for(data, type) when type == "pipeline" do
     Map.take(data, [:id, :type, :started_at, :finished_at, :state, :project_id])
   end
 

@@ -8,6 +8,10 @@ defmodule Beam.Steps do
   alias Beam.Repo
   alias Beam.Steps.Step
 
+  def get_step!(id) do
+    Repo.get!(Step, id)
+  end
+
   def update_step(%Step{} = step, attrs) do
     step
     |> Step.changeset(attrs)
@@ -20,7 +24,7 @@ defmodule Beam.Steps do
       where: s.stage_id == ^stage_id and s.status == "pending",
       order_by: s.ordinal_rank
     )
-    |> Repo.update_all(set: [state: "stopped", finished_at: DateTime.utc_now()])
+    |> Repo.update_all(set: [status: "stopped", finished_at: DateTime.utc_now()])
   end
 
   def fill_substeps(steps) do
@@ -37,11 +41,16 @@ defmodule Beam.Steps do
     Map.put(step, :substeps, substeps)
   end
 
-  def set_started(%Step{} = step) do
-    update_step(step, %{started_at: DateTime.utc_now(), state: "active"})
+  def set_step_started(%Step{} = step) do
+    update_step(step, %{started_at: DateTime.utc_now(), status: "active"})
   end
 
-  def set_finished(%Step{} = step, log \\ nil, state \\ "finished") do
-    update_step(step, %{finished_at: DateTime.utc_now(), state: state, log: log})
+  def set_step_started_by_id(id) do
+    get_step!(id)
+    |> update_step(%{started_at: DateTime.utc_now(), status: "active"})
+  end
+
+  def set_step_finished(%Step{} = step, log \\ nil, status \\ "finished") do
+    update_step(step, %{finished_at: DateTime.utc_now(), status: status, log: log})
   end
 end

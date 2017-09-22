@@ -5,48 +5,48 @@ pipelines:
       - include: ci_build
       - name: Deploy to Development
         steps_parallel:
-          - run: move ec2 --dev
-          - run: move s3 --dev
+          - run: sleep 2
+          - run: sleep 2
           - name: Schlafen
             steps_serial:
               - name: Schlaf mehr parallel
                 steps_parallel:
-                  - run: sleep 1
-                  - run: sleep 10
-              - run: sleep 3
-              - run: sleep 4
+                  - run: sleep 2
+                  - run: sleep 2
+              - run: sleep 2
+              - run: sleep 2
       - name: Notify
         steps_parallel:
           - name: "Send Mail"
             steps_serial:
               - name: "Prepare Mail"
-                run: "mailprepare foo@bar.com"
+                run: sleep 2
               - name: "Send Mail"
-                run: "sendmail general"
+                run: sleep 2
           - name: "Notify slack"
-            run: "slacknotify general"
+            run: sleep 2
 
   - name: Build & Deploy to Production
     ref: master
     stages:
       - name: Deploy to Production
         steps_parallel:
-          - run: move ec2 --prod
-          - run: move s3 --prod
+          - run: sleep 2
+          - run: sleep 2
       - name: Notify
         steps_parallel:
           - name: "Send Mail"
-            run: "mailsend prodfoo@bar.com"
+            run: sleep 2
           - name: "Notify slack"
-            run: "slacknotify general"
+            run: sleep 2
 
 stages:
   - id: ci_build
     name: CI Build
     steps_serial:
-      - run: docker up
-      - run: git merge master
+      - run: sleep 2
+      - run: sleep 2
       - steps_parallel:
-        - run: mix test
+        - run: sleep 2
         - name: Build Assets
-          run: npm run build
+          run: sleep 2

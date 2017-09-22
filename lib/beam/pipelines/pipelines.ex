@@ -20,7 +20,6 @@ defmodule Beam.Pipelines do
     %PipelineInstance{}
     |> PipelineInstance.changeset(attrs)
     |> Ecto.Changeset.merge(PipelineInstance.changeset(%PipelineInstance{}, %{project_id: project_id, pipeline_id: pipeline.id}))
-    |> IO.inspect
     |> Repo.insert()
   end
 
@@ -60,17 +59,17 @@ defmodule Beam.Pipelines do
     Map.put(pi, :stages, stages)
   end
 
-  def update_pipeline_instance(%PipelineInstance{} = pipeline_instance, attrs) do
+  def update_instance(%PipelineInstance{} = pipeline_instance, attrs) do
     pipeline_instance
     |> PipelineInstance.changeset(attrs)
     |> Repo.update()
   end
 
-  def set_pipeline_instance_started(%PipelineInstance{} = pipeline_instance) do
-    update_pipeline_instance(pipeline_instance, %{started_at: DateTime.utc_now(), state: "active"})
+  def set_instance_started(%PipelineInstance{} = instance) do
+    update_instance(instance, %{started_at: DateTime.utc_now(), status: "active"})
   end
 
-  def set_pipeline_instance_finished(%PipelineInstance{} = pipeline_instance, state \\ "success") do
-    update_pipeline_instance(pipeline_instance, %{finished_at: DateTime.utc_now(), state: state})
+  def set_instance_finished(%PipelineInstance{} = instance, status \\ "success") do
+    update_instance(instance, %{finished_at: DateTime.utc_now(), status: status})
   end
 end
