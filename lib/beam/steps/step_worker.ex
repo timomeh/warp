@@ -31,6 +31,7 @@ defmodule Beam.Steps.StepWorker do
 
   def handle_cast(:run, state) do
     log(state, "START with command: #{state.step.run}")
+    broadcast(state.step)
     step =
       state.step
       |> set_started()
@@ -72,10 +73,12 @@ defmodule Beam.Steps.StepWorker do
     case reason do
       :normal ->
         status = Map.get(state, :status, "success")
-        state = set_finished({state.step, output, status})
+        state = set_finished({state, output, status})
+        broadcast(state.step)
         # broadcast(state, stage)
       :error ->
-        state = set_finished({state.step, output, "failed"})
+        state = set_finished({state, output, "failed"})
+        broadcast(state.step)
         # broadcast(state, stage)
         # Steps.stop_active_steps_in_stage(state.stage.id)
     end
@@ -86,11 +89,9 @@ defmodule Beam.Steps.StepWorker do
     step
   end
 
-  defp set_finished({step, output, status}) do
-    {:ok, step} = Steps.set_step_finished(step, output, status)
-    broadcast(step)
-
-    step
+  defp set_finished({state, output, status}) do
+    {:ok, step} = Steps.set_step_finished(state.step, output, status)
+    Map.put(state, :step, step)
   end
 
   defp broadcast(step, event \\ "change") do

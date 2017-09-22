@@ -30,6 +30,7 @@ defmodule Beam.Pipelines.PipelineWorker do
     log(state, "START")
 
     {:ok, pipeline} = Pipelines.set_instance_started(state.pipeline)
+    broadcast(pipeline, "create")
     state = Map.put(state, :pipeline, pipeline)
     log(state, "RUN FIRST STAGE")
 
@@ -70,9 +71,11 @@ defmodule Beam.Pipelines.PipelineWorker do
     case reason do
       :normal ->
         {:ok, pipeline} = Pipelines.set_instance_finished(state.pipeline)
+        broadcast(pipeline)
       :error ->
         update_pending_to_stopped(state)
         {:ok, pipeline} = Pipelines.set_instance_finished(state.pipeline, "failed")
+        broadcast(pipeline)
     end
   end
 
@@ -95,11 +98,11 @@ defmodule Beam.Pipelines.PipelineWorker do
     Stages.stop_pending_stages_in_pipeline(state.pipeline.id)
   end
 
-  defp broadcast(_state, pipeline, event \\ "change") do
+  defp broadcast(pipeline, event \\ "change") do
     topic = "build:x"
     message = %{
       event: event,
-      type: "pipeline",
+      type: "pipeline_instance",
       data: pipeline
     }
     PubSub.broadcast(Beam.PubSub, topic, message)

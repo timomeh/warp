@@ -40,6 +40,7 @@ defmodule Beam.Steps.StepGroupWorker do
 
   @doc false
   def handle_cast(:run, %{execution_type: execution_type} = state) when execution_type == "serial" do
+    broadcast(state)
     log(state, "RUN in serial mode")
     state =
       state
@@ -51,6 +52,7 @@ defmodule Beam.Steps.StepGroupWorker do
 
   @doc false
   def handle_cast(:run, %{execution_type: type} = state) when type == "parallel" do
+    broadcast(state)
     log(state, "RUN in parallel mode")
     state =
       state
@@ -122,11 +124,10 @@ defmodule Beam.Steps.StepGroupWorker do
       :normal ->
         status = Map.get(state, :status, "success")
         state = set_finished(state, status)
-        # broadcast(state, stage)
+        broadcast(state)
       :error ->
         state = set_finished(state, "failed")
-        # broadcast(state, stage)
-        # Steps.stop_active_steps_in_stage(state.stage.id)
+        broadcast(state)
     end
   end
 
@@ -205,6 +206,16 @@ defmodule Beam.Steps.StepGroupWorker do
   defp set_finished(%{schema: schema} = state, status) when schema == :step do
     {:ok, step} = Steps.set_step_finished(state.group, nil, status)
     Map.put(state, :group, step)
+  end
+
+  defp broadcast(state, event \\ "change") do
+    topic = "build:x"
+    message = %{
+      event: event,
+      type: to_string(state.schema),
+      data: state.group
+    }
+    PubSub.broadcast(Beam.PubSub, topic, message)
   end
 
   defp log(%{debug_name: name}, text) do
