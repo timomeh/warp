@@ -18,14 +18,12 @@ Beam.Projects.create_project(%{
     %{
       title: "Build & Deploy to Staging",
       ref_match: "/^development$/",
-      human_id: "build_deploy_staging",
-      init_config: "steps_serial:\n- run: git clone git@github.com:timomeh/beam.git --branch master --single-branch"
+      human_id: "build_deploy_staging"
     },
     %{
       title: "Build & Deploy to Production",
       ref_match: "/^master$/",
-      human_id: "build_deploy_staging",
-      init_config: "steps_serial:\n- run: git clone git@github.com:timomeh/beam.git --branch master --single-branch"
+      human_id: "build_deploy_staging"
     }
   ]
 })
