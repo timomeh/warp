@@ -16,8 +16,16 @@ defmodule BeamWeb.API.ProjectView do
     output = %{
       id: project.id,
       name: project.name,
-      root_directory: project.root_directory,
-      pipelines: render_many(project.pipelines, PipelineView, "pipeline.json")
+      git: project.git,
+      secret: project.secret,
+      pipelines: []
     }
+
+    case project.pipelines do
+      %Ecto.Association.NotLoaded{} -> output
+      _ ->
+        output
+        |> Map.put(:pipelines, render_many(project.pipelines, PipelineView, "pipeline.json"))
+    end
   end
 end

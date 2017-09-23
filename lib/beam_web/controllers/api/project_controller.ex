@@ -14,7 +14,12 @@ defmodule BeamWeb.API.ProjectController do
   end
 
   def create(conn, %{"data" => project_params}) do
-    case Projects.create_project(project_params) do
+    create_project =
+      project_params
+      |> Map.put("secret", generate_secret(32))
+      |> Projects.create_project()
+
+    case create_project do
       {:ok, project} ->
         conn
         |> put_status(:created)
@@ -24,5 +29,11 @@ defmodule BeamWeb.API.ProjectController do
         |> put_status(:bad_request)
         |> render(BeamWeb.API.ChangesetView, "error.json", changeset: changeset)
     end
+  end
+
+  defp generate_secret(length) do
+    :crypto.strong_rand_bytes(length)
+    |> Base.url_encode64()
+    |> binary_part(0, length)
   end
 end
