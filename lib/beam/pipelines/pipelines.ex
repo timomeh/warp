@@ -14,6 +14,13 @@ defmodule Beam.Pipelines do
   alias Beam.Stages.Stage
   alias Beam.Projects.Project
 
+  def create_pipeline(attrs, project_id) do
+    %Pipeline{}
+    |> Pipeline.changeset(attrs)
+    |> Ecto.Changeset.merge(Pipeline.changeset(%Pipeline{}, %{project_id: project_id}))
+    |> Repo.insert()
+  end
+
   def create_pipeline_instance(attrs, project_id) do
     pipeline = get_pipeline_by_ref!(project_id, attrs["ref"])
 

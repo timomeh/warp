@@ -14,8 +14,11 @@ defmodule BeamWeb.API.PipelineView do
   def render("pipeline.json", %{pipeline: pipeline}) do
     output = %{
       id: pipeline.id,
-      name: pipeline.name,
-      ref: pipeline.ref,
+      project_id: pipeline.project_id,
+      title: pipeline.title,
+      ref_match: pipeline.ref_match,
+      human_id: pipeline.human_id,
+      init_config: pipeline.init_config,
       inserted_at: pipeline.inserted_at
     }
   end
