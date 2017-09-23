@@ -65,7 +65,7 @@ defmodule Beam.Steps.StepGroupWorker do
   def handle_cast(:graceful_halt, state) do
     log(state, "HALT requested. halting all children...")
     stop_running_steps(state.running_steps)
-    state = Map.put(:status, "stopped")
+    state = Map.put(state, :status, "stopped")
     {:stop, :normal, state}
   end
 

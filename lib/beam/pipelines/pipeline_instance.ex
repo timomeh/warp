@@ -17,12 +17,10 @@ defmodule Beam.Pipelines.PipelineInstance do
   @timestamps_opts [type: :utc_datetime]
 
   schema "pipeline_instances" do
-    field :name
     field :ref
-    field :matched_ref
     field :commit
     field :status, :string, default: "active"
-    field :started_at, :utc_datetime, default: DateTime.utc_now()
+    field :started_at, :utc_datetime
     field :finished_at, :utc_datetime
     belongs_to :project, Project
     belongs_to :pipeline, Pipeline
@@ -35,7 +33,7 @@ defmodule Beam.Pipelines.PipelineInstance do
   def changeset(%PipelineInstance{} = pipeline_instance, attrs \\ %{}) do
     pipeline_instance
     |> Repo.preload(:stages)
-    |> cast(attrs, [:name, :ref, :matched_ref, :commit, :status, :started_at, :finished_at, :project_id, :pipeline_id])
+    |> cast(attrs, [:ref, :commit, :status, :started_at, :finished_at, :project_id, :pipeline_id])
     |> assoc_constraint(:project)
     |> assoc_constraint(:pipeline)
     |> validate_inclusion(:status, @permitted_states)

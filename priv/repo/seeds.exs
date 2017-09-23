@@ -10,14 +10,22 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-project = Beam.Repo.insert!(%Beam.Projects.Project{
+Beam.Projects.create_project(%{
   name: "timomeh/beam",
   git: "https://github.com/timomeh/beam",
-  root_directory: "/Users/timomaemecke/Documents/dev/beam/"
+  secret: "H9g00LWzKCdpETNYbmYazFzscTejRvJz",
+  pipelines: [
+    %{
+      title: "Build & Deploy to Staging",
+      ref_match: "/^development$/",
+      human_id: "build_deploy_staging",
+      init_config: "steps_serial:\n- run: git clone git@github.com:timomeh/beam.git --branch master --single-branch"
+    },
+    %{
+      title: "Build & Deploy to Production",
+      ref_match: "/^master$/",
+      human_id: "build_deploy_staging",
+      init_config: "steps_serial:\n- run: git clone git@github.com:timomeh/beam.git --branch master --single-branch"
+    }
+  ]
 })
-
-Beam.ConfigParser.get_pipelines("/Users/timomaemecke/Documents/dev/beam/beamfile.yml")
-|> Enum.each(fn pipeline ->
-  pipeline = Map.put(pipeline, "project_id", project.id)
-  Beam.Repo.insert!(Beam.Pipelines.Pipeline.changeset(%Beam.Pipelines.Pipeline{}, pipeline))
-end)

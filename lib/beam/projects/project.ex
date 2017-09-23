@@ -14,8 +14,8 @@ defmodule Beam.Projects.Project do
 
   schema "projects" do
     field :name, :string
-    field :root_directory, :string
     field :git, :string
+    field :secret
     has_many :pipelines, Pipeline
 
     timestamps()
@@ -24,7 +24,8 @@ defmodule Beam.Projects.Project do
   @doc false
   def changeset(%Project{} = project, attrs) do
     project
-    |> cast(attrs, [:name, :root_directory])
-    |> validate_required([:name, :root_directory])
+    |> cast(attrs, [:name, :git, :secret])
+    |> validate_required([:name, :git, :secret])
+    |> cast_assoc(:pipelines)
   end
 end

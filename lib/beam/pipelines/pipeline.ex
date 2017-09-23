@@ -15,8 +15,10 @@ defmodule Beam.Pipelines.Pipeline do
   @timestamps_opts [type: :utc_datetime]
 
   schema "pipelines" do
-    field :name
-    field :ref
+    field :title
+    field :ref_match
+    field :human_id
+    field :init_config
     belongs_to :project, Project
     has_many :instances, PipelineInstance
 
@@ -26,7 +28,7 @@ defmodule Beam.Pipelines.Pipeline do
   @doc false
   def changeset(%Pipeline{} = pipeline, attrs \\ %{}) do
     pipeline
-    |> cast(attrs, [:name, :ref, :project_id])
+    |> cast(attrs, [:title, :ref_match, :human_id, :init_config, :project_id])
     |> assoc_constraint(:project)
   end
 end
