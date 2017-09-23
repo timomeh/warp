@@ -19,7 +19,7 @@ class App extends Component {
   componentWillMount() {
     this.socket.connect()
     this.socket.join("room:lobby")
-    this.props.dispatch(fetchProjects())
+    // this.props.dispatch(fetchProjects())
   }
 
   render() {
@@ -27,7 +27,7 @@ class App extends Component {
       <Router>
         <PageLayout
           top={<AppBar />}
-          main={this.renderMain()}
+          //main={this.renderMain()}
         />
       </Router>
     )

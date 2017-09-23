@@ -27,6 +27,7 @@ class Socket {
       .receive("timeout", () => console.log(`[WS] Still waiting to join Channel: ${room}`))
 
     channel.on("event", payload => {
+      console.log(payload)
       const { event, data: response } = payload
 
       const [ , eventType, entityName ] = /entity:(.*):(.*)$/.exec(event)
