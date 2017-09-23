@@ -45,6 +45,14 @@ defmodule Beam.Pipelines do
     Repo.get_by!(Pipeline, [ref: ref, project_id: project_id])
   end
 
+  def get_pipeline_by_ref_match(pipelines, ref) do
+    pipelines
+    |> Enum.find(fn pipeline ->
+      {:ok, ref_regex} = Regex.compile(pipeline.ref_match)
+      Regex.match?(ref_regex, ref)
+    end)
+  end
+
   def get_pipeline_instances!(pipeline_id) do
     from(instance in PipelineInstance, where: instance.pipeline_id == ^pipeline_id)
     |> Repo.all()
