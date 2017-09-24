@@ -4,12 +4,12 @@ defmodule BeamWeb.API.ProjectController do
   alias Beam.Projects
 
   def index(conn, _params) do
-    projects = Projects.list_projects()
+    projects = Projects.list()
     render(conn, "list.json", projects: projects)
   end
 
   def show(conn, %{"id" => id}) do
-    project = Projects.get_project!(id)
+    project = Projects.get!(id)
     render(conn, "show.json", project: project)
   end
 
@@ -17,7 +17,7 @@ defmodule BeamWeb.API.ProjectController do
     create_project =
       project_params
       |> Map.put("secret", generate_secret(32))
-      |> Projects.create_project()
+      |> Projects.create()
 
     case create_project do
       {:ok, project} ->

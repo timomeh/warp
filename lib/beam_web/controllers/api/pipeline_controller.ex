@@ -4,15 +4,22 @@ defmodule BeamWeb.API.PipelineController do
   alias Beam.Pipelines
   alias Beam.Projects
 
+  def index(conn, %{"project_id" => project_id}) do
+    project = Projects.get!(project_id)
+    pipelines = Pipelines.list(project)
+    render(conn, "list.json", pipelines: pipelines)
+  end
+
   def show(conn, %{"id" => id}) do
-    pipeline = Pipelines.get_pipeline!(id)
+    pipeline = Pipelines.get!(id)
     render(conn, "show.json", pipeline: pipeline)
   end
 
   def create(conn, %{"data" => pipeline_params, "project_id" => project_id}) do
     create_pipeline =
-      pipeline_params
-      |> Pipelines.create_pipeline(project_id)
+      project_id
+      |> Projects.get!()
+      |> Pipelines.create(pipeline_params)
 
     case create_pipeline do
       {:ok, pipeline} ->

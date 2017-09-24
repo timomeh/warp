@@ -8,49 +8,44 @@ defmodule Beam.Steps do
   alias Beam.Repo
   alias Beam.Steps.Step
 
-  def get_step!(id) do
+  def get!(id) do
     Repo.get!(Step, id)
   end
 
-  def update_step(%Step{} = step, attrs) do
+  def update(%Step{} = step, attrs) do
     step
     |> Step.changeset(attrs)
     |> Repo.update()
   end
 
-  def stop_pending_steps_in_stage(stage_id) do
-    from(
-      s in Step,
-      where: s.stage_id == ^stage_id and s.status == "pending",
-      order_by: s.ordinal_rank
-    )
-    |> Repo.update_all(set: [status: "stopped", finished_at: DateTime.utc_now()])
+  def update_all_pending_to_stopped(stage) do
+    from(s in Step, where: s.stage_id == ^stage.id
+      and s.status == "pending",
+      order_by: s.ordinal_rank)
+    |> Repo.update_all(set: [status: "stopped"])
   end
 
-  def fill_substeps(steps) do
+  def load_substeps(steps) do
     steps
-    |> Enum.map(&(get_substeps(&1)))
+    |> Enum.map(fn step ->
+      substeps =
+        from(s in Step, where: s.parent_step_id == ^step.id)
+        |> Repo.all()
+        |> load_substeps()
+
+      Map.put(step, :substeps, substeps)
+    end)
   end
 
-  def get_substeps(step) do
-    substeps =
-      from(s in Step, where: s.parent_step_id == ^step.id)
-      |> Repo.all()
-      |> Enum.map(&(get_substeps(&1)))
-
-    Map.put(step, :substeps, substeps)
+  def update_started(step) do
+    step
+    |> Ecto.Changeset.change(%{started_at: DateTime.utc_now(), status: "active"})
+    |> Repo.update()
   end
 
-  def set_step_started(%Step{} = step) do
-    update_step(step, %{started_at: DateTime.utc_now(), status: "active"})
-  end
-
-  def set_step_started_by_id(id) do
-    get_step!(id)
-    |> update_step(%{started_at: DateTime.utc_now(), status: "active"})
-  end
-
-  def set_step_finished(%Step{} = step, log \\ nil, status \\ "finished") do
-    update_step(step, %{finished_at: DateTime.utc_now(), status: status, log: log})
+  def update_finished(step, log \\ nil, status \\ "success") do
+    step
+    |> Ecto.Changeset.change(%{started_at: DateTime.utc_now(), log: log, status: status})
+    |> Repo.update()
   end
 end

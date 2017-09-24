@@ -15,10 +15,10 @@ defmodule BeamWeb.API.StepView do
       _ ->
         %{
           execution_type: step.execution_type,
-          started_at: step.started_at,
-          finished_at: step.finished_at,
           status: step.status,
           name: step.name,
+          started_at: step.started_at,
+          finished_at: step.finished_at,
           steps: render_many(step.substeps, __MODULE__, "step.json")
         }
     end

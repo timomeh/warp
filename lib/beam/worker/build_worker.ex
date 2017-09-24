@@ -1,18 +1,18 @@
-defmodule Beam.Pipelines.PipelineWorker do
+defmodule Beam.Worker.BuildWorker do
   use GenServer
 
   alias Beam.Stages
-  alias Beam.Steps.StepGroupWorker
-  alias Beam.Pipelines
+  alias Beam.Worker.GroupWorker
+  alias Beam.Builds
   alias Phoenix.PubSub
 
   require Logger
 
-  def start(pipeline) do
+  def start(build) do
     state = %{
-      pipeline: pipeline,
+      build: build,
       current_stage_index: -1,
-      debug_name: "#PipelineWorker<#{pipeline.id}>"
+      debug_name: "#BuildWorker<#{build.id}>"
     }
     Process.flag(:trap_exit, true) # Process calls terminate() before shutdown
     GenServer.start(__MODULE__, state)
@@ -29,12 +29,14 @@ defmodule Beam.Pipelines.PipelineWorker do
   def handle_cast(:run, state) do
     log(state, "START")
 
-    {:ok, pipeline} = Pipelines.set_instance_started(state.pipeline)
-    broadcast(pipeline, "create")
-    state = Map.put(state, :pipeline, pipeline)
-    log(state, "RUN FIRST STAGE")
+    {:ok, build} = Builds.update_started(state.build)
+    state =
+      state
+      |> Map.put(:build, build)
+      |> broadcast()
+      |> log("RUN FIRST STAGE")
+      |> run_next_stage()
 
-    state = run_next_stage(state)
     {:noreply, state}
   end
 
@@ -42,8 +44,10 @@ defmodule Beam.Pipelines.PipelineWorker do
   def handle_info({:EXIT, _pid, :normal}, %{current_stage_index: i, pipeline: %{stages: stages}} = state)
     when i < length(stages) - 1
   do
-    log(state, "RUN NEXT STAGE")
-    state = run_next_stage(state)
+    state
+    |> log("RUN NEXT STAGE")
+    |> run_next_stage()
+
     {:noreply, state}
   end
 
@@ -67,16 +71,20 @@ defmodule Beam.Pipelines.PipelineWorker do
   end
 
   def terminate(reason, state) do
-    log(state, "TERMINATE")
-    case reason do
+    build = case reason do
       :normal ->
-        {:ok, pipeline} = Pipelines.set_instance_finished(state.pipeline)
-        broadcast(pipeline)
+        {:ok, build} = Builds.update_finished(state.build)
+        build
       :error ->
-        update_pending_to_stopped(state)
-        {:ok, pipeline} = Pipelines.set_instance_finished(state.pipeline, "failed")
-        broadcast(pipeline)
+        {:ok, build} = Builds.update_finished(state.pipeline, "failed")
+        Stages.update_all_pending_to_stopped(build)
+        build
     end
+
+    state
+    |> Map.put(:build, build)
+    |> log("TERMINATE")
+    |> broadcast()
   end
 
   defp run_next_stage(state) do
@@ -90,25 +98,23 @@ defmodule Beam.Pipelines.PipelineWorker do
   end
 
   defp run_stage(stage) do
-    {:ok, pid} = StepGroupWorker.start_link(stage, :stage)
-    StepGroupWorker.run(pid)
+    {:ok, pid} = GroupWorker.start_link(stage, :stage)
+    GroupWorker.run(pid)
   end
 
-  defp update_pending_to_stopped(state) do
-    Stages.stop_pending_stages_in_pipeline(state.pipeline.id)
-  end
-
-  defp broadcast(pipeline, event \\ "change") do
+  defp broadcast(state, event \\ "change") do
     topic = "build:x"
     message = %{
       event: event,
-      type: "pipeline_instance",
-      data: pipeline
+      type: "build",
+      data: state.build
     }
     PubSub.broadcast(Beam.PubSub, topic, message)
+    state
   end
 
-  defp log(%{debug_name: name}, text) do
+  defp log(%{debug_name: name} = state, text) do
     Logger.debug("#{name} #{text}")
+    state
   end
 end

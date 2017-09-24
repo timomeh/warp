@@ -1,4 +1,4 @@
-defmodule Beam.PipelineBootstrapper do
+defmodule Beam.Worker.InitWorker do
   use GenServer
 
   @sandbox_path "/Users/timomaemecke/Documents/dev/beam_deployments/"

@@ -1,6 +1,6 @@
-defmodule Beam.Pipelines.PipelineInstance do
+defmodule Beam.Builds.Build do
   @moduledoc """
-  Schema for a Pipeline instance.
+  Schema for an Build.
   """
 
   use Ecto.Schema
@@ -8,21 +8,20 @@ defmodule Beam.Pipelines.PipelineInstance do
   import Ecto.Changeset
 
   alias Beam.Repo
-  alias Beam.Pipelines.PipelineInstance
+  alias Beam.Builds.Build
   alias Beam.Pipelines.Pipeline
   alias Beam.Stages.Stage
-  alias Beam.Projects.Project
 
-  @permitted_states ~W(active success failed)
+  @permitted_states ~W(queueing init active success failed)
   @timestamps_opts [type: :utc_datetime]
 
-  schema "pipeline_instances" do
+  schema "builds" do
     field :ref
     field :commit
-    field :status, :string, default: "active"
+    field :status, :string, default: "queueing"
+    field :working_dir
     field :started_at, :utc_datetime
     field :finished_at, :utc_datetime
-    belongs_to :project, Project
     belongs_to :pipeline, Pipeline
     has_many :stages, Stage
 
@@ -30,11 +29,10 @@ defmodule Beam.Pipelines.PipelineInstance do
   end
 
   @doc false
-  def changeset(%PipelineInstance{} = pipeline_instance, attrs \\ %{}) do
-    pipeline_instance
+  def changeset(%Build{} = build, attrs \\ %{}) do
+    build
     |> Repo.preload(:stages)
-    |> cast(attrs, [:ref, :commit, :status, :started_at, :finished_at, :project_id, :pipeline_id])
-    |> assoc_constraint(:project)
+    |> cast(attrs, [:ref, :commit, :status, :started_at, :finished_at, :working_dir, :pipeline_id])
     |> assoc_constraint(:pipeline)
     |> validate_inclusion(:status, @permitted_states)
     |> cast_assoc(:stages)

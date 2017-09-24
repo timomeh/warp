@@ -10,6 +10,7 @@ defmodule BeamWeb.API.StageView do
       execution_type: stage.execution_type,
       started_at: stage.started_at,
       finished_at: stage.finished_at,
+      build_id: stage.build_id,
       steps: render_many(stage.steps, StepView, "step.json")
     }
   end

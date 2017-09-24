@@ -21,10 +21,16 @@ defmodule BeamWeb.Router do
   scope "/api", BeamWeb do
     pipe_through :api
 
-    post "/webhooks/receive", API.WebhooksController, :receive
-    resources "/projects", API.ProjectController
-    resources "/pipelines", API.PipelineController do
-      resources "/instances", API.PipelineInstanceController
+    post "/webhooks/receive", API.WebhookController, :receive
+
+    resources "/projects", API.ProjectController, only: [:index, :show, :create] do
+      resources "/pipelines", API.PipelineController, only: [:index, :create]
     end
+
+    resources "/pipelines", API.PipelineController, only: [:show] do
+      resources "/builds", API.InstanceController, only: [:index, :create]
+    end
+
+    resources "/builds", API.BuildController, only: [:show]
   end
 end

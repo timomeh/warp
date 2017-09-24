@@ -7,9 +7,8 @@ defmodule Beam.Pipelines.Pipeline do
 
   import Ecto.Changeset
 
-  alias Beam.Repo
   alias Beam.Pipelines.Pipeline
-  alias Beam.Pipelines.PipelineInstance
+  alias Beam.Builds.Build
   alias Beam.Projects.Project
 
   @timestamps_opts [type: :utc_datetime]
@@ -19,7 +18,7 @@ defmodule Beam.Pipelines.Pipeline do
     field :ref_match
     field :human_id
     belongs_to :project, Project
-    has_many :instances, PipelineInstance
+    has_many :builds, Build
 
     timestamps()
   end

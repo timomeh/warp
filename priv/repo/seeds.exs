@@ -10,19 +10,19 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-Beam.Projects.create_project(%{
-  name: "timomeh/beam",
-  git: "https://github.com/timomeh/beam",
+Beam.Projects.create(%{
+  name: "timomeh/webhook_tstr",
+  git: "git@github.com:timomeh/webhook_tstr.git",
   secret: "H9g00LWzKCdpETNYbmYazFzscTejRvJz",
   pipelines: [
     %{
       title: "Build & Deploy to Staging",
-      ref_match: "/^development$/",
+      ref_match: "^development$",
       human_id: "build_deploy_staging"
     },
     %{
       title: "Build & Deploy to Production",
-      ref_match: "/^master$/",
+      ref_match: "^master$",
       human_id: "build_deploy_staging"
     }
   ]
