@@ -16,7 +16,11 @@ defmodule BeamWeb.API.BuildController do
   end
 
   def show(conn, %{"id" => id}) do
-    build = Builds.get!(id)
+    build =
+      id
+      |> Builds.get!()
+      |> Builds.preload_stages()
+
     render(conn, "show.json", build: build)
   end
 

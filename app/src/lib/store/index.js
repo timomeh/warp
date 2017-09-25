@@ -32,3 +32,5 @@ export const addEntities = entities => ({
 
 // Re-export all action creators
 export * from './projects'
+export * from './builds'
+export * from './steps'

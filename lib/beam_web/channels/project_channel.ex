@@ -39,11 +39,11 @@ defmodule BeamWeb.ProjectChannel do
   end
 
   defp strip_keys_for(data, type) when type == "stage" do
-    Map.take(data, [:id, :name, :status, :execution_type, :started_at, :finished_at])
+    Map.take(data, [:id, :title, :status, :execution_type, :started_at, :finished_at])
   end
 
   defp strip_keys_for(data, type) when type == "step" do
-    Map.take(data, [:id, :name, :execution_type, :run, :status, :log, :started_at, :finished_at])
+    Map.take(data, [:id, :title, :execution_type, :run, :status, :log, :started_at, :finished_at])
   end
 
   defp strip_keys_for(data, _type) do

@@ -1,7 +1,7 @@
 import { Socket as WebSocket } from 'phoenix'
 import { normalize } from 'normalizr'
 import * as schema from 'lib/schema'
-import { addEntities, fetchProject } from 'lib/store'
+import { addEntities, fetchProject, fetchBuild } from 'lib/store'
 
 let instance = null
 
@@ -30,7 +30,6 @@ class Socket {
       .receive("timeout", () => console.log(`[WS] Still waiting to join Channel: ${room}`))
 
     channel.on("event", payload => {
-      console.log(payload)
       const { event, data: response } = payload
 
       const [ , eventType, entityName ] = /entity:(.*):(.*)$/.exec(event)
@@ -43,6 +42,10 @@ class Socket {
 
       if (eventType === "create" && entityName === "build") {
         this.dispatch(fetchProject(attrs.projectId))
+      }
+
+      if (eventType === "change" && entityName === "build" && response.status === "active") {
+        this.dispatch(fetchBuild(data.result))
       }
     })
   }
@@ -74,6 +77,8 @@ class Socket {
   _getSchemaFromString(str) {
     switch (str) {
       case "build": return schema.build
+      case "stage": return schema.stage
+      case "step": return schema.step
       default: return null
     }
   }

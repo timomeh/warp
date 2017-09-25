@@ -29,7 +29,11 @@ defmodule Beam.Steps do
     steps
     |> Enum.map(fn step ->
       substeps =
-        from(s in Step, where: s.parent_step_id == ^step.id)
+        from(
+          s in Step,
+          where: s.parent_step_id == ^step.id,
+          order_by: [asc: s.ordinal_rank]
+        )
         |> Repo.all()
         |> load_substeps()
 

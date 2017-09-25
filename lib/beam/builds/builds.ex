@@ -67,8 +67,8 @@ defmodule Beam.Builds do
   end
 
   def preload_stages(build) do
-    step_query = from(step in Step, order_by: step.ordinal_rank)
-    stage_query = from(stage in Stage, order_by: stage.ordinal_rank, preload: [steps: ^step_query])
+    step_query = from(step in Step, order_by: [asc: step.ordinal_rank])
+    stage_query = from(stage in Stage, order_by: [asc: stage.ordinal_rank], preload: [steps: ^step_query])
 
     build =
       build

@@ -31,7 +31,7 @@ class Project extends Component {
   }
 
   render() {
-    const { projects, builds, pipelines } = this.props
+    const { projects, builds, pipelines, stages, steps } = this.props
     const projectId = this.currentProjectId()
     const project = projects.entities[projectId]
 
@@ -47,7 +47,15 @@ class Project extends Component {
         <BuildOverviewList
           items={project.latest_builds.map(buildId => builds.entities[buildId])}
           renderItem={build =>
-            <BuildOverview build={build} pipeline={pipelines.entities[build.pipeline_id]} />
+            <BuildOverview
+              build={build}
+              stages={(build.stages && build.stages.length)
+                ? build.stages.map(id => stages.entities[id])
+                : []
+              }
+              steps={steps}
+              pipeline={pipelines.entities[build.pipeline_id]}
+            />
           }
         />
       </div>

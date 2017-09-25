@@ -11,39 +11,39 @@ const rotate = css.keyframes({
   'to': { transform: 'rotate(360deg)' }
 })
 
-const Pending = glamorous.div({
+const Pending = glamorous.div(({ size }) => ({
   display: 'inline-block',
-  width: 16,
-  height: 16,
+  width: size,
+  height: size,
   borderRadius: '50%',
-  border: '3px solid white'
-})
+  border: `${size*0.1875}px solid white`
+}))
 
-const Active = glamorous.div({
+const Active = glamorous.div(({ size }) => ({
   display: 'inline-block',
-  width: 16,
-  height: 16,
+  width: size,
+  height: size,
   borderRadius: '50%',
-  border: '3px solid rgba(255, 255, 255, 0.5)',
-  borderLeft: '3px solid #FFFFFF',
+  border: `${size*0.1875}px solid rgba(255, 255, 255, 0.5)`,
+  borderLeft: `${size*0.1875}px solid #FFFFFF`,
   animation: `${rotate} 1s infinite linear`
-})
+}))
 
 const StatusIndicator = props => {
-  const { type } = props
+  const { type, size = 16 } = props
 
   switch (type) {
     case "success":
-      return <Icon icon={icons.checkmark} width={16} height={13} style={{ fill: 'white' }} />
+      return <Icon icon={icons.checkmark} width={size} height={size} style={{ fill: 'white' }} />
     case "pending":
-      return <Pending />
+      return <Pending size={size} />
     case "init":
     case "active":
-      return <Active />
+      return <Active size={size} />
     case "queued":
-      return <Icon icon={icons.hourglass} width={16} height={16} style={{ fill: 'white' }} />
+      return <Icon icon={icons.hourglass} width={size} height={size} style={{ fill: 'white' }} />
     case "failed":
-      return <Icon icon={icons.times} width={16} height={16} style={{ fill: 'white' }} />
+      return <Icon icon={icons.times} width={size} height={size} style={{ fill: 'white' }} />
     default:
       return <div>?</div>
   }
@@ -52,7 +52,8 @@ const StatusIndicator = props => {
 
 
 StatusIndicator.propTypes = {
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
+  size: PropTypes.number
 }
 
 export default StatusIndicator

@@ -9,6 +9,7 @@ const AppFrame = glamorous.div({
 
 const Top = glamorous.header({
   position: 'fixed',
+  zIndex: 1,
   top: 0,
   left: 0,
   right: 0,

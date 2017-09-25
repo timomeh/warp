@@ -10,6 +10,12 @@ const api = {
       return fetch(`${API_URL}/projects/${id}`)
         .then(response => response.json())
     }
+  },
+  builds: {
+    getById(id) {
+      return fetch(`${API_URL}/builds/${id}`)
+        .then(response => response.json())
+    }
   }
 }
 
