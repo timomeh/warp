@@ -16,10 +16,11 @@ defmodule Beam.Worker.GroupWorker do
   require Logger
 
   @doc false
-  def start_link(group, schema) do
+  def start_link(group, project_id, schema) do
     state = %{
       group: group,
       execution_type: group.execution_type,
+      project_id: project_id,
       schema: schema, # either :step or :stage
       running_worker_pids: [],
       finished_worker_pids: [],
@@ -152,7 +153,7 @@ defmodule Beam.Worker.GroupWorker do
     pid =
       state
       |> get_next_step()
-      |> run_step()
+      |> run_step(state)
 
     Map.put(state, :running_worker_pids, state.running_worker_pids ++ [pid])
   end
@@ -161,20 +162,20 @@ defmodule Beam.Worker.GroupWorker do
     running_worker_pids =
       state
       |> get_steps()
-      |> Enum.map(&(run_step(&1)))
+      |> Enum.map(&(run_step(&1, state)))
 
     Map.put(state, :running_worker_pids, running_worker_pids)
   end
 
-  defp run_step(%{execution_type: type} = step) when type == "run" do
-    {:ok, pid} = TaskWorker.start_link(step)
+  defp run_step(%{execution_type: type} = step, state) when type == "run" do
+    {:ok, pid} = TaskWorker.start_link(step, state.project_id)
     TaskWorker.run(pid)
     Process.monitor(pid)
     pid
   end
 
-  defp run_step(%{execution_type: _type} = step) do
-    {:ok, pid} = GroupWorker.start_link(step, :step)
+  defp run_step(%{execution_type: _type} = step, state) do
+    {:ok, pid} = GroupWorker.start_link(step, state.project_id, :step)
     GroupWorker.run(pid)
     Process.monitor(pid)
     pid
@@ -230,13 +231,13 @@ defmodule Beam.Worker.GroupWorker do
   end
 
   defp broadcast(state, event \\ "change") do
-    topic = "#{state.schema}:#{state.group.id}"
+    topic = "project:#{state.project_id}"
     message = %{
       event: event,
       type: to_string(state.schema),
       data: state.group
     }
-    PubSub.broadcast(Beam.PubSub, "build:x", message)
+    PubSub.broadcast(Beam.PubSub, topic, message)
     state
   end
 

@@ -14,11 +14,12 @@ defmodule Beam.Worker.TaskWorker do
   # Client
 
   @doc false
-  def start_link(step) do
+  def start_link(step, project_id) do
     state = %{
       step: step,
       debug_name: "#TaskWorker<#{step.id}>",
-      output: nil
+      output: nil,
+      project_id: project_id
     }
     Process.flag(:trap_exit, true) # Process calls terminate() before shutdown
     GenServer.start(__MODULE__, state)
@@ -112,13 +113,13 @@ defmodule Beam.Worker.TaskWorker do
   end
 
   defp broadcast(state, event \\ "change") do
-    topic = "step:#{state.step.id}"
+    topic = "project:#{state.project_id}"
     message = %{
       event: event,
       type: "step",
       data: state.step
     }
-    PubSub.broadcast(Beam.PubSub, "build:x", message)
+    PubSub.broadcast(Beam.PubSub, topic, message)
     state
   end
 

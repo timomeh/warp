@@ -8,10 +8,11 @@ defmodule Beam.Worker.BuildWorker do
 
   require Logger
 
-  def start(build) do
+  def start(build, project_id) do
     state = %{
       build: build,
       current_stage_index: -1,
+      project_id: project_id,
       debug_name: "#BuildWorker<#{build.id}>"
     }
     Process.flag(:trap_exit, true) # Process calls terminate() before shutdown
@@ -93,24 +94,24 @@ defmodule Beam.Worker.BuildWorker do
 
     state.build.stages
     |> Enum.at(state.current_stage_index)
-    |> run_stage()
+    |> run_stage(state)
 
     state
   end
 
-  defp run_stage(stage) do
-    {:ok, pid} = GroupWorker.start_link(stage, :stage)
+  defp run_stage(stage, state) do
+    {:ok, pid} = GroupWorker.start_link(stage, state.project_id, :stage)
     GroupWorker.run(pid)
   end
 
   defp broadcast(state, event \\ "change") do
-    topic = "build:#{state.build.id}"
+    topic = "project:#{state.project_id}"
     message = %{
       event: event,
       type: "build",
       data: state.build
     }
-    PubSub.broadcast(Beam.PubSub, "build:x", message)
+    PubSub.broadcast(Beam.PubSub, topic, message)
     state
   end
 

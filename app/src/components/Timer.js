@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+import raf from 'raf'
 
 class Timer extends Component {
   constructor(props) {
@@ -11,11 +12,11 @@ class Timer extends Component {
   }
 
   componentDidMount() {
-    this.updateRaf = window.requestAnimationFrame(this.updateTime.bind(this))
+    this.updateTime()
   }
 
   componentWillUnmount() {
-    window.cancelAnimationFrame(this.updateRaf)
+    raf.cancel(this.rafHandle)
   }
 
   render() {
@@ -28,6 +29,12 @@ class Timer extends Component {
   }
 
   updateTime = () => {
+    this.rafHandle = raf(this.updateTime)
+
+    // Throttle to 4fps (250ms difference)
+    const elapsedTime = Date.now() - this.lastUpdateTime
+    if (elapsedTime < 250) return
+
     const newTimerString = this.getTimerString(this.props.datetime)
 
     if (newTimerString !== this.state.timerString) {
@@ -36,7 +43,7 @@ class Timer extends Component {
       })
     }
 
-    window.requestAnimationFrame(this.updateTime.bind(this))
+    this.lastUpdateTime = Date.now()
   }
 }
 

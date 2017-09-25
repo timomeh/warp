@@ -46,7 +46,7 @@ const StatusItem = props => {
       <SecondaryText>{version}</SecondaryText>
       <SecondaryText alignRight>
         {startedAt &&
-          (startedAt === 'active' || startedAt === 'init')
+          (status === 'active' || status === 'init')
           ? <Timer datetime={startedAt} />
           : <TimeFromNow datetime={startedAt} />
         }

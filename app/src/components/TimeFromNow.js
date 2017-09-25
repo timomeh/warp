@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+import raf from 'raf'
 
 class TimeFromNow extends Component {
   constructor(props) {
@@ -11,11 +12,12 @@ class TimeFromNow extends Component {
   }
 
   componentDidMount() {
-    this.updateRaf = window.requestAnimationFrame(this.updateTime.bind(this))
+    this.lastUpdateTime = Date.now()
+    this.updateTime()
   }
 
   componentWillUnmount() {
-    window.cancelAnimationFrame(this.updateRaf)
+    raf.cancel(this.rafHandle)
   }
 
   render() {
@@ -27,6 +29,12 @@ class TimeFromNow extends Component {
   }
 
   updateTime = () => {
+    this.rafHandle = raf(this.updateTime)
+
+    // Throttle to 4fps (250ms difference)
+    const elapsedTime = Date.now() - this.lastUpdateTime
+    if (elapsedTime < 250) return
+
     const newTimeFromNow = this.timeFromNow(this.props.datetime)
 
     if (newTimeFromNow !== this.state.fromNowString) {
@@ -35,7 +43,7 @@ class TimeFromNow extends Component {
       })
     }
 
-    window.requestAnimationFrame(this.updateTime.bind(this))
+    this.lastUpdateTime = Date.now()
   }
 }
 

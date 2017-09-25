@@ -77,7 +77,7 @@ defmodule Beam.Worker.InitWorker do
   end
 
   defp run_build_worker(state) do
-    {:ok, pid} = BuildWorker.start(state.build)
+    {:ok, pid} = BuildWorker.start(state.build, state.project_id)
     BuildWorker.run(pid)
     state
   end
