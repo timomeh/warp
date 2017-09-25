@@ -29,12 +29,6 @@ const Active = glamorous.div({
   animation: `${rotate} 1s infinite linear`
 })
 
-const Errored = () => (
-  <svg width="16px" height="16px" viewBox="0 0 16 16" fill="white">
-    <polygon points="5 0 11 0 16 5 16 11 11.0527372 16 5 16 0 11 0 5"></polygon>
-  </svg>
-)
-
 const StatusIndicator = props => {
   const { type } = props
 
@@ -43,10 +37,13 @@ const StatusIndicator = props => {
       return <Icon icon={icons.checkmark} width={16} height={13} style={{ fill: 'white' }} />
     case "pending":
       return <Pending />
+    case "init":
     case "active":
       return <Active />
+    case "queued":
+      return <Icon icon={icons.hourglass} width={16} height={16} style={{ fill: 'white' }} />
     case "failed":
-      return <Errored />
+      return <Icon icon={icons.times} width={16} height={16} style={{ fill: 'white' }} />
     default:
       return <div>?</div>
   }

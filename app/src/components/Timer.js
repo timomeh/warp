@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 
-class TimeFromNow extends Component {
+class Timer extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      fromNowString: this.timeFromNow(props.datetime)
+      timerString: this.getTimerString(props.datetime)
     }
   }
 
@@ -19,19 +19,20 @@ class TimeFromNow extends Component {
   }
 
   render() {
-    return <span>{this.state.fromNowString}</span>
+    return <span>{this.state.timerString}</span>
   }
 
-  timeFromNow = (datetime) => {
-    return moment(datetime).fromNow()
+  getTimerString = (datetime) => {
+    const diff = moment().diff(moment(datetime))
+    return moment.utc(diff).format("mm:ss")
   }
 
   updateTime = () => {
-    const newTimeFromNow = this.timeFromNow(this.props.datetime)
+    const newTimerString = this.getTimerString(this.props.datetime)
 
-    if (newTimeFromNow !== this.state.fromNowString) {
+    if (newTimerString !== this.state.timerString) {
       this.setState({
-        fromNowString: newTimeFromNow
+        timerString: newTimerString
       })
     }
 
@@ -39,4 +40,4 @@ class TimeFromNow extends Component {
   }
 }
 
-export default TimeFromNow
+export default Timer

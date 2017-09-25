@@ -15,7 +15,7 @@ defmodule Beam.Builds do
     fields =
       attrs
       |> Map.put(:started_at, DateTime.utc_now())
-      |> Map.put(:status, "queueing")
+      |> Map.put(:status, "queued")
       |> Map.put(:pipeline_id, pipeline.id)
 
     %Build{}

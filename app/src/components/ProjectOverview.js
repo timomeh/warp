@@ -9,7 +9,6 @@ import Card from 'components/Card'
 import StatusList from 'components/StatusList'
 import StatusItem from 'components/StatusItem'
 import Link from 'components/Link'
-import TimeFromNow from 'components/TimeFromNow'
 
 const Meta = glamorous.div({
   fontSize: 14,
@@ -58,7 +57,7 @@ class ProjectOverview extends Component {
                   status={build.status}
                   title={pipelines[build.pipeline_id].title}
                   version={build.ref}
-                  right={<TimeFromNow datetime={build.started_at} />}
+                  startedAt={build.started_at}
                 />
               </Link>
             )}

@@ -6,7 +6,9 @@ export const fontWeight = {
 }
 export const statusColors = {
   success: '#8BC34A',
+  init: '#FBC02D',
   active: '#FBC02D',
   failed: '#D32F2F',
-  pending: '#C8C7C7'
+  pending: '#C8C7C7',
+  queued: '#C8C7C7',
 }

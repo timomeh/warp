@@ -4,6 +4,8 @@ import glamorous from 'glamorous'
 
 import StatusBox from 'components/StatusBox'
 import { fontWeight } from 'bits/styles'
+import TimeFromNow from 'components/TimeFromNow'
+import Timer from 'components/Timer'
 
 const Box = glamorous.div({
   background: '#FFFFFF',
@@ -35,14 +37,20 @@ const SecondaryText = glamorous.div(({ alignRight }) => ({
 }))
 
 const StatusItem = props => {
-  const { status, title, right, version } = props
+  const { status, title, startedAt, version } = props
 
   return (
     <Box>
       <StatusBox type={status} />
       <PrimaryText>{title}</PrimaryText>
       <SecondaryText>{version}</SecondaryText>
-      <SecondaryText alignRight>{right}</SecondaryText>
+      <SecondaryText alignRight>
+        {startedAt &&
+          (startedAt === 'active' || startedAt === 'init')
+          ? <Timer datetime={startedAt} />
+          : <TimeFromNow datetime={startedAt} />
+        }
+      </SecondaryText>
     </Box>
   )
 }
@@ -51,7 +59,7 @@ StatusItem.propTypes = {
   status: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   version: PropTypes.string.isRequired,
-  right: PropTypes.oneOfType([PropTypes.string, PropTypes.node])
+  startedAt: PropTypes.string
 }
 
 export default StatusItem

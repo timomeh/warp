@@ -12,13 +12,13 @@ defmodule Beam.Builds.Build do
   alias Beam.Pipelines.Pipeline
   alias Beam.Stages.Stage
 
-  @permitted_states ~W(queueing init active success failed)
+  @permitted_states ~W(queued init active success failed)
   @timestamps_opts [type: :utc_datetime]
 
   schema "builds" do
     field :ref
     field :commit_sha
-    field :status, :string, default: "queueing"
+    field :status, :string, default: "queued"
     field :working_dir
     field :started_at, :utc_datetime
     field :finished_at, :utc_datetime
