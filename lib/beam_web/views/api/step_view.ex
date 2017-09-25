@@ -12,6 +12,7 @@ defmodule BeamWeb.API.StepView do
           log: step.log,
           started_at: step.started_at,
           finished_at: step.finished_at,
+          parent_step_id: step.parent_step_id
         }
       _ ->
         %{
@@ -21,6 +22,7 @@ defmodule BeamWeb.API.StepView do
           title: step.title,
           started_at: step.started_at,
           finished_at: step.finished_at,
+          parent_step_id: step.parent_step_id,
           steps: render_many(step.substeps, __MODULE__, "step.json")
         }
     end
