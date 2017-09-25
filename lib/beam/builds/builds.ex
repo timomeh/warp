@@ -33,7 +33,7 @@ defmodule Beam.Builds do
       b in Build,
       where: b.pipeline_id == ^pipeline.id,
       order_by: [desc: b.started_at],
-      distinct: b.ref
+      distinct: b.pipeline_id
     )
     |> Repo.all()
   end
