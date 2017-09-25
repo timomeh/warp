@@ -49,7 +49,10 @@ class Socket {
 
   leave(room) {
     this.channels[room].leave()
-      .receive("ok", () => delete this.channels[room])
+      .receive("ok", () => {
+        console.log(`[WS] Leaving Channel: ${room}`)
+        delete this.channels[room]
+      })
   }
 
   joinProject(id) {
