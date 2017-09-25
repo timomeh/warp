@@ -37,7 +37,7 @@ defmodule BeamWeb.API.WebhookController do
       case Builds.create_queueing(pipeline, %{ref: ref, commit_sha: commit_sha}) do
         {:ok, build} ->
           broadcast(build, pipeline)
-          start_worker(build, git, pipeline.human_id)
+          start_worker(build, git, pipeline.human_id, pipeline.project_id)
 
           conn
           |> put_status(:accepted)
@@ -51,17 +51,22 @@ defmodule BeamWeb.API.WebhookController do
   end
 
   defp broadcast(build, pipeline) do
-    topic = "pipeline:#{pipeline.id}"
+    topic = "project:#{pipeline.project_id}"
     message = %{
       event: "create",
       type: "build",
       data: build
     }
-    PubSub.broadcast(Beam.PubSub, "build:x", message)
+    PubSub.broadcast(Beam.PubSub, topic, message)
   end
 
-  defp start_worker(build, git, pipeline_name) do
-    {:ok, pid} = InitWorker.start(%{build: build, git: git, pipeline_name: pipeline_name})
+  defp start_worker(build, git, pipeline_name, project_id) do
+    {:ok, pid} = InitWorker.start(%{
+      build: build,
+      git: git,
+      pipeline_name: pipeline_name,
+      project_id: project_id
+    })
     InitWorker.run(pid)
   end
 end

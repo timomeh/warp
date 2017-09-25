@@ -7,10 +7,6 @@ defmodule BeamWeb.API.ChangesetView do
   end
 
   def map_error({key, {msg, opts}}) do
-    IO.inspect key
-    IO.inspect msg
-    IO.inspect opts
-
     %{
       title: opts |> Enum.into(%{}) |> opts_to_title,
       detail: "Attribute `#{key}` #{msg}."

@@ -2,7 +2,7 @@ defmodule BeamWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  channel "room:*", BeamWeb.RoomChannel
+  channel "project:*", BeamWeb.ProjectChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

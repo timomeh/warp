@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import glamorous, { Div } from 'glamorous'
 
+import Socket from 'lib/socket'
 import { fontWeight } from 'bits/styles'
 import Title from 'components/Title'
 import Card from 'components/Card'
@@ -18,38 +19,54 @@ const Meta = glamorous.div({
   fontWeight: fontWeight.semibold
 })
 
-const ProjectOverview = props => {
-  const { project, builds, pipelines } = props
+class ProjectOverview extends Component {
+  static propTypes = {
+    project: PropTypes.object.isRequired,
+    builds: PropTypes.object.isRequired,
+    pipelines: PropTypes.object.isRequired
+  }
 
-  return (
-    <Card>
-      <Div padding={32}>
-        <Link bare to={`/projects/${project.id}`}>
-          <Title>{project.name}</Title>
-        </Link>
-        <Meta>Latest Builds</Meta>
-        <StatusList
-          items={project.latest_builds.map(id => builds[id])}
-          renderItem={build => (
-            <Link bare to={`/projects/${project.id}/builds/${build.id}`}>
-              <StatusItem
-                status={build.status}
-                title={pipelines[build.pipeline_id].title}
-                version={build.ref}
-                right={<TimeFromNow datetime={build.started_at} />}
-              />
-            </Link>
-          )}
-        />
-      </Div>
-    </Card>
-  )
-}
+  constructor(props) {
+    super(props)
 
-ProjectOverview.propTypes = {
-  project: PropTypes.object.isRequired,
-  builds: PropTypes.object.isRequired,
-  pipelines: PropTypes.object.isRequired
+    this.socket = Socket.instance()
+  }
+
+  componentWillMount() {
+    this.socket.joinProject(this.props.project.id)
+  }
+
+  componentWillUnmount() {
+    this.socket.leaveProject(this.props.project.id)
+  }
+
+  render() {
+    const { project, builds, pipelines } = this.props
+
+    return (
+      <Card>
+        <Div padding={32}>
+          <Link bare to={`/projects/${project.id}`}>
+            <Title>{project.name}</Title>
+          </Link>
+          <Meta>Latest Builds</Meta>
+          <StatusList
+            items={project.latest_builds.map(id => builds[id])}
+            renderItem={build => (
+              <Link bare to={`/projects/${project.id}/builds/${build.id}`}>
+                <StatusItem
+                  status={build.status}
+                  title={pipelines[build.pipeline_id].title}
+                  version={build.ref}
+                  right={<TimeFromNow datetime={build.started_at} />}
+                />
+              </Link>
+            )}
+          />
+        </Div>
+      </Card>
+    )
+  }
 }
 
 export default ProjectOverview

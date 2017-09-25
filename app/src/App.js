@@ -13,13 +13,16 @@ class App extends Component {
   constructor(props) {
     super(props)
 
-    this.socket = new Socket(props.dispatch)
+    this.socket = Socket.instance(props.dispatch)
   }
 
   componentWillMount() {
-    this.socket.connect()
-    this.socket.join("room:lobby")
+    //this.socket.joinGeneral()
     this.props.dispatch(fetchProjects())
+  }
+
+  componentWillUnmount() {
+    //this.socket.leaveGeneral()
   }
 
   render() {

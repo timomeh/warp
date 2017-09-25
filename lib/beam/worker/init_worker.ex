@@ -11,13 +11,14 @@ defmodule Beam.Worker.InitWorker do
   @sandbox_path "/Users/timomaemecke/Documents/dev/beam_deployments/"
   @config_file_name "beamfile.yml"
 
-  def start(%{build: build, git: git, pipeline_name: pipeline_name}) do
+  def start(%{build: build, git: git, pipeline_name: pipeline_name, project_id: project_id}) do
     state = %{
       build: build,
       pipeline_name: pipeline_name,
       build_dir: nil,
       build_full_path: nil,
       git: git,
+      project_id: project_id,
       debug_name: "#InitWorker<#{build.id}>"
     }
     GenServer.start(__MODULE__, state)
@@ -82,13 +83,13 @@ defmodule Beam.Worker.InitWorker do
   end
 
   defp broadcast(state, event \\ "change") do
-    topic = "build:#{state.build.id}"
+    topic = "project:#{state.project_id}"
     message = %{
       event: event,
       type: "build",
       data: state.build
     }
-    PubSub.broadcast(Beam.PubSub, "build:x", message)
+    PubSub.broadcast(Beam.PubSub, topic, message)
     state
   end
 

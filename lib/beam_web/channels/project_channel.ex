@@ -1,10 +1,9 @@
-defmodule BeamWeb.RoomChannel do
+defmodule BeamWeb.ProjectChannel do
   use Phoenix.Channel
 
   alias Phoenix.PubSub
 
-  def join("room:lobby", _message, socket) do
-    PubSub.subscribe(Beam.PubSub, "build:x")
+  def join("project:" <> project_id, _message, socket) do
     {:ok, socket}
   end
 
@@ -19,7 +18,7 @@ defmodule BeamWeb.RoomChannel do
       |> strip_keys_for(type)
       |> convert_to_event(type, event)
 
-    BeamWeb.Endpoint.broadcast("room:lobby", "event", payload)
+    BeamWeb.Endpoint.broadcast(socket.topic, "event", payload)
 
     {:noreply, socket}
   end
@@ -36,7 +35,7 @@ defmodule BeamWeb.RoomChannel do
   end
 
   defp strip_keys_for(data, type) when type == "build" do
-    Map.take(data, [:id, :ref, :commit_sha, :status, :started_at, :status, :started_at, :finished_at])
+    Map.take(data, [:id, :ref, :commit_sha, :status, :started_at, :status, :started_at, :finished_at, :pipeline_id])
   end
 
   defp strip_keys_for(data, type) when type == "stage" do

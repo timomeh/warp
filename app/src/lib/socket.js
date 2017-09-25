@@ -3,24 +3,27 @@ import { normalize } from 'normalizr'
 import * as schema from 'lib/schema'
 import { addEntities, fetchProject } from 'lib/store'
 
+let instance = null
+
 class Socket {
-  static instance
-
   constructor(dispatch) {
-    // This is a singleton
-    if (this.instance) return this.instance
-
     this.dispatch = dispatch
     this.ws = new WebSocket("ws://localhost:4000/socket", {})
-    this.instance = this
-  }
-
-  connect() {
+    this.channels = {}
     this.ws.connect()
+
+    instance = this
   }
 
-  join(room) {
-    let channel = this.ws.channel(room, {})
+  // This is a singleton
+  static instance(dispatch) {
+    if (instance == null) return new Socket(dispatch)
+    return instance
+  }
+
+  join(room, attrs = {}) {
+    const channel = this.ws.channel(room, {})
+    this.channels[room] = channel
     channel.join()
       .receive("ok", () => console.log(`[WS] Joined Channel: ${room}`))
       .receive("error", () => console.log(`[WS] Failed to join Channel: ${room}`))
@@ -39,9 +42,30 @@ class Socket {
       this.dispatch(addEntities(data.entities))
 
       if (eventType === "create" && entityName === "build") {
-        this.dispatch(fetchProject(data.entities.builds[data.result].project_id))
+        this.dispatch(fetchProject(attrs.projectId))
       }
     })
+  }
+
+  leave(room) {
+    this.channels[room].leave()
+      .receive("ok", () => delete this.channels[room])
+  }
+
+  joinProject(id) {
+    this.join(`project:${id}`, { projectId: id })
+  }
+
+  leaveProject(id) {
+    this.leave(`project:${id}`)
+  }
+
+  joinGeneral() {
+    this.join(`topic:general`)
+  }
+
+  leaveGeneral() {
+    this.leave(`topic:general`)
   }
 
   _getSchemaFromString(str) {
