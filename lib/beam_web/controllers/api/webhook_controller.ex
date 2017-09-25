@@ -16,7 +16,7 @@ defmodule BeamWeb.API.WebhookController do
   def receive(conn, %{"payload" => payload}) do
     %{
       "ref" => ref,
-      "after" => commit,
+      "after" => commit_sha,
       "repository" => %{"ssh_url" => git}
     } = Poison.Parser.parse!(payload)
 
@@ -34,7 +34,7 @@ defmodule BeamWeb.API.WebhookController do
       |> render("nothing.json", %{})
 
     else
-      case Builds.create_queueing(pipeline, %{ref: ref, commit: commit}) do
+      case Builds.create_queueing(pipeline, %{ref: ref, commit_sha: commit_sha}) do
         {:ok, build} ->
           broadcast(build, pipeline)
           start_worker(build, git, pipeline.human_id)

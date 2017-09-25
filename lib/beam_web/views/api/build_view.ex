@@ -15,7 +15,7 @@ defmodule BeamWeb.API.BuildView do
     output = %{
       id: build.id,
       ref: build.ref,
-      commit: build.commit,
+      commit_sha: build.commit_sha,
       status: build.status,
       started_at: build.started_at,
       finished_at: build.finished_at,

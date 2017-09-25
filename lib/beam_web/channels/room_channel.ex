@@ -36,7 +36,7 @@ defmodule BeamWeb.RoomChannel do
   end
 
   defp strip_keys_for(data, type) when type == "build" do
-    Map.take(data, [:id, :ref, :commit, :status, :started_at, :status, :started_at, :finished_at])
+    Map.take(data, [:id, :ref, :commit_sha, :status, :started_at, :status, :started_at, :finished_at])
   end
 
   defp strip_keys_for(data, type) when type == "stage" do

@@ -8,7 +8,7 @@ defmodule BeamWeb.API.WebhookView do
       build: %{
         id: build.id,
         ref: build.ref,
-        commit: build.commit,
+        commit_sha: build.commit_sha,
         status: build.status,
         pipeline_id: build.pipeline_id
       }

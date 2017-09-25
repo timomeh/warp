@@ -17,7 +17,7 @@ defmodule Beam.Builds.Build do
 
   schema "builds" do
     field :ref
-    field :commit
+    field :commit_sha
     field :status, :string, default: "queueing"
     field :working_dir
     field :started_at, :utc_datetime
@@ -32,7 +32,7 @@ defmodule Beam.Builds.Build do
   def changeset(%Build{} = build, attrs \\ %{}) do
     build
     |> Repo.preload(:stages)
-    |> cast(attrs, [:ref, :commit, :status, :started_at, :finished_at, :working_dir, :pipeline_id])
+    |> cast(attrs, [:ref, :commit_sha, :status, :started_at, :finished_at, :working_dir, :pipeline_id])
     |> assoc_constraint(:pipeline)
     |> validate_inclusion(:status, @permitted_states)
     |> cast_assoc(:stages)
