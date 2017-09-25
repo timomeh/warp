@@ -45,7 +45,7 @@ defmodule Beam.Steps do
 
   def update_finished(step, log \\ nil, status \\ "success") do
     step
-    |> Ecto.Changeset.change(%{started_at: DateTime.utc_now(), log: log, status: status})
+    |> Ecto.Changeset.change(%{finished_at: DateTime.utc_now(), log: log, status: status})
     |> Repo.update()
   end
 end

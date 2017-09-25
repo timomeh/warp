@@ -17,12 +17,12 @@ Beam.Projects.create(%{
   pipelines: [
     %{
       title: "Build & Deploy to Staging",
-      ref_match: "^development$",
+      ref_match: "development$",
       human_id: "build_deploy_staging"
     },
     %{
       title: "Build & Deploy to Production",
-      ref_match: "^master$",
+      ref_match: "master$",
       human_id: "build_deploy_staging"
     }
   ]

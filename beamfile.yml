@@ -1,50 +1,68 @@
 pipelines:
-  - id: build_deploy_dev
+  - name: build_deploy_dev
     stages:
       - include: ci_build
-      - name: Deploy to Development
+        title: foobar bar!
+      - title: Deploy to Development
         steps_parallel:
           - run: sleep 2
           - run: sleep 2
-          - name: Schlafen
+          - title: Schlafen
             steps_serial:
-              - name: Schlaf mehr parallel
+              - title: Schlaf mehr parallel
                 steps_parallel:
                   - run: sleep 2
                   - run: sleep 2
               - run: sleep 2
               - run: sleep 2
-      - name: Notify
+      - title: Notify
         steps_parallel:
-          - name: "Send Mail"
+          - title: "Send Mail"
             steps_serial:
-              - name: "Prepare Mail"
+              - title: "Prepare Mail"
                 run: sleep 2
-              - name: "Send Mail"
+              - title: "Send Mail"
                 run: sleep 2
-          - name: "Notify slack"
+          - title: "Notify slack"
             run: sleep 2
 
-  - id: build_deploy_prod
+  - name: build_deploy_prod
     stages:
-      - name: Deploy to Production
+      - title: Deploy to Production
         steps_parallel:
           - run: sleep 2
           - run: sleep 2
-      - name: Notify
+      - title: Notify
         steps_parallel:
-          - name: "Send Mail"
+          - title: "Send Mail"
             run: sleep 2
-          - name: "Notify slack"
+          - title: "Notify slack"
             run: sleep 2
 
-stages:
-  - id: ci_build
-    name: CI Build
+  - name: build_deploy_staging
+    stages:
+      - title: Deploy to Staging
+        steps_parallel:
+          - run: sleep 2
+          - run: sleep 2
+          - steps_serial:
+            - run: sleep 4
+            - run: sleep 2
+            - run: sleep 3
+      - title: Notify
+        steps_parallel:
+          - title: "Send Mail"
+            run: sleep 2
+          - title: "Notify slack"
+            run: sleep 2
+
+includes:
+  ci_build:
+    title: CI Build
     steps_serial:
       - run: sleep 2
       - run: sleep 2
       - steps_parallel:
         - run: sleep 2
-        - name: Build Assets
+        - title: Build Assets
           run: sleep 2

@@ -16,7 +16,7 @@ defmodule Beam.Steps.Step do
   @timestamps_opts [type: :utc_datetime]
 
   schema "steps" do
-    field :name
+    field :title
     field :run
     field :status, :string, default: "pending"
     field :log

@@ -17,7 +17,7 @@ defmodule Beam.Stages.Stage do
   @timestamps_opts [type: :utc_datetime]
 
   schema "stages" do
-    field :name, :string
+    field :title, :string
     field :status, :string, default: "pending"
     field :ordinal_rank, :integer
     field :execution_type

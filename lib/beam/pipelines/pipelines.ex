@@ -14,7 +14,7 @@ defmodule Beam.Pipelines do
       |> Map.put(:project_id, project.id)
 
     %Pipeline{}
-    |> Pipeline.changeset(attrs)
+    |> Pipeline.changeset(fields)
     |> Repo.insert()
   end
 
@@ -32,11 +32,10 @@ defmodule Beam.Pipelines do
   end
 
   def get_by_ref_match(pipelines, ref) do
-    pipeline =
-      pipelines
-      |> Enum.find(fn pipeline ->
-        {:ok, ref_regex} = Regex.compile(pipeline.ref_match)
-        Regex.match?(ref_regex, ref)
-      end)
+    pipelines
+    |> Enum.find(fn pipeline ->
+      {:ok, ref_regex} = Regex.compile(pipeline.ref_match)
+      Regex.match?(ref_regex, ref)
+    end)
   end
 end

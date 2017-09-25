@@ -87,13 +87,16 @@ defmodule Beam.Worker.GroupWorker do
   def handle_info({:DOWN, _ref, :process, pid, :normal}, %{execution_type: type} = state)
     when type == "parallel"
   do
+    state =
+      state
+      |> change_running_worker_to_finished(pid)
+
     steps = get_steps(state)
 
     if length(state.finished_worker_pids) == length(steps) do
       state =
         state
         |> log("DONE [worker finished. all done]")
-        |> change_running_worker_to_finished(pid)
 
       {:stop, :normal, state}
     else
@@ -170,7 +173,7 @@ defmodule Beam.Worker.GroupWorker do
     pid
   end
 
-  defp run_step(%{execution_type: type} = step) do
+  defp run_step(%{execution_type: _type} = step) do
     {:ok, pid} = GroupWorker.start_link(step, :step)
     GroupWorker.run(pid)
     Process.monitor(pid)
@@ -184,7 +187,7 @@ defmodule Beam.Worker.GroupWorker do
   end
 
   defp get_steps(state) do
-    steps = case state do
+    case state do
       %{schema: :stage} -> state.group.steps
       %{schema: :step} -> state.group.substeps
     end
@@ -233,7 +236,7 @@ defmodule Beam.Worker.GroupWorker do
       type: to_string(state.schema),
       data: state.group
     }
-    PubSub.broadcast(Beam.PubSub, topic, message)
+    PubSub.broadcast(Beam.PubSub, "build:x", message)
     state
   end
 

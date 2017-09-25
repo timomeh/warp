@@ -101,14 +101,14 @@ defmodule Beam.Worker.TaskWorker do
     Map.put(state, :step, step)
   end
 
-  defp execute(step) do
+  defp execute(state) do
     task = Task.async(fn ->
-      System.cmd("sh", ["-c", step.run],
-        [stderr_to_stdout: true, into: %LogCollector{step_id: step.id}]
+      System.cmd("sh", ["-c", state.step.run],
+        [stderr_to_stdout: true, into: %LogCollector{step_id: state.step.id}]
       )
     end)
 
-    Map.put(step, :task, task)
+    Map.put(state, :task, task)
   end
 
   defp broadcast(state, event \\ "change") do
@@ -118,7 +118,7 @@ defmodule Beam.Worker.TaskWorker do
       type: "step",
       data: state.step
     }
-    PubSub.broadcast(Beam.PubSub, topic, message)
+    PubSub.broadcast(Beam.PubSub, "build:x", message)
     state
   end
 

@@ -41,18 +41,19 @@ defmodule Beam.Worker.BuildWorker do
   end
 
   @doc false
-  def handle_info({:EXIT, _pid, :normal}, %{current_stage_index: i, pipeline: %{stages: stages}} = state)
+  def handle_info({:EXIT, _pid, :normal}, %{current_stage_index: i, build: %{stages: stages}} = state)
     when i < length(stages) - 1
   do
-    state
-    |> log("RUN NEXT STAGE")
-    |> run_next_stage()
+    state =
+      state
+      |> log("RUN NEXT STAGE")
+      |> run_next_stage()
 
     {:noreply, state}
   end
 
   @doc false
-  def handle_info({:EXIT, _pid, :normal}, %{current_stage_index: i, pipeline: %{stages: stages}} = state)
+  def handle_info({:EXIT, _pid, :normal}, %{current_stage_index: i, build: %{stages: stages}} = state)
     when i == length(stages) - 1
   do
     log(state, "ALL STAGES DONE")
@@ -76,7 +77,7 @@ defmodule Beam.Worker.BuildWorker do
         {:ok, build} = Builds.update_finished(state.build)
         build
       :error ->
-        {:ok, build} = Builds.update_finished(state.pipeline, "failed")
+        {:ok, build} = Builds.update_finished(state.build, "failed")
         Stages.update_all_pending_to_stopped(build)
         build
     end
@@ -90,7 +91,7 @@ defmodule Beam.Worker.BuildWorker do
   defp run_next_stage(state) do
     state = Map.put(state, :current_stage_index, state.current_stage_index + 1)
 
-    state.pipeline.stages
+    state.build.stages
     |> Enum.at(state.current_stage_index)
     |> run_stage()
 
@@ -103,13 +104,13 @@ defmodule Beam.Worker.BuildWorker do
   end
 
   defp broadcast(state, event \\ "change") do
-    topic = "build:x"
+    topic = "build:#{state.build.id}"
     message = %{
       event: event,
       type: "build",
       data: state.build
     }
-    PubSub.broadcast(Beam.PubSub, topic, message)
+    PubSub.broadcast(Beam.PubSub, "build:x", message)
     state
   end
 

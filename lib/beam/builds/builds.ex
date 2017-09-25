@@ -51,15 +51,21 @@ defmodule Beam.Builds do
     |> Repo.update()
   end
 
+  def update_initializing(build) do
+    build
+    |> Ecto.Changeset.change(%{started_at: DateTime.utc_now(), status: "init"})
+    |> Repo.update()
+  end
+
   def update_started(build) do
     build
-    |> Ecto.Changeset.change(%{started_at: DateTime.utc_now(), status: "active"})
+    |> Ecto.Changeset.change(%{status: "active"})
     |> Repo.update()
   end
 
   def update_finished(build, status \\ "success") do
     build
-    |> Ecto.Changeset.change(%{started_at: DateTime.utc_now(), status: status})
+    |> Ecto.Changeset.change(%{finished_at: DateTime.utc_now(), status: status})
     |> Repo.update()
   end
 end
