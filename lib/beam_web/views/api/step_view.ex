@@ -5,6 +5,7 @@ defmodule BeamWeb.API.StepView do
     case step do
       %{execution_type: "run"} ->
         %{
+          id: step.id,
           title: step.title,
           run: step.run,
           status: step.status,
@@ -14,6 +15,7 @@ defmodule BeamWeb.API.StepView do
         }
       _ ->
         %{
+          id: step.id,
           execution_type: step.execution_type,
           status: step.status,
           title: step.title,

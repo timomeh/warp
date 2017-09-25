@@ -73,7 +73,6 @@ defmodule Beam.Builds do
     build =
       build
       |> Repo.preload([stages: stage_query])
-      |> IO.inspect
 
     joined_and_ordered_stages =
       build.stages
