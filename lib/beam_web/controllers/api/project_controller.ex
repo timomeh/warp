@@ -2,14 +2,21 @@ defmodule BeamWeb.API.ProjectController do
   use BeamWeb, :controller
 
   alias Beam.Projects
+  alias Beam.Builds
 
   def index(conn, _params) do
-    projects = Projects.list()
+    projects =
+      Projects.list()
+      |> Enum.map(&(preload_latest_builds(&1)))
+
     render(conn, "list.json", projects: projects)
   end
 
   def show(conn, %{"id" => id}) do
-    project = Projects.get!(id)
+    project =
+      Projects.get!(id)
+      |> preload_latest_builds()
+
     render(conn, "show.json", project: project)
   end
 
@@ -29,6 +36,15 @@ defmodule BeamWeb.API.ProjectController do
         |> put_status(:bad_request)
         |> render(BeamWeb.API.ChangesetView, "error.json", changeset: changeset)
     end
+  end
+
+  defp preload_latest_builds(project) do
+    latest_builds =
+      project.pipelines
+      |> Enum.map(&(Builds.all_distinct_latest_by_pipeline(&1)))
+      |> List.flatten()
+
+    Map.put(project, :latest_builds, latest_builds)
   end
 
   defp generate_secret(length) do

@@ -24,7 +24,17 @@ defmodule Beam.Builds do
   end
 
   def all_by_pipeline(pipeline) do
-    from(i in Build, where: i.pipeline_id == ^pipeline.id)
+    from(b in Build, where: b.pipeline_id == ^pipeline.id)
+    |> Repo.all()
+  end
+
+  def all_distinct_latest_by_pipeline(pipeline) do
+    from(
+      b in Build,
+      where: b.pipeline_id == ^pipeline.id,
+      order_by: [desc: b.started_at],
+      distinct: b.ref
+    )
     |> Repo.all()
   end
 

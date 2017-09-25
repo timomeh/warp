@@ -16,6 +16,7 @@ defmodule Beam.Projects do
 
   def list() do
     Repo.all(Project)
+    |> Repo.preload(:pipelines)
   end
 
   def get!(id) do
