@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import glamorous, { Div } from 'glamorous'
 
+import { fontWeight } from 'bits/styles'
 import Title from 'components/Title'
 import Card from 'components/Card'
 import StatusList from 'components/StatusList'
@@ -13,28 +14,29 @@ const Meta = glamorous.div({
   fontSize: 14,
   color: '#929292',
   marginBottom: 16,
-  marginTop: 16
+  marginTop: 16,
+  fontWeight: fontWeight.semibold
 })
 
 const ProjectOverview = props => {
-  const { title, builds, projectId } = props
+  const { project, builds, pipelines } = props
 
   return (
     <Card>
       <Div padding={32}>
-        <Link blank to={`/projects/${projectId}`}>
-          <Title>{title}</Title>
+        <Link bare to={`/projects/${project.id}`}>
+          <Title>{project.name}</Title>
         </Link>
-        <Meta>Environment Overview</Meta>
+        <Meta>Latest Builds</Meta>
         <StatusList
-          items={builds}
+          items={project.latest_builds.map(id => builds[id])}
           renderItem={build => (
-            <Link blank to={`/projects/${projectId}/build/${build.id}`}>
+            <Link bare to={`/projects/${project.id}/builds/${build.id}`}>
               <StatusItem
-                status={build.state}
-                title={build.type}
-                version={`Version: #${build.id}`}
-                right={<TimeFromNow datetime={build.started_at} key={build.id} />}
+                status={build.status}
+                title={pipelines[build.pipeline_id].title}
+                version={build.ref}
+                right={<TimeFromNow datetime={build.started_at} />}
               />
             </Link>
           )}
@@ -45,9 +47,9 @@ const ProjectOverview = props => {
 }
 
 ProjectOverview.propTypes = {
-  title: PropTypes.string.isRequired,
-  builds: PropTypes.array.isRequired,
-  projectId: PropTypes.number.isRequired
+  project: PropTypes.object.isRequired,
+  builds: PropTypes.object.isRequired,
+  pipelines: PropTypes.object.isRequired
 }
 
 export default ProjectOverview

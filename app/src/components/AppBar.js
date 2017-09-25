@@ -15,7 +15,7 @@ const AppBar = props => {
       justifyContent="center"
       boxShadow="0 4px 5px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.14)"
     >
-      <Link blank to="/">
+      <Link bare to="/">
         <Logo color="white" />
       </Link>
     </Div>

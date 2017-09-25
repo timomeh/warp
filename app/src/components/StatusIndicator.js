@@ -39,13 +39,13 @@ const StatusIndicator = props => {
   const { type } = props
 
   switch (type) {
-    case "finished":
+    case "success":
       return <Icon icon={icons.checkmark} width={16} height={13} style={{ fill: 'white' }} />
     case "pending":
       return <Pending />
     case "active":
       return <Active />
-    case "errored":
+    case "failed":
       return <Errored />
     default:
       return <div>?</div>

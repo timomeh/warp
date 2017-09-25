@@ -5,8 +5,8 @@ export const fontWeight = {
   bold: 700
 }
 export const statusColors = {
-  finished: '#8BC34A',
+  success: '#8BC34A',
   active: '#FBC02D',
-  errored: '#D32F2F',
+  failed: '#D32F2F',
   pending: '#C8C7C7'
 }

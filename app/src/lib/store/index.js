@@ -5,10 +5,12 @@ import * as schema from 'lib/schema'
 import api from 'lib/api'
 import projects from './projects'
 import builds from './builds'
+import pipelines from './pipelines'
 
 const rootReducer = combineReducers({
   projects,
-  builds
+  builds,
+  pipelines
 })
 
 const store = createStore(

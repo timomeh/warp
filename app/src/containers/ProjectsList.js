@@ -6,19 +6,19 @@ import ProjectOverview from 'components/ProjectOverview'
 
 class ProjectsList extends Component {
   render() {
-    const { projects, builds } = this.props
+    const { projects, builds, pipelines } = this.props
 
     return (
       <Div marginTop={64}>
         {projects.items.map(projectId => {
-          const { name, latest_builds } = projects.entities[projectId]
+          const project = projects.entities[projectId]
 
           return (
             <ProjectOverview
               key={projectId}
-              projectId={projectId}
-              title={name}
-              builds={latest_builds.map(buildId => builds.entities[buildId])}
+              project={project}
+              pipelines={pipelines.entities}
+              builds={builds.entities}
             />
           )
         })}
@@ -29,7 +29,8 @@ class ProjectsList extends Component {
 
 const mapStateToProps = state => ({
   projects: state.projects,
-  builds: state.builds
+  builds: state.builds,
+  pipelines: state.pipelines
 })
 
 export default connect(mapStateToProps)(ProjectsList)

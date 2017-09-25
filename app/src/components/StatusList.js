@@ -10,7 +10,7 @@ const StatusList = props => {
   return (
     <FlipMove duration={130} easing="ease-in-out">
       {items.map(item => (
-        <Div marginTop={8} key={slug(item.type)}>
+        <Div marginTop={8} key={slug(item.ref)}>
           {renderItem(item)}
         </Div>
       ))}
