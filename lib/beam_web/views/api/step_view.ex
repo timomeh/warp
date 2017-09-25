@@ -5,7 +5,7 @@ defmodule BeamWeb.API.StepView do
     case step do
       %{execution_type: "run"} ->
         %{
-          name: step.name,
+          title: step.title,
           run: step.run,
           status: step.status,
           log: step.log,
@@ -16,7 +16,7 @@ defmodule BeamWeb.API.StepView do
         %{
           execution_type: step.execution_type,
           status: step.status,
-          name: step.name,
+          title: step.title,
           started_at: step.started_at,
           finished_at: step.finished_at,
           steps: render_many(step.substeps, __MODULE__, "step.json")

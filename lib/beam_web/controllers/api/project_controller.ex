@@ -44,6 +44,7 @@ defmodule BeamWeb.API.ProjectController do
       |> Enum.map(&(Builds.all_distinct_latest_by_pipeline(&1)))
       |> List.flatten()
       |> Enum.sort(&(DateTime.compare(&1.started_at, &2.started_at) == :gt))
+      |> Enum.map(&(Builds.preload_stages(&1)))
 
     Map.put(project, :latest_builds, latest_builds)
   end

@@ -6,17 +6,18 @@ defmodule BeamWeb.API.BuildController do
   alias Beam.Worker.BuildWorker
 
   def index(conn, %{"pipeline_id" => pipeline_id}) do
-    instances =
+    builds =
       pipeline_id
       |> Pipelines.get!()
       |> Builds.all_by_pipeline()
+      |> Enum.map(&(Builds.preload_stages(&1)))
 
-    render(conn, "list.json", instances: instances)
+    render(conn, "list.json", builds: builds)
   end
 
   def show(conn, %{"id" => id}) do
-    instance = Builds.get!(id)
-    render(conn, "show.json", instance: instance)
+    build = Builds.get!(id)
+    render(conn, "show.json", build: build)
   end
 
   def create(conn, %{"pipeline_id" => pipeline_id}) do

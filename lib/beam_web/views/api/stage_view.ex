@@ -5,7 +5,7 @@ defmodule BeamWeb.API.StageView do
 
   def render("stage.json", %{stage: stage}) do
     %{
-      name: stage.name,
+      title: stage.title,
       status: stage.status,
       execution_type: stage.execution_type,
       started_at: stage.started_at,

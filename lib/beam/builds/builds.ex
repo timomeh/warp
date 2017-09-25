@@ -39,20 +39,7 @@ defmodule Beam.Builds do
   end
 
   def get!(id) do
-    step_query = from(step in Step, order_by: step.ordinal_rank)
-    stage_query = from(stage in Stage, order_by: stage.ordinal_rank, preload: [steps: ^step_query])
-
-    build =
-      Repo.get!(Build, id)
-      |> Repo.preload([stages: stage_query])
-
-    joined_and_ordered_stages =
-      build.stages
-      |> Enum.map(&(Map.put(&1, :steps, Steps.load_substeps(&1.steps))))
-
-    Map.put(build, :stages, joined_and_ordered_stages)
-
-    build
+    Repo.get!(Build, id)
   end
 
   def update(build, attrs) do
@@ -77,5 +64,21 @@ defmodule Beam.Builds do
     build
     |> Ecto.Changeset.change(%{finished_at: DateTime.utc_now(), status: status})
     |> Repo.update()
+  end
+
+  def preload_stages(build) do
+    step_query = from(step in Step, order_by: step.ordinal_rank)
+    stage_query = from(stage in Stage, order_by: stage.ordinal_rank, preload: [steps: ^step_query])
+
+    build =
+      build
+      |> Repo.preload([stages: stage_query])
+      |> IO.inspect
+
+    joined_and_ordered_stages =
+      build.stages
+      |> Enum.map(&(Map.put(&1, :steps, Steps.load_substeps(&1.steps))))
+
+    Map.put(build, :stages, joined_and_ordered_stages)
   end
 end
