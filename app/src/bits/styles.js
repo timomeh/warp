@@ -1,4 +1,8 @@
-export const fontFamily = '"Source Sans Pro", sans-serif'
+export const fontFamily = {
+  normal: '"Source Sans Pro", sans-serif',
+  code: '"Fira Mono", monospace'
+}
+
 export const fontWeight = {
   regular: 400,
   semibold: 600,

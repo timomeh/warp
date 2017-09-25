@@ -7,7 +7,7 @@ import { fontWeight } from 'bits/styles'
 import Title from 'components/Title'
 import Card from 'components/Card'
 import StatusList from 'components/StatusList'
-import StatusItem from 'components/StatusItem'
+import StatusBar from 'components/StatusBar'
 import Link from 'components/Link'
 
 const Meta = glamorous.div({
@@ -53,7 +53,7 @@ class ProjectOverview extends Component {
             items={project.latest_builds.map(id => builds[id])}
             renderItem={build => (
               <Link bare to={`/projects/${project.id}/builds/${build.id}`}>
-                <StatusItem
+                <StatusBar
                   status={build.status}
                   title={pipelines[build.pipeline_id].title}
                   version={build.ref}

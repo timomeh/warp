@@ -10,7 +10,7 @@ const BuildOverviewList = props => {
   return (
     <FlipMove duration={130} easing="ease-in-out">
       {items.map(item => (
-        <Div marginBottom={8} key={slug(item.type)}>
+        <Div marginBottom={32} key={slug(item.ref)}>
           {renderItem(item)}
         </Div>
       ))}

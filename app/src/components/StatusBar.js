@@ -4,11 +4,12 @@ import glamorous from 'glamorous'
 
 import { statusColors, fontWeight } from 'bits/styles'
 import StatusBox from 'components/StatusBox'
+import Timer from 'components/Timer'
+import TimeFromNow from 'components/TimeFromNow'
 
 const ColoredBar = glamorous.div(({ status }) => ({
   backgroundColor: statusColors[status],
   backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.15), rgba(0,0,0,0.07))',
-  height: 48,
   display: 'flex',
   flexFlow: 'row nowrap',
   alignItems: 'center'
@@ -30,21 +31,25 @@ const RightText = glamorous.div({
 })
 
 const StatusBar = props => {
-  const { status, primaryText, right } = props
+  const { status, title, time } = props
 
   return (
     <ColoredBar status={status}>
       <StatusBox type={status} big />
-      <PrimaryText>{primaryText}</PrimaryText>
-      <RightText>{right}</RightText>
+      <PrimaryText>{title}</PrimaryText>
+      <RightText>{time &&
+        (status === 'active' || status === 'init')
+        ? <Timer datetime={time} />
+        : <TimeFromNow datetime={time} />
+      }</RightText>
     </ColoredBar>
   )
 }
 
 StatusBar.propTypes = {
   status: PropTypes.string.isRequired,
-  primaryText: PropTypes.string.isRequired,
-  right: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired
+  title: PropTypes.string.isRequired,
+  time: PropTypes.string
 }
 
 export default StatusBar
