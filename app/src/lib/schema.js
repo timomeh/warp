@@ -1,6 +1,16 @@
 import { schema } from 'normalizr'
 
-export const build = new schema.Entity('builds')
+const singleStep = new schema.Entity('steps')
+singleStep.define({ steps: [singleStep] })
+export const step = singleStep
+
+export const stage = new schema.Entity('stages', {
+  steps: [step]
+})
+
+export const build = new schema.Entity('builds', {
+  stages: [stage]
+})
 
 export const pipeline = new schema.Entity('pipelines')
 

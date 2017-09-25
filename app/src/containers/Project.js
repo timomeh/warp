@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import { fetchProject } from 'lib/store'
 import Socket from 'lib/socket'
 import ProjectHeader from 'components/ProjectHeader'
 import SectionTitle from 'components/SectionTitle'
@@ -17,6 +18,7 @@ class Project extends Component {
   componentWillMount() {
     const projectId = this.currentProjectId()
     this.socket.joinProject(projectId)
+    this.props.dispatch(fetchProject(projectId))
   }
 
   componentWillUnmount() {
@@ -33,7 +35,7 @@ class Project extends Component {
     const projectId = this.currentProjectId()
     const project = projects.entities[projectId]
 
-    if (projects.isFetching) return <div>Loading</div>
+    if (project == null) return <div>Loading</div>
 
     return (
       <div>
@@ -56,7 +58,9 @@ class Project extends Component {
 const mapStateToProps = state => ({
   projects: state.projects,
   pipelines: state.pipelines,
-  builds: state.builds
+  builds: state.builds,
+  stages: state.stages,
+  steps: state.steps
 })
 
 export default connect(mapStateToProps)(Project)

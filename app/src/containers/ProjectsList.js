@@ -2,9 +2,14 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Div } from 'glamorous'
 
+import { fetchProjects } from 'lib/store'
 import ProjectOverview from 'components/ProjectOverview'
 
 class ProjectsList extends Component {
+  componentWillMount() {
+    this.props.dispatch(fetchProjects())
+  }
+
   render() {
     const { projects, builds, pipelines } = this.props
 

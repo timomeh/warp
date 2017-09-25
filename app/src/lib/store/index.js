@@ -4,13 +4,17 @@ import thunk from 'redux-thunk'
 import * as schema from 'lib/schema'
 import api from 'lib/api'
 import projects from './projects'
-import builds from './builds'
 import pipelines from './pipelines'
+import builds from './builds'
+import stages from './stages'
+import steps from './steps'
 
 const rootReducer = combineReducers({
   projects,
+  pipelines,
   builds,
-  pipelines
+  stages,
+  steps
 })
 
 const store = createStore(
