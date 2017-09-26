@@ -29,14 +29,16 @@ defmodule Beam.Builds do
     |> Repo.all()
   end
 
-  def all_by_project(project) do
+  def all_by_project(project, offset \\ 0, limit \\ 25) do
     from(
       b in Build,
       join: p in Pipeline,
       where: p.project_id == ^project.id
         and b.pipeline_id == p.id
         and b.status in ["success", "failed"],
-      order_by: [desc: b.started_at]
+      order_by: [desc: b.started_at],
+      limit: ^limit,
+      offset: ^offset
     )
     |> Repo.all()
   end
