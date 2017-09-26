@@ -58,6 +58,7 @@ class ProjectOverview extends Component {
                   title={pipelines[build.pipeline_id].title}
                   version={build.ref}
                   startedAt={build.started_at}
+                  finishedAt={build.finished_at}
                 />
               </Link>
             )}

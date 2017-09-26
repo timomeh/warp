@@ -27,10 +27,6 @@ const Meta = glamorous.div({
 const BuildOverview = props => {
   const { build, pipeline, stages, steps } = props
 
-  const time = ['success', 'failed'].includes(build.status)
-    ? build.finished_at
-    : build.started_at
-
   function timeToString(time) {
     return time
       ? moment(time).format("YYYY-MM-DD HH:mm:ss")
@@ -48,7 +44,8 @@ const BuildOverview = props => {
       <StatusBar
         status={build.status}
         title={pipeline.title}
-        time={time}
+        startedAt={build.started_at}
+        finishedAt={build.finished_at}
       />
       <Inner>
         <InfoList>
