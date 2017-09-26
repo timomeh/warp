@@ -6,6 +6,7 @@ defmodule Beam.Builds do
   import Ecto.Query, warn: false
 
   alias Beam.Repo
+  alias Beam.Pipelines.Pipeline
   alias Beam.Builds.Build
   alias Beam.Steps
   alias Beam.Steps.Step
@@ -25,6 +26,18 @@ defmodule Beam.Builds do
 
   def all_by_pipeline(pipeline) do
     from(b in Build, where: b.pipeline_id == ^pipeline.id)
+    |> Repo.all()
+  end
+
+  def all_by_project(project) do
+    from(
+      b in Build,
+      join: p in Pipeline,
+      where: p.project_id == ^project.id
+        and b.pipeline_id == p.id
+        and b.status in ["success", "failed"],
+      order_by: [desc: b.started_at]
+    )
     |> Repo.all()
   end
 

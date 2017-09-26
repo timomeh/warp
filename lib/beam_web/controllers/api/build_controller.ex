@@ -1,6 +1,7 @@
 defmodule BeamWeb.API.BuildController do
   use BeamWeb, :controller
 
+  alias Beam.Projects
   alias Beam.Pipelines
   alias Beam.Builds
   alias Beam.Worker.BuildWorker
@@ -11,6 +12,15 @@ defmodule BeamWeb.API.BuildController do
       |> Pipelines.get!()
       |> Builds.all_by_pipeline()
       |> Enum.map(&(Builds.preload_stages(&1)))
+
+    render(conn, "list.json", builds: builds)
+  end
+
+  def index_by_project(conn, %{"project_id" => project_id}) do
+    builds =
+      project_id
+      |> Projects.get!()
+      |> Builds.all_by_project()
 
     render(conn, "list.json", builds: builds)
   end

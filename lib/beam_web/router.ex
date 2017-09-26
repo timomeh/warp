@@ -25,6 +25,7 @@ defmodule BeamWeb.Router do
 
     resources "/projects", API.ProjectController, only: [:index, :show, :create] do
       resources "/pipelines", API.PipelineController, only: [:index, :create]
+      get "/builds", API.BuildController, :index_by_project
     end
 
     resources "/pipelines", API.PipelineController, only: [:show] do
