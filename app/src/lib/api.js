@@ -9,6 +9,10 @@ const api = {
     getById(id) {
       return fetch(`${API_URL}/projects/${id}`)
         .then(response => response.json())
+    },
+    getBuildHistory(id) {
+      return fetch(`${API_URL}/projects/${id}/builds`)
+        .then(response => response.json())
     }
   },
   builds: {

@@ -1,7 +1,7 @@
 import { Socket as WebSocket } from 'phoenix'
 import { normalize } from 'normalizr'
 import * as schema from 'lib/schema'
-import { addEntities, fetchProject, fetchBuild } from 'lib/store'
+import { addEntities, updateProject, fetchBuild } from 'lib/store'
 
 let instance = null
 
@@ -41,7 +41,7 @@ class Socket {
       this.dispatch(addEntities(data.entities))
 
       if (eventType === "create" && entityName === "build") {
-        this.dispatch(fetchProject(attrs.projectId))
+        this.dispatch(updateProject())
       }
 
       if (eventType === "change" && entityName === "build" && response.status === "active") {

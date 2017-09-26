@@ -4,7 +4,6 @@ import glamorous from 'glamorous'
 import { css, after, plugins } from 'glamor'
 import { ReactHintFactory } from 'react-hint'
 
-import { getStepLeaves } from 'lib/store'
 import MiniStatus from 'components/MiniStatus'
 
 plugins.add(({ style, selector }) => ({
@@ -59,18 +58,12 @@ const Item = glamorous.div({
 })
 
 const MiniStepsList = props => {
-  const { stages, steps } = props
-
-  const leafSteps =
-    stages
-      .map(stage => getStepLeaves(stage.steps, steps.entities))
-      .reduce((acc, cur) => acc.concat(cur), [])
-      .map(id => steps.entities[id])
+  const { steps } = props
 
   return (
     <Row>
       <ReactHint events delay={30} className={hintClass.toString()}/>
-      {leafSteps.map(step => (
+      {steps.map(step => (
         <Item key={step.id}>
           <MiniStatus status={step.status} title={step.title} />
         </Item>
@@ -80,8 +73,7 @@ const MiniStepsList = props => {
 }
 
 MiniStepsList.propTypes = {
-  stages: PropTypes.array,
-  steps: PropTypes.object
+  steps: PropTypes.array.isRequired
 }
 
 export default MiniStepsList

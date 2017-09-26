@@ -4,6 +4,7 @@ import thunk from 'redux-thunk'
 import * as schema from 'lib/schema'
 import api from 'lib/api'
 import projects from './projects'
+import project from './project'
 import pipelines from './pipelines'
 import builds from './builds'
 import stages from './stages'
@@ -11,6 +12,7 @@ import steps from './steps'
 
 const rootReducer = combineReducers({
   projects,
+  project,
   pipelines,
   builds,
   stages,
@@ -32,5 +34,6 @@ export const addEntities = entities => ({
 
 // Re-export all action creators
 export * from './projects'
+export * from './project'
 export * from './builds'
 export * from './steps'

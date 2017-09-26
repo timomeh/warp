@@ -16,26 +16,29 @@ class Project extends Component {
   }
 
   componentWillMount() {
-    const projectId = this.currentProjectId()
+    const { projectId } = this.props.match.params
     this.socket.joinProject(projectId)
     this.props.dispatch(fetchProject(projectId))
   }
 
   componentWillUnmount() {
-    const projectId = this.currentProjectId()
+    const { selectedId: projectId } = this.props.project
     this.socket.leaveProject(projectId)
   }
 
-  currentProjectId = () => {
-    return this.props.match.params.projectId
-  }
-
   render() {
-    const { projects, builds, pipelines, stages, steps } = this.props
-    const projectId = this.currentProjectId()
-    const project = projects.entities[projectId]
+    const {
+      projects,
+      builds,
+      pipelines,
+      stages,
+      steps,
+      project: projectStore
+    } = this.props
 
-    if (project == null) return <div>Loading</div>
+    if (projectStore.isFetching) return <div>Loading</div>
+
+    const project = projects.entities[projectStore.selectedId]
 
     return (
       <div>
@@ -65,6 +68,7 @@ class Project extends Component {
 }
 
 const mapStateToProps = state => ({
+  project: state.project,
   projects: state.projects,
   pipelines: state.pipelines,
   builds: state.builds,
