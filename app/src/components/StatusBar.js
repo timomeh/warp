@@ -40,7 +40,7 @@ const IconContainer = glamorous.div({
 })
 
 const StatusBar = props => {
-  const { status, title, startedAt, finishedAt, hasArrow = true } = props
+  const { status, title, startedAt, finishedAt, hasArrow = false } = props
 
   const time = ['success', 'failed'].includes(status)
     ? finishedAt

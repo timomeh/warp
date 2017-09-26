@@ -54,6 +54,7 @@ class ProjectOverview extends Component {
             renderItem={build => (
               <Link bare to={`/projects/${project.id}/builds/${build.id}`}>
                 <StatusBar
+                  hasArrow
                   status={build.status}
                   title={pipelines[build.pipeline_id].title}
                   version={build.ref}

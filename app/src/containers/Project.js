@@ -43,7 +43,7 @@ class Project extends Component {
           title={project.name}
           secondary={`Git: ${project.git}`}
         />
-        <SectionTitle>Latest Builds</SectionTitle>
+        <SectionTitle>Latest Builds by Pipeline</SectionTitle>
         <BuildOverviewList
           items={project.latest_builds.map(buildId => builds.entities[buildId])}
           renderItem={build =>
@@ -58,6 +58,7 @@ class Project extends Component {
             />
           }
         />
+        <SectionTitle>Build History</SectionTitle>
       </div>
     )
   }

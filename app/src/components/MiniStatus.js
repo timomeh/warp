@@ -27,7 +27,8 @@ const MiniStatus = props => {
 }
 
 MiniStatus.propTypes = {
-
+  status: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired
 }
 
 export default MiniStatus
