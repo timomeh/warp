@@ -5,12 +5,12 @@ import FlipMove from 'react-flip-move'
 import slug from 'slug'
 
 const BuildOverviewList = props => {
-  const { items, renderItem } = props
+  const { items, renderItem, uniqueKey } = props
 
   return (
     <FlipMove duration={130} easing="ease-in-out">
       {items.map(item => (
-        <Div marginBottom={32} key={slug(item.ref)}>
+        <Div marginBottom={32} key={slug(item[uniqueKey])}>
           {renderItem(item)}
         </Div>
       ))}
@@ -20,7 +20,8 @@ const BuildOverviewList = props => {
 
 BuildOverviewList.propTypes = {
   items: PropTypes.array.isRequired,
-  renderItem: PropTypes.func.isRequired
+  renderItem: PropTypes.func.isRequired,
+  uniqueKey: PropTypes.string.isRequired
 }
 
 export default BuildOverviewList

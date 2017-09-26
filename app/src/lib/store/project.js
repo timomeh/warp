@@ -87,11 +87,11 @@ export const updateProject = () => (dispatch, getState, { api, schema }) => {
     })
 }
 
-export const fetchBuildHistory = () => (dispatch, getState, { api, schema }) => {
-  const projectId = selectProject(getState())
+export const fetchBuildHistory = projectId => (dispatch, getState, { api, schema }) => {
+  const id = projectId || selectProject(getState())
   dispatch(requestBuildHistory())
 
-  return api.projects.getBuildHistory(projectId)
+  return api.projects.getBuildHistory(id)
     .then(response => {
       const { entities, result } = normalize(response.data, [schema.build])
       dispatch(receiveBuildHistory(result))

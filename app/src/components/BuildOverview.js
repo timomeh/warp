@@ -22,10 +22,22 @@ const Meta = glamorous.div({
   fontSize: 14,
   color: '#929292',
   marginBottom: 8,
+  marginTop: 16,
   fontWeight: fontWeight.semibold
 })
 
 class BuildOverview extends Component {
+  static defaultProps = {
+    stages: [],
+    steps: {}
+  }
+  static propTypes = {
+    build: PropTypes.object.isRequired,
+    pipeline: PropTypes.object.isRequired,
+    stages: PropTypes.array,
+    steps: PropTypes.object
+  }
+
   state = {
     leafSteps: []
   }
@@ -74,7 +86,7 @@ class BuildOverview extends Component {
               value={<CodeChip>{build.ref}</CodeChip>}
             />
           </InfoList>
-          <InfoList>
+          <InfoList noMarginBottom>
             <Info
               name="Duration"
               value={this.timesToDuration(build.started_at, build.finished_at)}
@@ -122,13 +134,6 @@ class BuildOverview extends Component {
       ? moment(time).format("YYYY-MM-DD HH:mm:ss")
       : "–"
   }
-}
-
-BuildOverview.propTypes = {
-  build: PropTypes.object.isRequired,
-  pipeline: PropTypes.object.isRequired,
-  stages: PropTypes.array.isRequired,
-  steps: PropTypes.object.isRequired
 }
 
 export default BuildOverview

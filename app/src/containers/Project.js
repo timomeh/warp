@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { fetchProject } from 'lib/store'
+import { fetchProject, fetchBuildHistory } from 'lib/store'
 import Socket from 'lib/socket'
 import ProjectHeader from 'components/ProjectHeader'
 import SectionTitle from 'components/SectionTitle'
@@ -19,6 +19,7 @@ class Project extends Component {
     const { projectId } = this.props.match.params
     this.socket.joinProject(projectId)
     this.props.dispatch(fetchProject(projectId))
+    this.props.dispatch(fetchBuildHistory(projectId))
   }
 
   componentWillUnmount() {
@@ -29,10 +30,6 @@ class Project extends Component {
   render() {
     const {
       projects,
-      builds,
-      pipelines,
-      stages,
-      steps,
       project: projectStore
     } = this.props
 
@@ -46,8 +43,29 @@ class Project extends Component {
           title={project.name}
           secondary={`Git: ${project.git}`}
         />
+        {this.renderLatestBuilds()}
+        {this.renderBuildHistory()}
+      </div>
+    )
+  }
+
+  renderLatestBuilds = () => {
+    const {
+      projects,
+      builds,
+      pipelines,
+      stages,
+      steps,
+      project: projectStore
+    } = this.props
+
+    const project = projects.entities[projectStore.selectedId]
+
+    return (
+      <div>
         <SectionTitle>Latest Builds by Pipeline</SectionTitle>
         <BuildOverviewList
+          uniqueKey="ref"
           items={project.latest_builds.map(buildId => builds.entities[buildId])}
           renderItem={build =>
             <BuildOverview
@@ -61,7 +79,32 @@ class Project extends Component {
             />
           }
         />
+      </div>
+    )
+  }
+
+  renderBuildHistory = () => {
+    const {
+      builds,
+      pipelines,
+      project: projectStore
+    } = this.props
+
+    if (projectStore.isFetchingBuilds) return <div>Loading</div>
+
+    return (
+      <div>
         <SectionTitle>Build History</SectionTitle>
+        <BuildOverviewList
+          uniqueKey="id"
+          items={projectStore.buildHistory.map(buildId => builds.entities[buildId])}
+          renderItem={build =>
+            <BuildOverview
+              build={build}
+              pipeline={pipelines.entities[build.pipeline_id]}
+            />
+          }
+        />
       </div>
     )
   }
