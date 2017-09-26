@@ -57,7 +57,7 @@ class ProjectOverview extends Component {
                   hasArrow
                   status={build.status}
                   title={pipelines[build.pipeline_id].title}
-                  version={build.ref}
+                  version={build.id}
                   startedAt={build.started_at}
                   finishedAt={build.finished_at}
                 />

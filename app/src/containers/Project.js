@@ -59,7 +59,8 @@ class Project extends Component {
       project: projectStore
     } = this.props
 
-    const project = projects.entities[projectStore.selectedId]
+    const projectId = projectStore.selectedId
+    const project = projects.entities[projectId]
 
     return (
       <div>
@@ -69,6 +70,7 @@ class Project extends Component {
           items={project.latest_builds.map(buildId => builds.entities[buildId])}
           renderItem={build =>
             <BuildOverview
+              projectId={projectId}
               build={build}
               stages={(build.stages && build.stages.length)
                 ? build.stages.map(id => stages.entities[id])
@@ -96,6 +98,7 @@ class Project extends Component {
       <div>
         <SectionTitle>Build History</SectionTitle>
         <BuildOverviewList
+          projectId={projectStore.selectedId}
           uniqueKey="id"
           items={projectStore.buildHistory.map(buildId => builds.entities[buildId])}
           renderItem={build =>

@@ -11,6 +11,7 @@ import InfoList from 'components/InfoList'
 import StatusChip from 'components/StatusChip'
 import CodeChip from 'components/CodeChip'
 import Info from 'components/Info'
+import Link from 'components/Link'
 import Timer from 'components/Timer'
 import MiniStepsList from 'components/MiniStepsList'
 
@@ -63,17 +64,21 @@ class BuildOverview extends Component {
   }
 
   render() {
-    const { build, pipeline, steps } = this.props
+    const { build, pipeline, steps, projectId } = this.props
     const { leafSteps } = this.state
 
     return (
       <Card>
-        <StatusBar
-          status={build.status}
-          title={pipeline.title}
-          startedAt={build.started_at}
-          finishedAt={build.finished_at}
-        />
+        <Link bare to={`/projects/${projectId}/builds/${build.id}`}>
+          <StatusBar
+            hasArrow
+            status={build.status}
+            title={pipeline.title}
+            version={build.id}
+            startedAt={build.started_at}
+            finishedAt={build.finished_at}
+          />
+        </Link>
         <Inner>
           <InfoList>
             <StatusChip status={build.status} />

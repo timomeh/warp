@@ -24,11 +24,15 @@ const PrimaryText = glamorous.div({
   marginLeft: 16
 })
 
-const Right = glamorous.div({
+const SecondaryText = glamorous.div({
   fontWeight: fontWeight.bold,
   fontSize: 16,
   color: 'white',
   opacity: 0.75,
+  marginLeft: 8
+})
+
+const Right = glamorous(SecondaryText)({
   marginLeft: 'auto',
   marginRight: 16,
   display: 'flex',
@@ -40,7 +44,7 @@ const IconContainer = glamorous.div({
 })
 
 const StatusBar = props => {
-  const { status, title, startedAt, finishedAt, hasArrow = false } = props
+  const { status, title, startedAt, finishedAt, hasArrow = false, version } = props
 
   const time = ['success', 'failed'].includes(status)
     ? finishedAt
@@ -50,6 +54,7 @@ const StatusBar = props => {
     <ColoredBar status={status}>
       <StatusBox type={status} big />
       <PrimaryText>{title}</PrimaryText>
+      <SecondaryText>#{version}</SecondaryText>
       <Right>{time &&
         (status === 'active' || status === 'init')
         ? <Timer datetime={time} />
