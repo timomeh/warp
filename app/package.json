@@ -41,6 +41,7 @@
     "react-dev-utils": "^4.0.1",
     "react-dom": "^15.6.1",
     "react-flip-move": "^2.9.15",
+    "react-hint": "^2.0.2",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",

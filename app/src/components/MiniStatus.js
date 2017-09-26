@@ -5,6 +5,7 @@ import glamorous from 'glamorous'
 import { statusColors } from 'bits/styles'
 import StatusIndicator from 'components/StatusIndicator'
 
+
 const Bubble = glamorous.div(({ status }) => ({
   width: 16,
   height: 16,
@@ -16,10 +17,10 @@ const Bubble = glamorous.div(({ status }) => ({
 }))
 
 const MiniStatus = props => {
-  const { status } = props
+  const { status, title } = props
 
   return (
-    <Bubble status={status}>
+    <Bubble status={status} data-rh={title}>
       <StatusIndicator type={status} size={8} />
     </Bubble>
   )
