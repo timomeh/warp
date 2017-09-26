@@ -94,7 +94,7 @@ export const fetchBuildHistory = projectId => (dispatch, getState, { api, schema
   return api.projects.getBuildHistory(id)
     .then(response => {
       const { entities, result } = normalize(response.data, [schema.build])
-      dispatch(receiveBuildHistory(result))
       dispatch(addEntities(entities))
+      dispatch(receiveBuildHistory(result))
     })
 }
