@@ -7,6 +7,7 @@ import projects from './projects'
 import project from './project'
 import pipelines from './pipelines'
 import builds from './builds'
+import build from './build'
 import stages from './stages'
 import steps from './steps'
 
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   project,
   pipelines,
   builds,
+  build,
   stages,
   steps
 })
@@ -36,4 +38,5 @@ export const addEntities = entities => ({
 export * from './projects'
 export * from './project'
 export * from './builds'
+export * from './build'
 export * from './steps'

@@ -1,5 +1,4 @@
-import { normalize } from 'normalizr'
-import { addEntities, ADD_ENTITIES } from 'lib/store'
+import { ADD_ENTITIES } from 'lib/store'
 import merge from 'deepmerge'
 
 const initialState = {
@@ -18,12 +17,4 @@ export default function reducer(state = initialState, action) {
     default:
       return state
   }
-}
-
-export const fetchBuild = id => (dispatch, getState, { api, schema }) => {
-  return api.builds.getById(id)
-    .then(response => {
-      const { entities } = normalize(response.data, schema.build)
-      dispatch(addEntities(entities))
-    })
 }
