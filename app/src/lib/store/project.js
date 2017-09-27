@@ -77,8 +77,8 @@ export const fetchProject = id => (dispatch, getState, { api, schema }) => {
     })
 }
 
-export const updateProject = () => (dispatch, getState, { api, schema }) => {
-  const projectId = selectProject(getState())
+export const updateProject = id => (dispatch, getState, { api, schema }) => {
+  const projectId = id || selectProject(getState())
 
   return api.projects.getById(projectId)
     .then(response => {

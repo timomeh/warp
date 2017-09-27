@@ -41,7 +41,7 @@ class Socket {
       this.dispatch(addEntities(data.entities))
 
       if (eventType === "create" && entityName === "build") {
-        this.dispatch(updateProject())
+        this.dispatch(updateProject(attrs.projectId))
       }
 
       if (eventType === "change" && entityName === "build" && response.status === "active") {
