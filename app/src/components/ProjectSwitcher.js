@@ -24,11 +24,15 @@ const SwitcherButton = glamorous.div({
   userSelect: 'none'
 })
 
-const Expandable = glamorous.div({
+const Expandable = glamorous.div(({ open }) => ({
   position: 'absolute',
   top: '100%',
-  backgroundColor: '#262626'
-})
+  left: 16,
+  backgroundColor: '#262626',
+  transform: `translateY(${open ? 0 : '-101%'})`,
+  transition: 'transform 130ms',
+  zIndex: -1
+}))
 
 const ListItem = glamorous.div({
   padding: '16px 32px',
@@ -40,17 +44,20 @@ const ActiveProjectName = glamorous.div({
 })
 
 class ProjectSwitcher extends Component {
+  static propTypes = {
+    projects: PropTypes.array.isRequired,
+    selectedProject: PropTypes.object.isRequired
+  }
+
   state = {
     switcherOpen: false
   }
 
   render() {
-    const { switcherOpen } = this.state
-
     return (
       <Wrap>
         {this.renderActiveProject()}
-        {switcherOpen && this.renderProjectList()}
+        {this.renderProjectList()}
       </Wrap>
     )
   }
@@ -74,9 +81,10 @@ class ProjectSwitcher extends Component {
 
   renderProjectList = () => {
     const { projects } = this.props
+    const { switcherOpen } = this.state
 
     return (
-      <Expandable>
+      <Expandable open={switcherOpen}>
         {projects.map(project => (
           <ListItem key={project.id}>{project.name}</ListItem>
         ))}
