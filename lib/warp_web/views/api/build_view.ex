@@ -15,11 +15,18 @@ defmodule WarpWeb.API.BuildView do
     output = %{
       id: build.id,
       ref: build.ref,
-      commit_sha: build.commit_sha,
       status: build.status,
       started_at: build.started_at,
       finished_at: build.finished_at,
       pipeline_id: build.pipeline_id,
+      commit: %{
+        commit_sha: build.commit.commit_sha,
+        message: build.commit.message,
+        timestamp: build.commit.timestamp,
+        foreign_url: build.commit.foreign_url,
+        sender_name: build.commit.sender_name,
+        sender_avatar: build.commit.sender_avatar
+      },
       stages: []
     }
 

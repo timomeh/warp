@@ -3,6 +3,7 @@ defmodule WarpWeb.API.WebhookController do
 
   alias Warp.Projects
   alias Warp.Pipelines
+  alias Warp.Repo
   alias Warp.Builds
   alias Warp.Worker.InitWorker
   alias Phoenix.PubSub
@@ -16,7 +17,8 @@ defmodule WarpWeb.API.WebhookController do
   def receive(conn, %{"payload" => payload}) do
     %{
       "ref" => ref,
-      "after" => commit_sha,
+      "head_commit" => commit,
+      "sender" => sender,
       "repository" => %{"ssh_url" => git}
     } = Poison.Parser.parse!(payload)
 
@@ -34,10 +36,27 @@ defmodule WarpWeb.API.WebhookController do
       |> render("nothing.json", %{})
 
     else
-      case Builds.create_queueing(pipeline, %{ref: ref, commit_sha: commit_sha}) do
+      {:ok, commit_timestamp, _} = DateTime.from_iso8601(commit["timestamp"])
+
+      attrs = %{
+        ref: ref,
+        commit: %{
+          commit_sha: commit["id"],
+          message: commit["message"],
+          timestamp: commit_timestamp,
+          foreign_url: commit["url"],
+          sender_name: sender["login"],
+          sender_avatar: sender["avatar_url"]
+        }
+      }
+
+      case Builds.create_queueing(pipeline, attrs) do
         {:ok, build} ->
-          broadcast(build, pipeline)
-          start_worker(build, git, pipeline.human_id, pipeline.project_id)
+          build =
+            build
+            |> Repo.preload(:commit)
+            |> broadcast(pipeline)
+            |> start_worker(git, pipeline.human_id, pipeline.project_id)
 
           conn
           |> put_status(:accepted)
@@ -58,6 +77,7 @@ defmodule WarpWeb.API.WebhookController do
       data: build
     }
     PubSub.broadcast(Warp.PubSub, topic, message)
+    build
   end
 
   defp start_worker(build, git, pipeline_name, project_id) do
@@ -68,5 +88,7 @@ defmodule WarpWeb.API.WebhookController do
       project_id: project_id
     })
     InitWorker.run(pid)
+
+    build
   end
 end

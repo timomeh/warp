@@ -16,14 +16,14 @@ Warp.Projects.create(%{
   secret: "H9g00LWzKCdpETNYbmYazFzscTejRvJz",
   pipelines: [
     %{
-      title: "Build & Deploy to Staging",
+      title: "Build & Deploy to Development",
       ref_match: "development$",
-      human_id: "build_deploy_staging"
+      human_id: "build_deploy_dev"
     },
     %{
       title: "Build & Deploy to Production",
       ref_match: "master$",
-      human_id: "build_deploy_staging"
+      human_id: "build_deploy_prod"
     }
   ]
 })

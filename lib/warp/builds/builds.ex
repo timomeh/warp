@@ -25,7 +25,7 @@ defmodule Warp.Builds do
   end
 
   def all_by_pipeline(pipeline) do
-    from(b in Build, where: b.pipeline_id == ^pipeline.id)
+    from(b in Build, where: b.pipeline_id == ^pipeline.id, preload: [:commit])
     |> Repo.all()
   end
 
@@ -38,7 +38,8 @@ defmodule Warp.Builds do
         and b.status in ["success", "failed"],
       order_by: [desc: b.finished_at],
       limit: ^limit,
-      offset: ^offset
+      offset: ^offset,
+      preload: [:commit]
     )
     |> Repo.all()
   end
@@ -48,13 +49,15 @@ defmodule Warp.Builds do
       b in Build,
       where: b.pipeline_id == ^pipeline.id,
       order_by: [desc: b.started_at],
-      distinct: b.pipeline_id
+      distinct: b.pipeline_id,
+      preload: [:commit]
     )
     |> Repo.all()
   end
 
   def get!(id) do
     Repo.get!(Build, id)
+    |> Repo.preload(:commit)
   end
 
   def update(build, attrs) do
@@ -87,7 +90,7 @@ defmodule Warp.Builds do
 
     build =
       build
-      |> Repo.preload([stages: stage_query])
+      |> Repo.preload([:commit, stages: stage_query])
 
     joined_and_ordered_stages =
       build.stages

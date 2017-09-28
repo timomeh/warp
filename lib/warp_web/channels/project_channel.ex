@@ -35,7 +35,7 @@ defmodule WarpWeb.ProjectChannel do
   end
 
   defp strip_keys_for(data, type) when type == "build" do
-    Map.take(data, [:id, :ref, :commit_sha, :status, :started_at, :status, :started_at, :finished_at, :pipeline_id])
+    Map.take(data, [:id, :ref, :started_at, :status, :started_at, :finished_at, :pipeline_id])
   end
 
   defp strip_keys_for(data, type) when type == "stage" do

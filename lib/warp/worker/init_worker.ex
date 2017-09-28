@@ -59,7 +59,7 @@ defmodule Warp.Worker.InitWorker do
 
   defp git_clone(%{build_dir: build_dir, build: build, git: git} = state) do
     System.cmd("git", ["clone", git, build_dir], cd: @sandbox_path)
-    System.cmd("git", ["checkout", build.commit_sha], cd: "#{@sandbox_path}#{build_dir}")
+    System.cmd("git", ["checkout", build.commit.commit_sha], cd: "#{@sandbox_path}#{build_dir}")
     Map.put(state, :build_full_path, "#{@sandbox_path}#{build_dir}")
   end
 

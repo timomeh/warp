@@ -8,7 +8,7 @@ defmodule WarpWeb.API.WebhookView do
       build: %{
         id: build.id,
         ref: build.ref,
-        commit_sha: build.commit_sha,
+        commit_sha: build.commit.commit_sha,
         status: build.status,
         pipeline_id: build.pipeline_id
       }

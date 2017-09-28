@@ -84,7 +84,7 @@ class BuildOverview extends Component {
             <StatusChip status={build.status} />
             <Info
               name="Commit"
-              value={<CodeChip>{build.commit_sha.substring(0,7)}</CodeChip>}
+              value={<CodeChip>{build.commit.commit_sha.substring(0,7)}</CodeChip>}
             />
             <Info
               name="Ref"
