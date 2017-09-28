@@ -33,9 +33,19 @@ const NavLink = glamorous(RRNavLink)({
   paddingLeft: 32,
   textDecoration: 'none',
   position: 'relative',
-  '&.active ::after': {
+  transition: 'opacity 130ms',
+  opacity: 0.75,
+  '&.active': {
+    opacity: 1
+  },
+  ':hover': {
+    opacity: 1
+  },
+  '::after': {
     content: '""',
     position: 'absolute',
+    transform: 'translateX(-5px)',
+    transition: 'all 500ms',
     left: -2,
     top: 4,
     bottom: 4,
@@ -43,6 +53,9 @@ const NavLink = glamorous(RRNavLink)({
     boxShadow: '0 0 2px 1px rgba(255,255,255,0.75)',
     width: 3,
     borderRadius: 2,
+  },
+  '&.active::after': {
+    transform: 'translateX(0)',
   }
 })
 
@@ -102,4 +115,4 @@ const mapStateToProps = state => ({
   projectId: state.project.selectedId
 })
 
-export default connect(mapStateToProps)(Aside)
+export default connect(mapStateToProps, null, null, { pure: false })(Aside)
