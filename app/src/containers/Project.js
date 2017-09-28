@@ -3,11 +3,18 @@ import { Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import { fetchProject } from 'lib/store'
+import Socket from 'lib/socket'
 import ProjectDashboard from 'containers/ProjectDashboard'
 
 class Project extends Component {
+  constructor(props) {
+    super(props)
+    this.socket = Socket.instance()
+  }
+
   componentWillMount() {
     const { projectId } = this.props.match.params
+    this.socket.joinProject(projectId)
     this.props.dispatch(fetchProject(projectId))
   }
 
