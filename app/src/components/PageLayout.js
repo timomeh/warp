@@ -40,7 +40,8 @@ const Top = glamorous.div({
 })
 
 const Content = glamorous.main({
-  paddingTop: 64,
+  padding: 50,
+  paddingTop: 64 + 50,
   width: '100%'
 })
 

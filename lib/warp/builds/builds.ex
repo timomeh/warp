@@ -36,7 +36,7 @@ defmodule Warp.Builds do
       where: p.project_id == ^project.id
         and b.pipeline_id == p.id
         and b.status in ["success", "failed"],
-      order_by: [desc: b.started_at],
+      order_by: [desc: b.finished_at],
       limit: ^limit,
       offset: ^offset
     )

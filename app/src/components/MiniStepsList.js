@@ -19,15 +19,7 @@ const hintClass = css({
   paddingBottom: 10,
   zIndex: 2,
   cursor: 'default',
-  animation: `${showHint} 200ms`,
-  '&__content': {
-    whiteSpace: 'nowrap',
-    padding: 10,
-    borderRadius: 6,
-    background: 'rgba(0,0,0,0.7)',
-    color: 'white',
-    fontSize: 14
-  },
+  animation: `${showHint} 200ms`
 },
 after({
   content: '""',
@@ -42,6 +34,15 @@ after({
   borderRight: '7px solid transparent',
   borderTop: '6px solid rgba(0,0,0,0.7)',
 }))
+
+css.global(`.${hintClass}__content`, {
+  whiteSpace: 'nowrap',
+  padding: 10,
+  borderRadius: 6,
+  background: 'rgba(0,0,0,0.7)',
+  color: 'white',
+  fontSize: 14
+})
 
 
 const Row = glamorous.div({
