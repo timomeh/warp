@@ -5,7 +5,7 @@ const REQUEST_PROJECTS = 'beam/projects/REQUEST_PROJECTS'
 const RECEIVE_PROJECTS = 'beam/projects/RECEIVE_PROJECTS'
 
 const initialState = {
-  isFetching: false,
+  isFetching: true,
   items: [],
   entities: {}
 }
@@ -55,5 +55,6 @@ export const fetchProjects = () => (dispatch, getState, { api, schema }) => {
       const { entities, result } = normalize(response.data, [schema.project])
       dispatch(addEntities(entities))
       dispatch(receiveProjects(result))
+      return result
     })
 }

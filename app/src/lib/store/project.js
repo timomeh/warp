@@ -74,6 +74,7 @@ export const fetchProject = id => (dispatch, getState, { api, schema }) => {
       const { entities, result } = normalize(response.data, schema.project)
       dispatch(addEntities(entities))
       dispatch(receiveProject(result))
+      return result
     })
 }
 

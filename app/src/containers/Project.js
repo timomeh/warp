@@ -39,12 +39,7 @@ class Project extends Component {
 
     return (
       <div>
-        <ProjectHeader
-          title={project.name}
-          secondary={`Git: ${project.git}`}
-        />
-        {this.renderLatestBuilds()}
-        {this.renderBuildHistory()}
+
       </div>
     )
   }
