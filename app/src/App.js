@@ -2,13 +2,12 @@ import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { fetchProjects, fetchProject } from 'lib/store'
+import { fetchProjects } from 'lib/store'
 import Socket from 'lib/socket'
 import AppBar from 'containers/AppBar'
 import PageLayout from 'components/PageLayout'
 import Project from 'containers/Project'
 import ProjectRedirect from 'containers/ProjectRedirect'
-import Build from 'containers/Build'
 import Aside from 'containers/Aside'
 
 class App extends Component {
@@ -19,7 +18,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchProjectsAndSelectFirst()
+    this.props.dispatch(fetchProjects())
     //this.socket.joinGeneral()
   }
 
@@ -43,19 +42,10 @@ class App extends Component {
     return (
       <Switch>
         <Route exact path="/" component={ProjectRedirect} />
-        <Route exact path="/:projectId" component={Project} />
-        <Route path="/:projectId/builds/:buildId" component={Build} />
         <Route path="/:projectId" component={Project} />
       </Switch>
     )
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  fetchProjectsAndSelectFirst() {
-    dispatch(fetchProjects())
-    .then(projectIds => dispatch(fetchProject(projectIds[0])))
-  }
-})
-
-export default connect(null, mapDispatchToProps)(App)
+export default connect()(App)
