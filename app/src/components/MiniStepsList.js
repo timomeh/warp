@@ -1,14 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import glamorous from 'glamorous'
-import { css, after, plugins } from 'glamor'
+import { css, after } from 'glamor'
 import { ReactHintFactory } from 'react-hint'
 
 import MiniStatus from 'components/MiniStatus'
-
-plugins.add(({ style, selector }) => ({
-  style, selector: selector.replace(/,\s?\[[^.,]+/g, ''),
-}))
 
 const showHint = css.keyframes({
   'from': { opacity: 0, transform: 'translateY(-3px)' },

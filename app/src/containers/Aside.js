@@ -35,11 +35,14 @@ const NavLink = glamorous(RRNavLink)({
   position: 'relative',
   transition: 'opacity 130ms',
   opacity: 0.75,
-  '&.active': {
+  '.active': {
     opacity: 1
   },
   ':hover': {
     opacity: 1
+  },
+  '&.active::after': {
+    transform: 'translateX(0)'
   },
   '::after': {
     content: '""',
@@ -52,10 +55,7 @@ const NavLink = glamorous(RRNavLink)({
     background: '#FFFFFF',
     boxShadow: '0 0 2px 1px rgba(255,255,255,0.75)',
     width: 3,
-    borderRadius: 2,
-  },
-  '&.active::after': {
-    transform: 'translateX(0)',
+    borderRadius: 2
   }
 })
 
