@@ -9,7 +9,7 @@ defmodule Warp.Worker.InitWorker do
   require Logger
 
   @sandbox_path "/Users/timomaemecke/Documents/dev/warp_deployments/"
-  @config_file_name "warpfile.yml"
+  @config_file_name ".warp.yml"
 
   def start(%{build: build, git: git, pipeline_name: pipeline_name, project_id: project_id}) do
     state = %{
