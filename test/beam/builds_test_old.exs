@@ -1,9 +1,9 @@
-defmodule Beam.Builds.BuildsTest do
-  use Beam.DataCase
+defmodule Warp.Builds.BuildsTest do
+  use Warp.DataCase
 
-  alias Beam.Builds
-  alias Beam.Builds.Build
-  alias Beam.Projects
+  alias Warp.Builds
+  alias Warp.Builds.Build
+  alias Warp.Projects
 
   @invalid_attrs %{state: "foo"}
   @full_build_attrs %{

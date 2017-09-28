@@ -1,3 +1,3 @@
-defmodule BeamWeb.PageViewTest do
-  use BeamWeb.ConnCase, async: true
+defmodule WarpWeb.PageViewTest do
+  use WarpWeb.ConnCase, async: true
 end

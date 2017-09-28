@@ -1,4 +1,4 @@
-defmodule Beam.Repo.Migrations.CommitToCommitSha do
+defmodule Warp.Repo.Migrations.CommitToCommitSha do
   use Ecto.Migration
 
   def change do

@@ -5,12 +5,12 @@
 # Inside the script, you can read and write to any of your
 # repositories directly:
 #
-#     Beam.Repo.insert!(%Beam.SomeSchema{})
+#     Warp.Repo.insert!(%Warp.SomeSchema{})
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-Beam.Projects.create(%{
+Warp.Projects.create(%{
   name: "timomeh/webhook_tstr",
   git: "git@github.com:timomeh/webhook_tstr.git",
   secret: "H9g00LWzKCdpETNYbmYazFzscTejRvJz",

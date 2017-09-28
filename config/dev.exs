@@ -6,7 +6,7 @@ use Mix.Config
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
-config :beam, BeamWeb.Endpoint,
+config :warp, WarpWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -30,7 +30,7 @@ config :beam, BeamWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :beam, BeamWeb.Endpoint,
+config :warp, WarpWeb.Endpoint,
   live_reload: []
 
 # Do not include metadata nor timestamps in development logs
@@ -41,10 +41,10 @@ config :logger, :console, format: "[$level] $message\n"
 config :phoenix, :stacktrace_depth, 20
 
 # Configure your database
-config :beam, Beam.Repo,
+config :warp, Warp.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
   password: "postgres",
-  database: "beam_dev",
+  database: "warp_dev",
   hostname: "localhost",
   pool_size: 10

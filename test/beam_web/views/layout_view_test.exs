@@ -1,3 +1,3 @@
-defmodule BeamWeb.LayoutViewTest do
-  use BeamWeb.ConnCase, async: true
+defmodule WarpWeb.LayoutViewTest do
+  use WarpWeb.ConnCase, async: true
 end

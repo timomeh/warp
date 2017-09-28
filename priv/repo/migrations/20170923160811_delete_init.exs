@@ -1,4 +1,4 @@
-defmodule Beam.Repo.Migrations.DeleteInit do
+defmodule Warp.Repo.Migrations.DeleteInit do
   use Ecto.Migration
 
   def change do

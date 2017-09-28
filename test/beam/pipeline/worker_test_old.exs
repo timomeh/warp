@@ -1,9 +1,9 @@
-defmodule Beam.Pipeline.WorkerTest do
-  use Beam.DataCase
+defmodule Warp.Pipeline.WorkerTest do
+  use Warp.DataCase
 
-  alias Beam.Pipeline.Worker
-  alias Beam.Projects
-  alias Beam.Builds
+  alias Warp.Pipeline.Worker
+  alias Warp.Projects
+  alias Warp.Builds
 
   @full_build_attrs %{
     stages: [

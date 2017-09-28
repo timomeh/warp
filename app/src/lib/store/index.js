@@ -28,7 +28,7 @@ const store = createStore(
 
 export default store
 
-export const ADD_ENTITIES = 'beam/core/ADD_ENTITIES'
+export const ADD_ENTITIES = 'warp/core/ADD_ENTITIES'
 export const addEntities = entities => ({
   type: ADD_ENTITIES,
   entities

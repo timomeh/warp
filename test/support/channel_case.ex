@@ -1,4 +1,4 @@
-defmodule BeamWeb.ChannelCase do
+defmodule WarpWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -21,15 +21,15 @@ defmodule BeamWeb.ChannelCase do
       use Phoenix.ChannelTest
 
       # The default endpoint for testing
-      @endpoint BeamWeb.Endpoint
+      @endpoint WarpWeb.Endpoint
     end
   end
 
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Beam.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Warp.Repo)
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Beam.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Warp.Repo, {:shared, self()})
     end
     :ok
   end

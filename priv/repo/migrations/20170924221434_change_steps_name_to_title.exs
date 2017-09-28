@@ -1,4 +1,4 @@
-defmodule Beam.Repo.Migrations.ChangeStepsNameToTitle do
+defmodule Warp.Repo.Migrations.ChangeStepsNameToTitle do
   use Ecto.Migration
 
   def change do

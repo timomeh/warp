@@ -1,4 +1,4 @@
-# Beam
+# Warp
 
 To start your Phoenix server:
 

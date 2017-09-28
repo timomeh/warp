@@ -1,4 +1,4 @@
-defmodule Beam.Repo.Migrations.PipelineChanges do
+defmodule Warp.Repo.Migrations.PipelineChanges do
   use Ecto.Migration
 
   def change do

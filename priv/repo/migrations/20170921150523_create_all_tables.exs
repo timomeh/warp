@@ -1,4 +1,4 @@
-defmodule Beam.Repo.Migrations.CreateAllTables do
+defmodule Warp.Repo.Migrations.CreateAllTables do
   use Ecto.Migration
 
   def change do

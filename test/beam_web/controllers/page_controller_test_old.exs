@@ -1,5 +1,5 @@
-defmodule BeamWeb.PageControllerTest do
-  use BeamWeb.ConnCase
+defmodule WarpWeb.PageControllerTest do
+  use WarpWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get conn, "/"

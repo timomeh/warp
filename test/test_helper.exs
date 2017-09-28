@@ -1,3 +1,3 @@
 ExUnit.start()
 
-Ecto.Adapters.SQL.Sandbox.mode(Beam.Repo, :auto)
+Ecto.Adapters.SQL.Sandbox.mode(Warp.Repo, :auto)

@@ -1,8 +1,8 @@
-defmodule Beam.Projects.ProjectsTest do
-  use Beam.DataCase
+defmodule Warp.Projects.ProjectsTest do
+  use Warp.DataCase
 
-  alias Beam.Projects
-  alias Beam.Projects.Project
+  alias Warp.Projects
+  alias Warp.Projects.Project
 
   @valid_attrs %{name: "project name", root_directory: "/foo/bar"}
   @invalid_attrs %{foo: "bar"}

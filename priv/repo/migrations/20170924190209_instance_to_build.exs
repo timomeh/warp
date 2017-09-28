@@ -1,4 +1,4 @@
-defmodule Beam.Repo.Migrations.InstanceToBuild do
+defmodule Warp.Repo.Migrations.InstanceToBuild do
   use Ecto.Migration
 
   def change do

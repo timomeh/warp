@@ -1,10 +1,10 @@
 import { normalize } from 'normalizr'
 import { addEntities } from 'lib/store'
 
-const REQUEST_PROJECT = 'beam/project/REQUEST_PROJECTS'
-const RECEIVE_PROJECT = 'beam/project/RECEIVE_PROJECTS'
-const REQUEST_BUILDS = 'beam/project/REQUEST_BUILDS'
-const RECEIVE_BUILDS = 'beam/project/RECEIVE_BUILDS'
+const REQUEST_PROJECT = 'warp/project/REQUEST_PROJECTS'
+const RECEIVE_PROJECT = 'warp/project/RECEIVE_PROJECTS'
+const REQUEST_BUILDS = 'warp/project/REQUEST_BUILDS'
+const RECEIVE_BUILDS = 'warp/project/RECEIVE_BUILDS'
 
 const initialState = {
   isFetching: true,

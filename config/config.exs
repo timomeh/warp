@@ -6,15 +6,15 @@
 use Mix.Config
 
 # General application configuration
-config :beam,
-  ecto_repos: [Beam.Repo]
+config :warp,
+  ecto_repos: [Warp.Repo]
 
 # Configures the endpoint
-config :beam, BeamWeb.Endpoint,
+config :warp, WarpWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "oO2SOMhaIvaQE/f4Ue8ACRGngUI9XrvS0LksHwMhsvxE5RhcsaJlbQtZ52CFwCAx",
-  render_errors: [view: BeamWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Beam.PubSub,
+  render_errors: [view: WarpWeb.ErrorView, accepts: ~w(html json)],
+  pubsub: [name: Warp.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger

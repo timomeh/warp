@@ -1,4 +1,4 @@
-defmodule Beam.DataCase do
+defmodule Warp.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -16,20 +16,20 @@ defmodule Beam.DataCase do
 
   using do
     quote do
-      alias Beam.Repo
+      alias Warp.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Beam.DataCase
+      import Warp.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Beam.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Warp.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Beam.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Warp.Repo, {:shared, self()})
     end
 
     :ok
