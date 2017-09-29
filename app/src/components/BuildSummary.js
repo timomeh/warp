@@ -39,7 +39,6 @@ const SmallBlock = glamorous(Block)({ flexBasis: '30%', width: '30%' })
 
 const BuildSummary = props => {
   const { status, title, buildNo, userAvatar, userName, commitMessage, commitSha, datetime, duration, meanDuration, buildRef } = props
-
   const [refType, refName] = utils.parseRef(buildRef)
 
   return (
