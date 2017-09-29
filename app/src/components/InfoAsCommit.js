@@ -21,7 +21,7 @@ const InfoAsCommit = props => {
       info={
         <InfoWithTitle
           name={`${userName}:`}
-          value={<Ellipsis>{message}</Ellipsis>}
+          value={<Ellipsis>{message.split('\n')[0]}</Ellipsis>}
         />
       }
     />
