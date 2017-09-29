@@ -4,14 +4,19 @@ import glamorous from 'glamorous'
 
 import { fontWeight } from 'bits/styles'
 
-const Name = glamorous.span({
+const Name = glamorous.div({
   marginRight: 4,
   fontWeight: fontWeight.semibold,
 })
 
-const Outer = glamorous.span({
+const Value = glamorous.div({
+  minWidth: 0,
+  flex: 1
+})
+
+const Outer = glamorous.div({
   display: 'flex',
-  flexFlow: 'row nowarp',
+  flexFlow: 'row nowrap',
   alignItems: 'center',
   fontSize: 14,
   color: '#595959'
@@ -23,7 +28,7 @@ const TitleValue = props => {
   return (
     <Outer>
       <Name>{name}</Name>
-      <span>{value}</span>
+      <Value>{value}</Value>
     </Outer>
   )
 }

@@ -105,7 +105,7 @@ class BuildOverview extends Component {
             <Div flexShrink={0} marginRight={32}>
               <ChipStatus status={build.status} />
             </Div>
-            <Div flexGrow={1} alignSelf="center">
+            <Div flex={1} minWidth={0} alignSelf="center">
               <InfoAsCommit
                 avatarUrl={build.commit.sender_avatar}
                 userName={build.commit.sender_name}
