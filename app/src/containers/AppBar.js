@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import glamorous from 'glamorous'
 
 import ProjectSwitcher from 'components/ProjectSwitcher'
+import ProjectStatus from 'components/ProjectStatus'
 
 const Bar = glamorous.div({
   background: '#303030',
@@ -14,16 +15,22 @@ const Bar = glamorous.div({
 })
 
 const AppBar = props => {
-  const { projects, project } = props
+  const { projects, builds, project } = props
 
   return (
     <Bar>
       {(projects.isFetching || project.isFetching)
         ? null
-        : <ProjectSwitcher
+        : [<ProjectSwitcher key="switcher"
             projects={projects.items.map(id => projects.entities[id])}
             selectedProject={projects.entities[project.selectedId]}
-          />
+          />,
+          <ProjectStatus key="status"
+            latestBuilds={
+              projects.entities[project.selectedId]
+                .latest_builds.map(id => builds[id])
+            }
+          />]
       }
     </Bar>
   )
@@ -31,7 +38,8 @@ const AppBar = props => {
 
 const mapStateToProps = state => ({
   projects: state.projects,
-  project: state.project
+  project: state.project,
+  builds: state.builds.entities
 })
 
 export default connect(mapStateToProps)(AppBar)
