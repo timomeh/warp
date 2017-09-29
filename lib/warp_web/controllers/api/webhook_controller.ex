@@ -5,8 +5,7 @@ defmodule WarpWeb.API.WebhookController do
   alias Warp.Pipelines
   alias Warp.Repo
   alias Warp.Builds
-  alias Warp.Worker.InitWorker
-  alias Phoenix.PubSub
+  alias Warp.Worker.PipelineQueue
 
   def receive(conn, %{"payload" => %{"zen" => zen}}) do
     conn
@@ -55,8 +54,7 @@ defmodule WarpWeb.API.WebhookController do
           build =
             build
             |> Repo.preload(:commit)
-            |> broadcast(pipeline)
-            |> start_worker(git, pipeline.human_id, pipeline.project_id)
+            |> queue_build(pipeline.id)
 
           conn
           |> put_status(:accepted)
@@ -69,26 +67,10 @@ defmodule WarpWeb.API.WebhookController do
     end
   end
 
-  defp broadcast(build, pipeline) do
-    topic = "project:#{pipeline.project_id}"
-    message = %{
-      event: "create",
-      type: "build",
-      data: build
-    }
-    PubSub.broadcast(Warp.PubSub, topic, message)
-    build
-  end
-
-  defp start_worker(build, git, pipeline_name, project_id) do
-    {:ok, pid} = InitWorker.start(%{
-      build: build,
-      git: git,
-      pipeline_name: pipeline_name,
-      project_id: project_id
-    })
-    InitWorker.run(pid)
-
+  defp queue_build(build, pipeline_id) do
+    is_running = PipelineQueue.ping(pipeline_id) == :pong
+    if (!is_running), do: PipelineQueue.start(pipeline_id)
+    PipelineQueue.enqueue(pipeline_id, build.id)
     build
   end
 end

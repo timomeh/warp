@@ -15,7 +15,6 @@ defmodule Warp.Builds do
   def create_queueing(pipeline, attrs \\ %{}) do
     fields =
       attrs
-      |> Map.put(:started_at, DateTime.utc_now())
       |> Map.put(:status, "queued")
       |> Map.put(:pipeline_id, pipeline.id)
 
@@ -47,7 +46,8 @@ defmodule Warp.Builds do
   def all_distinct_latest_by_pipeline(pipeline) do
     from(
       b in Build,
-      where: b.pipeline_id == ^pipeline.id,
+      where: b.pipeline_id == ^pipeline.id
+        and b.status != "queued",
       order_by: [desc: b.started_at],
       distinct: b.pipeline_id,
       preload: [:commit]

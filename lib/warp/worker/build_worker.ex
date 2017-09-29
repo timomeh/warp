@@ -3,6 +3,7 @@ defmodule Warp.Worker.BuildWorker do
 
   alias Warp.Stages
   alias Warp.Worker.GroupWorker
+  alias Warp.Worker.PipelineQueue
   alias Warp.Builds
   alias Phoenix.PubSub
 
@@ -82,6 +83,8 @@ defmodule Warp.Worker.BuildWorker do
         Stages.update_all_pending_to_stopped(build)
         build
     end
+
+    PipelineQueue.dequeue(build.pipeline_id, build.id)
 
     state
     |> Map.put(:build, build)

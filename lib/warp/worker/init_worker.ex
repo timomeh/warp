@@ -33,7 +33,7 @@ defmodule Warp.Worker.InitWorker do
       state
       |> log("STARTING initializing build")
       |> set_init()
-      |> broadcast()
+      |> broadcast("create")
       |> Map.put(:build_dir, get_build_dir(build))
       |> git_clone()
       |> create_full_build()

@@ -55,7 +55,8 @@ defmodule WarpWeb.API.BuildController do
   end
 
   defp start_build(build) do
-    {:ok, pid} = BuildWorker.start(build)
-    BuildWorker.run(pid)
+    build
+    # {:ok, pid} = BuildWorker.start(build)
+    # BuildWorker.run(pid)
   end
 end
