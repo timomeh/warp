@@ -16,8 +16,7 @@ defmodule Warp.ConfigParser do
   end
 
   defp get_by_ref(config, name) do
-    config["pipelines"]
-    |> Enum.find(&(&1["name"] == name))
+    config["pipelines"][name]
     |> include_includes(config["includes"])
   end
 
