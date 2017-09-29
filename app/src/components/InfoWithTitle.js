@@ -23,7 +23,7 @@ const TitleValue = props => {
   return (
     <Outer>
       <Name>{name}</Name>
-      {value}
+      <span>{value}</span>
     </Outer>
   )
 }

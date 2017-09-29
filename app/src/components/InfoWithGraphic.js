@@ -2,12 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import glamorous from 'glamorous'
 
-const Flex = glamorous.div({
+const Flex = glamorous.div(({ isMultiline }) => ({
   display: 'flex',
   flexFlow: 'row nowrap',
   alignItems: 'center',
-  height: 24
-})
+  height: !isMultiline && 24
+}))
 
 const Left = glamorous.div({
   width: 20,
@@ -23,10 +23,10 @@ const Right = glamorous.div({
 })
 
 const IconText = props => {
-  const { graphic, info } = props
+  const { graphic, info, isMultiline = false } = props
 
   return (
-    <Flex>
+    <Flex isMultiline={isMultiline}>
       <Left>{graphic}</Left>
       <Right>{info}</Right>
     </Flex>
@@ -34,6 +34,7 @@ const IconText = props => {
 }
 
 IconText.propTypes = {
+  isMultiline: PropTypes.bool,
   graphic: PropTypes.node.isRequired,
   info: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired
 }

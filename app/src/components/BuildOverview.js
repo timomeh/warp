@@ -1,12 +1,20 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import glamorous from 'glamorous'
+import glamorous, { Div } from 'glamorous'
 import moment from 'moment'
 
+import utils from 'lib/utils'
 import { fontWeight } from 'bits/styles'
+import icons from 'bits/icons'
 import { getStepLeaves } from 'lib/store'
 import Card from 'components/Card'
 import StatusBar from 'components/StatusBar'
+import ChipStatus from 'components/ChipStatus'
+import ChipCommit from 'components/ChipCommit'
+import ChipCode from 'components/ChipCode'
+import InfoAsCommit from 'components/InfoAsCommit'
+import InfoWithIcon from 'components/InfoWithIcon'
+import InfoWithTitle from 'components/InfoWithTitle'
 import Link from 'components/Link'
 import Timer from 'components/Timer'
 import MiniStepsList from 'components/MiniStepsList'
@@ -19,8 +27,24 @@ const Meta = glamorous.div({
   fontSize: 14,
   color: '#929292',
   marginBottom: 8,
-  marginTop: 16,
   fontWeight: fontWeight.semibold
+})
+
+const Row = glamorous.div({
+  display: 'flex',
+  flexFlow: 'row nowrap',
+  marginBottom: 16
+})
+
+const InfoBlock = glamorous.div({
+  marginBottom: 8
+})
+
+const CardSection = glamorous.div({
+  margin: -32,
+  marginTop: 0,
+  padding: 32,
+  borderTop: '1px solid #F0F0F0'
 })
 
 class BuildOverview extends Component {
@@ -62,10 +86,11 @@ class BuildOverview extends Component {
   render() {
     const { build, pipeline, steps, projectId } = this.props
     const { leafSteps } = this.state
+    const [refType, refName, refTitle] = utils.parseRef(build.ref)
 
     return (
       <Card>
-        <Link bare to={`/projects/${projectId}/builds/${build.id}`}>
+        <Link bare to={`/${projectId}/build/${build.id}`}>
           <StatusBar
             hasArrow
             status={build.status}
@@ -76,15 +101,76 @@ class BuildOverview extends Component {
           />
         </Link>
         <Inner>
+          <Row>
+            <Div flexShrink={0} marginRight={32}>
+              <ChipStatus status={build.status} />
+            </Div>
+            <Div flexGrow={1} alignSelf="center">
+              <InfoAsCommit
+                avatarUrl={build.commit.sender_avatar}
+                userName={build.commit.sender_name}
+                message={build.commit.message}
+              />
+            </Div>
+          </Row>
 
+          <Row>
+            <Div flexGrow={1}>
+              <InfoBlock>
+                <InfoWithIcon
+                  isMultiline
+                  icon={icons.time}
+                  info={
+                    <div>
+                      <InfoWithTitle name="Started:" value={this.timeToString(build.started_at)} />
+                      <InfoWithTitle name="Finished:" value={this.timeToString(build.finished_at)} />
+                    </div>
+                  }
+                />
+              </InfoBlock>
+              <InfoBlock>
+                <InfoWithIcon
+                  isMultiline
+                  icon={icons.duration}
+                  info={
+                    <div>
+                      <InfoWithTitle name="Duration:" value={this.timesToDuration(build.started_at, build.finished_at)} />
+                      <InfoWithTitle name="∅ Duration:" value="-" />
+                    </div>
+                  }
+                />
+              </InfoBlock>
+            </Div>
+
+            <Div flexGrow={1}>
+              <InfoBlock>
+                <InfoWithIcon
+                  icon={icons.package}
+                  info={<InfoWithTitle name="Build Number:" value={`#${build.id}`} />}
+                />
+              </InfoBlock>
+              <InfoBlock>
+                <InfoWithIcon
+                  icon={icons.commit}
+                  info={<InfoWithTitle name="Commit:" value={<ChipCommit sha={build.commit.commit_sha} />} />}
+                />
+              </InfoBlock>
+              <InfoBlock>
+                <InfoWithIcon
+                  icon={icons[refType]}
+                  info={<InfoWithTitle name={`${refTitle}:`} value={<ChipCode>{refName}</ChipCode>} />}
+                />
+              </InfoBlock>
+            </Div>
+          </Row>
 
           {leafSteps.length > 0 &&
-            <div>
+            <CardSection>
               <Meta>All Build Steps</Meta>
               <MiniStepsList
                 steps={leafSteps.map(id => steps.entities[id])}
               />
-            </div>
+            </CardSection>
           }
         </Inner>
       </Card>
