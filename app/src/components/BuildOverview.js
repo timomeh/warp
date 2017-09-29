@@ -7,10 +7,6 @@ import { fontWeight } from 'bits/styles'
 import { getStepLeaves } from 'lib/store'
 import Card from 'components/Card'
 import StatusBar from 'components/StatusBar'
-import InfoList from 'components/InfoList'
-import StatusChip from 'components/StatusChip'
-import CodeChip from 'components/CodeChip'
-import Info from 'components/Info'
 import Link from 'components/Link'
 import Timer from 'components/Timer'
 import MiniStepsList from 'components/MiniStepsList'
@@ -80,31 +76,7 @@ class BuildOverview extends Component {
           />
         </Link>
         <Inner>
-          <InfoList>
-            <StatusChip status={build.status} />
-            <Info
-              name="Commit"
-              value={<CodeChip>{build.commit.commit_sha.substring(0,7)}</CodeChip>}
-            />
-            <Info
-              name="Ref"
-              value={<CodeChip>{build.ref}</CodeChip>}
-            />
-          </InfoList>
-          <InfoList noMarginBottom>
-            <Info
-              name="Duration"
-              value={this.timesToDuration(build.started_at, build.finished_at)}
-            />
-            <Info
-              name="Start Time"
-              value={this.timeToString(build.started_at)}
-            />
-            <Info
-              name="End Time"
-              value={this.timeToString(build.finished_at)}
-            />
-          </InfoList>
+
 
           {leafSteps.length > 0 &&
             <div>

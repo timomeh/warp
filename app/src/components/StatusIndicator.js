@@ -30,9 +30,9 @@ const Active = glamorous.div(({ size }) => ({
 }))
 
 const StatusIndicator = props => {
-  const { type, size = 16 } = props
+  const { status, size = 16 } = props
 
-  switch (type) {
+  switch (status) {
     case "success":
       return <Icon icon={icons.checkmark} width={size} height={size} style={{ fill: 'white' }} />
     case "pending":
@@ -52,16 +52,8 @@ const StatusIndicator = props => {
 
 
 StatusIndicator.propTypes = {
-  type: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
   size: PropTypes.number
 }
 
 export default StatusIndicator
-
-export function stories({ storiesOf }) {
-  storiesOf('StatusIndicator', module)
-    .add('finished', () => <StatusIndicator type="finished" />)
-    .add('pending', () => <StatusIndicator type="pending" />)
-    .add('active', () => <StatusIndicator type="active" />)
-    .add('errored', () => <StatusIndicator type="errored" />)
-}

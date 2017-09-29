@@ -5,7 +5,8 @@ import glamorous from 'glamorous'
 import { fontWeight } from 'bits/styles'
 
 const Name = glamorous.span({
-  marginRight: 4
+  marginRight: 4,
+  fontWeight: fontWeight.semibold,
 })
 
 const Outer = glamorous.span({
@@ -13,24 +14,23 @@ const Outer = glamorous.span({
   flexFlow: 'row nowarp',
   alignItems: 'center',
   fontSize: 14,
-  fontWeight: fontWeight.semibold,
   color: '#595959'
 })
 
-const Info = props => {
+const TitleValue = props => {
   const { name, value } = props
 
   return (
     <Outer>
-      <Name>{name}:</Name>
+      <Name>{name}</Name>
       {value}
     </Outer>
   )
 }
 
-Info.propTypes = {
+TitleValue.propTypes = {
   name: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired
 }
 
-export default Info
+export default TitleValue

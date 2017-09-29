@@ -14,7 +14,8 @@ const ColoredBar = glamorous.div(({ status }) => ({
   backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.15), rgba(0,0,0,0.07))',
   display: 'flex',
   flexFlow: 'row nowrap',
-  alignItems: 'center'
+  alignItems: 'center',
+  height: 48
 }))
 
 const PrimaryText = glamorous.div({
@@ -52,7 +53,7 @@ const StatusBar = props => {
 
   return (
     <ColoredBar status={status}>
-      <StatusBox type={status} big />
+      <StatusBox status={status} big />
       <PrimaryText>{title}</PrimaryText>
       <SecondaryText>#{version}</SecondaryText>
       <Right>{time &&

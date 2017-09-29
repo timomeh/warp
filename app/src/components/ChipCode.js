@@ -2,7 +2,7 @@ import glamorous from 'glamorous'
 
 import { fontFamily } from 'bits/styles'
 
-const CodeChip = glamorous.div({
+const ChipCode = glamorous.div({
   lineHeight: 1,
   backgroundColor: '#F1DDE4',
   borderRadius: 4,
@@ -17,4 +17,4 @@ const CodeChip = glamorous.div({
   justifyContent: 'center'
 })
 
-export default CodeChip
+export default ChipCode

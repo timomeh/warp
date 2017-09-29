@@ -5,27 +5,27 @@ import glamorous from 'glamorous'
 import StatusIndicator from 'components/StatusIndicator'
 import { statusColors } from 'bits/styles'
 
-const Box = glamorous.div(({ type, big }) => ({
-  width: big ? 48 : 36,
-  height: big ? 48 : 36,
+const Box = glamorous.div(({ status }) => ({
+  width: 48,
+  height: '100%',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: statusColors[type]
+  backgroundColor: statusColors[status]
 }))
 
 const StatusBox = props => {
-  const { type, big = false  } = props
+  const { status } = props
 
   return (
-    <Box big={big} type={type}>
-      <StatusIndicator type={type} />
+    <Box status={status}>
+      <StatusIndicator status={status} />
     </Box>
   )
 }
 
 StatusBox.propTypes = {
-  type: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
   big: PropTypes.bool
 }
 

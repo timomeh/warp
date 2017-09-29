@@ -3,7 +3,8 @@ import { css } from 'glamor'
 import { Link as RRLink } from 'react-router-dom'
 
 const bareLink = css({
-  textDecoration: 'none'
+  textDecoration: 'none',
+  display: 'block'
 }).toString()
 
 const Link = props => {

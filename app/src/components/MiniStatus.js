@@ -21,7 +21,7 @@ const MiniStatus = props => {
 
   return (
     <Bubble status={status} data-rh={title}>
-      <StatusIndicator type={status} size={8} />
+      <StatusIndicator status={status} size={8} />
     </Bubble>
   )
 }
