@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import glamorous from 'glamorous'
 
+import utils from 'lib/utils'
 import { fetchBuildHistory } from 'lib/store'
 import icons from 'bits/icons'
 import Link from 'components/Link'
@@ -62,7 +63,7 @@ class BuildHistory extends Component {
             commitMessage={build.commit.message}
             datetime={build.finished_at}
             duration={this.getDuration(build.started_at, build.finished_at)}
-            meanDuration={this.getDuration(build.started_at, build.finished_at)}
+            meanDuration={utils.durationFromSeconds(pipeline.mean_duration)}
             commitSha={build.commit.commit_sha}
             buildRef={build.ref}
           />

@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 const utils = {
   parseRef(ref) {
     const refRegex = /refs\/(heads|tags)\/(.*)/
@@ -8,6 +10,11 @@ const utils = {
       case 'tags': return ['tag', result[2], 'Tag']
       default: return ['?', result[2]]
     }
+  },
+
+  durationFromSeconds(seconds) {
+    const duration = moment.duration(seconds, 'seconds')
+    return moment.utc(duration.as('milliseconds')).format('mm:ss')
   }
 }
 

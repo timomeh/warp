@@ -135,7 +135,7 @@ class BuildOverview extends Component {
                   info={
                     <div>
                       <InfoWithTitle name="Duration:" value={this.timesToDuration(build.started_at, build.finished_at)} />
-                      <InfoWithTitle name="∅ Duration:" value="-" />
+                      <InfoWithTitle name="∅ Duration:" value={utils.durationFromSeconds(pipeline.mean_duration)} />
                     </div>
                   }
                 />
