@@ -16,7 +16,8 @@ defmodule WarpWeb.API.PipelineView do
       title: pipeline.title,
       ref_match: pipeline.ref_match,
       human_id: pipeline.human_id,
-      inserted_at: pipeline.inserted_at
+      inserted_at: pipeline.inserted_at,
+      mean_duration: pipeline.mean_duration
     }
   end
 end

@@ -3,11 +3,13 @@ defmodule WarpWeb.API.ProjectController do
 
   alias Warp.Projects
   alias Warp.Builds
+  alias Warp.Pipelines
 
   def index(conn, _params) do
     projects =
       Projects.list()
       |> Enum.map(&(preload_latest_builds(&1)))
+      |> Enum.map(&(populate_pipelines_mean_duration(&1)))
 
     render(conn, "list.json", projects: projects)
   end
@@ -16,6 +18,7 @@ defmodule WarpWeb.API.ProjectController do
     project =
       Projects.get!(id)
       |> preload_latest_builds()
+      |> populate_pipelines_mean_duration()
 
     render(conn, "show.json", project: project)
   end
@@ -47,6 +50,14 @@ defmodule WarpWeb.API.ProjectController do
       |> Enum.map(&(Builds.preload_stages(&1)))
 
     Map.put(project, :latest_builds, latest_builds)
+  end
+
+  defp populate_pipelines_mean_duration(project) do
+    populated_pipelines =
+      project.pipelines
+      |> Enum.map(&(Pipelines.populate_mean_duration(&1)))
+
+    Map.put(project, :pipelines, populated_pipelines)
   end
 
   defp generate_secret(length) do
