@@ -8,9 +8,8 @@ import icons from 'bits/icons'
 import Card from 'components/Card'
 import ChipCommit from 'components/ChipCommit'
 import ChipCode from 'components/ChipCode'
-import Icon from 'components/Icon'
 import StatusBox from 'components/StatusBox'
-import InfoWithGraphic from 'components/InfoWithGraphic'
+import InfoWithIcon from 'components/InfoWithIcon'
 import InfoWithTitle from 'components/InfoWithTitle'
 import InfoAsCommit from 'components/InfoAsCommit'
 
@@ -49,15 +48,9 @@ const BuildSummary = props => {
       <Content>
         {/* Build Name and Sender */}
         <BigBlock>
-          <InfoWithGraphic
-            graphic={
-              <Icon
-                width={20}
-                height={20}
-                style={{ fill: '#6A6A6A'}}
-                icon={icons.truck}
-              />
-            }
+          <InfoWithIcon
+            size={20}
+            icon={icons.truck}
             info={<InfoWithTitle name={title} value={`#${buildNo}`} />}
           />
           <InfoAsCommit
@@ -69,52 +62,24 @@ const BuildSummary = props => {
 
         {/* Time and Duration */}
         <SmallBlock>
-          <InfoWithGraphic
-            graphic={
-              <Icon
-                width={14}
-                height={14}
-                style={{ fill: '#6A6A6A'}}
-                icon={icons.time}
-              />
-            }
+          <InfoWithIcon
+            icon={icons.time}
             info={moment(datetime).format('YYYY-MM-DD HH:mm:ss')}
           />
-          <InfoWithGraphic
-            graphic={
-              <Icon
-                width={14}
-                height={14}
-                style={{ fill: '#6A6A6A'}}
-                icon={icons.duration}
-              />
-            }
+          <InfoWithIcon
+            icon={icons.duration}
             info={`${duration} vs ${meanDuration}`}
           />
         </SmallBlock>
 
         {/* Commit and Ref */}
         <SmallBlock>
-          <InfoWithGraphic
-            graphic={
-              <Icon
-                width={14}
-                height={14}
-                style={{ fill: '#6A6A6A'}}
-                icon={icons.commit}
-              />
-            }
+          <InfoWithIcon
+            icon={icons.commit}
             info={<ChipCommit sha={commitSha} />}
           />
-          <InfoWithGraphic
-            graphic={
-              <Icon
-                width={14}
-                height={14}
-                style={{ fill: '#6A6A6A'}}
-                icon={icons[refType]}
-              />
-            }
+          <InfoWithIcon
+            icon={icons[refType]}
             info={<ChipCode>{refName}</ChipCode>}
           />
         </SmallBlock>
