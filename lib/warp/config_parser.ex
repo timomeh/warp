@@ -57,11 +57,18 @@ defmodule Warp.ConfigParser do
   end
 
   defp transform_nested_steps(map_with_steps, key_name) do
+    # TODO: DRY
     case map_with_steps do
       %{:steps_parallel => steps_parallel} ->
+        steps =
+          steps_parallel
+          |> Enum.map(&(transform_nested_steps(&1, :substeps)))
+          |> Enum.with_index()
+          |> Enum.map(fn {stage, i} -> Map.put(stage, :ordinal_rank, i) end)
+
         map_with_steps
         |> Map.merge(%{:execution_type => "parallel"})
-        |> Map.put(key_name, Enum.map(steps_parallel, &(transform_nested_steps(&1, :substeps))))
+        |> Map.put(key_name, steps)
         |> Map.delete(:steps_parallel)
 
       %{:steps_serial => steps_serial} ->
