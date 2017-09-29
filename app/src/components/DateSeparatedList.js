@@ -1,6 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import glamorous from 'glamorous'
+
+const List = glamorous.ul({
+  margin: 0,
+  padding: 0,
+  listStyleType: 'none'
+})
+
+const Item = glamorous.li({
+  margin: 0,
+  padding: 0
+})
 
 const DateSeparatedList = props => {
   const { items, getCompareDate, renderDate, renderItem } = props
@@ -10,7 +22,7 @@ const DateSeparatedList = props => {
   let lastDate = moment(new Date()).startOf('day').add(1, 'days')
 
   return (
-    <div>
+    <List>
       {items.map(item => {
         const compareDateAgainst = getCompareDate(item)
         const dayDiff =
@@ -21,13 +33,13 @@ const DateSeparatedList = props => {
         lastDate = compareDateAgainst
 
         return (
-          <div key={item}>
+          <Item key={item}>
             {dayDiff < 0 && renderDate(lastDate)}
             {renderItem(item)}
-          </div>
+          </Item>
         )
       })}
-    </div>
+    </List>
   )
 }
 
