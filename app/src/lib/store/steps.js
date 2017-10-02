@@ -30,6 +30,7 @@ export function getStepLeaves(stepList, allSteps) {
 }
 
 export function populateSteps(group, allSteps) {
-  group.steps = group.steps && group.steps.map(stepId => populateSteps(allSteps[stepId], allSteps))
-  return group
+  const g = { ...group }
+  g.steps = g.steps && g.steps.map(stepId => populateSteps(allSteps[stepId], allSteps))
+  return g
 }
