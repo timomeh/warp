@@ -8,6 +8,7 @@ import { fontWeight } from 'bits/styles'
 import Card from 'components/Card'
 import StatusStrip from 'components/StatusStrip'
 import IconButton from 'components/IconButton'
+import FakeTerminal from 'components/FakeTerminal'
 
 const MainBar = glamorous.div({
   height: 48,
@@ -46,9 +47,23 @@ class StepCard extends Component {
     collapsed: true
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (['active', 'failed'].includes(nextProps.step.status)) {
+      this.setState({ collapsed: false })
+    }
+
+    if (this.state.collapsed === false && ['success', 'failed'].includes(nextProps.step.status)) {
+      setTimeout(() => {
+        this.setState({ collapsed: true })
+      }, 3000)
+    }
+  }
+
   render() {
     const { step } = this.props
     const { collapsed } = this.state
+
+    const log = `$> ${step.run}\n${step.log}`
 
     return (
       <Card>
@@ -65,6 +80,7 @@ class StepCard extends Component {
         </MainBar>
         <Collapse isOpened={!collapsed}>
           <ExpandedContent>
+            <FakeTerminal text={log} />
           </ExpandedContent>
         </Collapse>
       </Card>
