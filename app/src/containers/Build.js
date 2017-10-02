@@ -30,7 +30,7 @@ class Build extends Component {
     const build = builds[buildStore.selectedId]
     const pipeline = pipelines[build.pipeline_id]
 
-    const stages = build.stages.map(stageId =>
+    const stages = build.stages && build.stages.map(stageId =>
       populateSteps(stagesStore[stageId], steps)
     )
 
