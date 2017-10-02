@@ -1,5 +1,5 @@
 defmodule Warp.LogCollector do
-  defstruct lines: [], step_id: nil
+  defstruct lines: [], step_id: nil, project_id: nil
 end
 
 defimpl Collectable, for: Warp.LogCollector do
@@ -8,7 +8,7 @@ defimpl Collectable, for: Warp.LogCollector do
   def into(original) do
     collector_fun = fn
       log, {:cont, line} ->
-        PubSub.broadcast(Warp.PubSub, "step:log:#{log.step_id}", %{
+        PubSub.broadcast(Warp.PubSub, "project:#{log.project_id}", %{
           event: "add",
           type: "log",
           data: %{step_id: log.step_id, line: line}

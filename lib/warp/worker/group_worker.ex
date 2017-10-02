@@ -16,8 +16,9 @@ defmodule Warp.Worker.GroupWorker do
   require Logger
 
   @doc false
-  def start_link(group, project_id, schema) do
+  def start_link(group, project_id, working_dir, schema) do
     state = %{
+      working_dir: working_dir,
       group: group,
       execution_type: group.execution_type,
       project_id: project_id,
@@ -168,14 +169,14 @@ defmodule Warp.Worker.GroupWorker do
   end
 
   defp run_step(%{execution_type: type} = step, state) when type == "run" do
-    {:ok, pid} = TaskWorker.start_link(step, state.project_id)
+    {:ok, pid} = TaskWorker.start_link(step, state.project_id, state.working_dir)
     TaskWorker.run(pid)
     Process.monitor(pid)
     pid
   end
 
   defp run_step(%{execution_type: _type} = step, state) do
-    {:ok, pid} = GroupWorker.start_link(step, state.project_id, :step)
+    {:ok, pid} = GroupWorker.start_link(step, state.project_id, state.working_dir, :step)
     GroupWorker.run(pid)
     Process.monitor(pid)
     pid

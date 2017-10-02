@@ -103,7 +103,7 @@ defmodule Warp.Worker.BuildWorker do
   end
 
   defp run_stage(stage, state) do
-    {:ok, pid} = GroupWorker.start_link(stage, state.project_id, :stage)
+    {:ok, pid} = GroupWorker.start_link(stage, state.project_id, state.build.working_dir, :stage)
     GroupWorker.run(pid)
   end
 

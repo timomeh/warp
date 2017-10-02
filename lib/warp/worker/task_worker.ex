@@ -14,8 +14,9 @@ defmodule Warp.Worker.TaskWorker do
   # Client
 
   @doc false
-  def start_link(step, project_id) do
+  def start_link(step, project_id, working_dir) do
     state = %{
+      working_dir: working_dir,
       step: step,
       debug_name: "#TaskWorker<#{step.id}>",
       output: nil,
@@ -105,7 +106,7 @@ defmodule Warp.Worker.TaskWorker do
   defp execute(state) do
     task = Task.async(fn ->
       System.cmd("sh", ["-c", state.step.run],
-        [stderr_to_stdout: true, into: %LogCollector{step_id: state.step.id}]
+        [stderr_to_stdout: true, into: %LogCollector{step_id: state.step.id, project_id: state.project_id}, cd: state.working_dir]
       )
     end)
 
