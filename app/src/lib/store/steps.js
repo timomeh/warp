@@ -28,3 +28,8 @@ export function getStepLeaves(stepList, allSteps) {
     })
     .reduce((acc, cur) => acc.concat(cur), [])
 }
+
+export function populateSteps(group, allSteps) {
+  group.steps = group.steps && group.steps.map(stepId => populateSteps(allSteps[stepId], allSteps))
+  return group
+}
