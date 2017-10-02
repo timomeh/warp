@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 
 import icons from 'bits/icons'
 import PageContainer from 'components/PageContainer'
-import BuildOverview from 'components/BuildOverview'
-import BuildOverviewList from 'components/BuildOverviewList'
+import BuildDetailCard from 'components/BuildDetailCard'
+import BuildDetailList from 'components/BuildDetailList'
 import PageTitle from 'components/PageTitle'
 
 class ProjectDashboard extends Component {
@@ -15,11 +15,11 @@ class ProjectDashboard extends Component {
       <PageContainer>
         <PageTitle icon={icons.package} title="Latest Builds" />
 
-        <BuildOverviewList
+        <BuildDetailList
           uniqueKey="ref"
           items={project.latest_builds.map(buildId => builds.entities[buildId])}
           renderItem={build =>
-            <BuildOverview
+            <BuildDetailCard
               projectId={project.id}
               build={build}
               stages={(build.stages && build.stages.length)

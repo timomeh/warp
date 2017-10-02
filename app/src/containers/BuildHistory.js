@@ -10,7 +10,7 @@ import Link from 'components/Link'
 import PageTitle from 'components/PageTitle'
 import DateSeparatedList from 'components/DateSeparatedList'
 import Subtitle from 'components/Subtitle'
-import BuildSummary from 'components/BuildSummary'
+import BuildSummaryCard from 'components/BuildSummaryCard'
 
 const ListItem = glamorous.div({
   marginTop: 14,
@@ -54,7 +54,7 @@ class BuildHistory extends Component {
     return (
       <ListItem>
         <Link bare to={`/${projectId}/build/${build.id}`}>
-          <BuildSummary
+          <BuildSummaryCard
             status={build.status}
             title={pipeline.title}
             buildNo={build.id}
