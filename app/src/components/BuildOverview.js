@@ -1,27 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import glamorous, { Div } from 'glamorous'
-import moment from 'moment'
+import glamorous from 'glamorous'
 
-import utils from 'lib/utils'
 import { fontWeight } from 'bits/styles'
-import icons from 'bits/icons'
 import { getStepLeaves } from 'lib/store'
 import Card from 'components/Card'
+import BuildInfo from 'components/BuildInfo'
 import StatusBar from 'components/StatusBar'
-import ChipStatus from 'components/ChipStatus'
-import ChipCommit from 'components/ChipCommit'
-import ChipCode from 'components/ChipCode'
-import InfoAsCommit from 'components/InfoAsCommit'
-import InfoWithIcon from 'components/InfoWithIcon'
-import InfoWithTitle from 'components/InfoWithTitle'
 import Link from 'components/Link'
-import Timer from 'components/Timer'
 import MiniStepsList from 'components/MiniStepsList'
 
-const Inner = glamorous.div({
-  padding: 32
-})
 
 const Meta = glamorous.div({
   fontSize: 14,
@@ -30,14 +18,8 @@ const Meta = glamorous.div({
   fontWeight: fontWeight.semibold
 })
 
-const Row = glamorous.div({
-  display: 'flex',
-  flexFlow: 'row nowrap',
-  marginBottom: 16
-})
-
-const InfoBlock = glamorous.div({
-  marginBottom: 8
+const Inner = glamorous.div({
+  padding: 32
 })
 
 const CardSection = glamorous.div({
@@ -86,7 +68,6 @@ class BuildOverview extends Component {
   render() {
     const { build, pipeline, steps, projectId } = this.props
     const { leafSteps } = this.state
-    const [refType, refName, refTitle] = utils.parseRef(build.ref)
 
     return (
       <Card>
@@ -101,69 +82,7 @@ class BuildOverview extends Component {
           />
         </Link>
         <Inner>
-          <Row>
-            <Div flexShrink={0} marginRight={32}>
-              <ChipStatus status={build.status} />
-            </Div>
-            <Div flex={1} minWidth={0} alignSelf="center">
-              <InfoAsCommit
-                avatarUrl={build.commit.sender_avatar}
-                userName={build.commit.sender_name}
-                message={build.commit.message}
-              />
-            </Div>
-          </Row>
-
-          <Row>
-            <Div flexGrow={1}>
-              <InfoBlock>
-                <InfoWithIcon
-                  isMultiline
-                  icon={icons.time}
-                  info={
-                    <div>
-                      <InfoWithTitle name="Started:" value={this.timeToString(build.started_at)} />
-                      <InfoWithTitle name="Finished:" value={this.timeToString(build.finished_at)} />
-                    </div>
-                  }
-                />
-              </InfoBlock>
-              <InfoBlock>
-                <InfoWithIcon
-                  isMultiline
-                  icon={icons.duration}
-                  info={
-                    <div>
-                      <InfoWithTitle name="Duration:" value={this.timesToDuration(build.started_at, build.finished_at)} />
-                      <InfoWithTitle name="∅ Duration:" value={utils.durationFromSeconds(pipeline.mean_duration)} />
-                    </div>
-                  }
-                />
-              </InfoBlock>
-            </Div>
-
-            <Div flexGrow={1}>
-              <InfoBlock>
-                <InfoWithIcon
-                  icon={icons.package}
-                  info={<InfoWithTitle name="Build Number:" value={`#${build.id}`} />}
-                />
-              </InfoBlock>
-              <InfoBlock>
-                <InfoWithIcon
-                  icon={icons.commit}
-                  info={<InfoWithTitle name="Commit:" value={<ChipCommit sha={build.commit.commit_sha} />} />}
-                />
-              </InfoBlock>
-              <InfoBlock>
-                <InfoWithIcon
-                  icon={icons[refType]}
-                  info={<InfoWithTitle name={`${refTitle}:`} value={<ChipCode>{refName}</ChipCode>} />}
-                />
-              </InfoBlock>
-            </Div>
-          </Row>
-
+          <BuildInfo build={build} pipeline={pipeline} />
           {leafSteps.length > 0 &&
             <CardSection>
               <Meta>All Build Steps</Meta>
@@ -184,18 +103,6 @@ class BuildOverview extends Component {
         .reduce((acc, cur) => acc.concat(cur), [])
 
     this.setState({ leafSteps })
-  }
-
-  timesToDuration = (from, to) => {
-    if (from == null && to == null) return "–"
-    else if (to == null) return <Timer datetime={from} />
-    else return moment(moment(to).diff(moment(from))).format("mm:ss")
-  }
-
-  timeToString = (time) => {
-    return time
-      ? moment(time).format("YYYY-MM-DD HH:mm:ss")
-      : "–"
   }
 }
 

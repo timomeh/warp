@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import glamorous from 'glamorous'
 
-import utils from 'lib/utils'
 import { fetchBuildHistory } from 'lib/store'
 import icons from 'bits/icons'
+import PageContainer from 'components/PageContainer'
 import Link from 'components/Link'
 import PageTitle from 'components/PageTitle'
 import DateSeparatedList from 'components/DateSeparatedList'
@@ -26,7 +26,7 @@ class BuildHistory extends Component {
     const { isFetching, buildHistory, builds } = this.props
 
     return (
-      <div>
+      <PageContainer>
         <PageTitle icon={icons.history} title="Build History" />
         {isFetching
           ? <div>Loading...</div>
@@ -37,7 +37,7 @@ class BuildHistory extends Component {
               renderItem={id => this.renderBuild(id)}
             />
         }
-      </div>
+      </PageContainer>
     )
   }
 
@@ -61,9 +61,9 @@ class BuildHistory extends Component {
             userName={build.commit.sender_name}
             userAvatar={build.commit.sender_avatar}
             commitMessage={build.commit.message}
-            datetime={build.finished_at}
-            duration={this.getDuration(build.started_at, build.finished_at)}
-            meanDuration={utils.durationFromSeconds(pipeline.mean_duration)}
+            startedAt={build.started_at}
+            finishedAt={build.finished_at}
+            meanDuration={pipeline.mean_duration}
             commitSha={build.commit.commit_sha}
             buildRef={build.ref}
           />

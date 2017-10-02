@@ -95,7 +95,7 @@ class Aside extends Component {
               <Icon width={14} height={16} icon={icons.pipeSideways} style={{ fill: 'white' }} />
               <NavText>Pipelines</NavText>
             </NavLink>
-            <NavLink to={`/${projectId}/build-history`}>
+            <NavLink to={`/${projectId}/history`}>
               <Icon width={16} height={16} icon={icons.history} style={{ fill: 'white' }} />
               <NavText>Build History</NavText>
             </NavLink>

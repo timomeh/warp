@@ -8,6 +8,7 @@ import icons from 'bits/icons'
 import Card from 'components/Card'
 import ChipCommit from 'components/ChipCommit'
 import ChipCode from 'components/ChipCode'
+import Duration from 'components/Duration'
 import StatusBox from 'components/StatusBox'
 import InfoWithIcon from 'components/InfoWithIcon'
 import InfoWithTitle from 'components/InfoWithTitle'
@@ -38,7 +39,7 @@ const BigBlock = glamorous(Block)({ flexBasis: '40%', width: '40%' })
 const SmallBlock = glamorous(Block)({ flexBasis: '30%', width: '30%' })
 
 const BuildSummary = props => {
-  const { status, title, buildNo, userAvatar, userName, commitMessage, commitSha, datetime, duration, meanDuration, buildRef } = props
+  const { status, title, buildNo, userAvatar, userName, commitMessage, commitSha, startedAt, finishedAt, meanDuration, buildRef } = props
   const [refType, refName] = utils.parseRef(buildRef)
 
   return (
@@ -63,11 +64,13 @@ const BuildSummary = props => {
         <SmallBlock>
           <InfoWithIcon
             icon={icons.time}
-            info={moment(datetime).format('YYYY-MM-DD HH:mm:ss')}
+            info={moment(finishedAt).format('YYYY-MM-DD HH:mm:ss')}
           />
-          <InfoWithIcon
-            icon={icons.duration}
-            info={`${duration} vs ${meanDuration}`}
+          <Duration
+            hideMean
+            startedAt={startedAt}
+            finishedAt={finishedAt}
+            mean={meanDuration}
           />
         </SmallBlock>
 
@@ -91,9 +94,9 @@ BuildSummary.propTypes = {
   status: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   buildNo: PropTypes.number.isRequired,
-  datetime: PropTypes.string.isRequired,
-  duration: PropTypes.string.isRequired,
-  meanDuration: PropTypes.string.isRequired,
+  startedAt: PropTypes.string.isRequired,
+  finishedAt: PropTypes.string.isRequired,
+  meanDuration: PropTypes.number.isRequired,
   commitSha: PropTypes.string.isRequired,
   commitMessage: PropTypes.string.isRequired,
   buildRef: PropTypes.string.isRequired,

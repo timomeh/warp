@@ -7,6 +7,7 @@ import Socket from 'lib/socket'
 import ProjectDashboard from 'containers/ProjectDashboard'
 import Pipelines from 'containers/Pipelines'
 import BuildHistory from 'containers/BuildHistory'
+import Build from 'containers/Build'
 
 class Project extends Component {
   constructor(props) {
@@ -34,8 +35,9 @@ class Project extends Component {
   renderRoutes = () => {
     return (
       <Switch>
+        <Route path="/:projectId/build/:buildId" component={Build} />
         <Route path="/:projectId/pipelines" component={Pipelines} />
-        <Route path="/:projectId/build-history" component={BuildHistory} />
+        <Route path="/:projectId/history" component={BuildHistory} />
         <Route path="/:projectId" component={ProjectDashboard} />
       </Switch>
     )

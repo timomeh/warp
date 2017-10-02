@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import icons from 'bits/icons'
+import PageContainer from 'components/PageContainer'
 import BuildOverview from 'components/BuildOverview'
 import BuildOverviewList from 'components/BuildOverviewList'
 import PageTitle from 'components/PageTitle'
@@ -11,7 +12,7 @@ class ProjectDashboard extends Component {
     const { project, steps, pipelines, builds, stages } = this.props
 
     return (
-      <div>
+      <PageContainer>
         <PageTitle icon={icons.package} title="Latest Builds" />
 
         <BuildOverviewList
@@ -30,7 +31,7 @@ class ProjectDashboard extends Component {
             />
           }
         />
-      </div>
+      </PageContainer>
     )
   }
 }

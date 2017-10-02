@@ -5,11 +5,10 @@ import InfoWithGraphic from 'components/InfoWithGraphic'
 import Icon from 'components/Icon'
 
 const InfoWithIcon = props => {
-  const { size = 14, icon, info, isMultiline = false } = props
+  const { size = 14, icon, info } = props
 
   return (
     <InfoWithGraphic
-      isMultiline={isMultiline}
       graphic={
         <Icon
           width={size}
@@ -24,7 +23,6 @@ const InfoWithIcon = props => {
 }
 
 InfoWithIcon.propTypes = {
-  isMultiline: PropTypes.bool,
   icon: PropTypes.object.isRequired,
   size: PropTypes.number,
   info: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired

@@ -2,9 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import glamorous from 'glamorous'
 
-const AppFrame = glamorous.div({
-
-})
 
 const Left = glamorous.div({
   position: 'fixed',
@@ -40,8 +37,7 @@ const Top = glamorous.div({
 })
 
 const Content = glamorous.main({
-  padding: 50,
-  paddingTop: 64 + 50,
+  paddingTop: 64,
   width: '100%'
 })
 
@@ -49,13 +45,13 @@ const PageLayout = props => {
   const { aside, top, main } = props
 
   return (
-    <AppFrame>
+    <div>
       <Left>{aside}</Left>
       <Right>
         <Top>{top}</Top>
         <Content>{main}</Content>
       </Right>
-    </AppFrame>
+    </div>
   )
 }
 

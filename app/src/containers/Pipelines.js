@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import icons from 'bits/icons'
+import PageContainer from 'components/PageContainer'
 import PageTitle from 'components/PageTitle'
 
 class Pipelines extends Component {
@@ -9,9 +10,9 @@ class Pipelines extends Component {
     // const { pipelines } = this.props
 
     return (
-      <div>
+      <PageContainer>
         <PageTitle icon={icons.pipeSideways} title="Pipelines" />
-      </div>
+      </PageContainer>
     )
   }
 }
