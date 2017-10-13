@@ -16,12 +16,9 @@ defmodule WarpWeb.API.PipelineController do
   end
 
   def create(conn, %{"data" => pipeline_params, "project_id" => project_id}) do
-    create_pipeline =
-      project_id
-      |> Projects.get!()
-      |> Pipelines.create(pipeline_params)
+    project = Projects.get!(project_id)
 
-    case create_pipeline do
+    case Pipelines.create(project, pipeline_params) do
       {:ok, pipeline} ->
         conn
         |> put_status(:created)
@@ -31,5 +28,24 @@ defmodule WarpWeb.API.PipelineController do
         |> put_status(:bad_request)
         |> render(WarpWeb.API.ChangesetView, "error.json", changeset: changeset)
     end
+  end
+
+  def update(conn, %{"id" => id, "data" => pipeline_params}) do
+    pipeline = Pipelines.get!(id)
+
+    case Pipelines.update(pipeline, pipeline_params) do
+      {:ok, pipeline} ->
+        render(conn, "show.json", pipeline: pipeline)
+      {:error, changeset} ->
+        conn
+        |> put_status(:bad_request)
+        |> render(WarpWeb.API.ChangesetView, "error.json", changeset: changeset)
+    end
+  end
+
+  def delete(conn, %{"id" => id}) do
+    pipeline = Pipelines.get!(id)
+    {:ok, _pipeline} = Pipelines.delete(pipeline)
+    render(conn, WarpWeb.API.MetaView, "show.json", message: "Pipeline deleted successfully.")
   end
 end

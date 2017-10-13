@@ -12,7 +12,7 @@ defmodule Warp.Pipelines do
   def create(project, attrs \\ %{}) do
     fields =
       attrs
-      |> Map.put(:project_id, project.id)
+      |> Map.put("project_id", project.id)
 
     %Pipeline{}
     |> Pipeline.changeset(fields)
@@ -28,6 +28,16 @@ defmodule Warp.Pipelines do
   def get!(id) do
     Repo.get!(Pipeline, id)
     |> populate_mean_duration()
+  end
+
+  def update(%Pipeline{} = pipeline, attrs) do
+    pipeline
+    |> Pipeline.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def delete(%Pipeline{} = pipeline) do
+    Repo.delete(pipeline)
   end
 
   def get_by_ref!(project, ref) do
@@ -60,7 +70,12 @@ defmodule Warp.Pipelines do
         {diff, diff + acc}
       end)
 
-    mean_duration = durations_sum/length(durations)
+    mean_duration =
+      case length(durations) do
+        0 -> 0
+        _ -> durations_sum/length(durations)
+      end
+
     Map.put(pipeline, :mean_duration, mean_duration)
   end
 end

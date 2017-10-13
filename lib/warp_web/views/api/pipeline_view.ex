@@ -17,7 +17,7 @@ defmodule WarpWeb.API.PipelineView do
       ref_match: pipeline.ref_match,
       human_id: pipeline.human_id,
       inserted_at: pipeline.inserted_at,
-      mean_duration: pipeline.mean_duration
+      mean_duration: Map.get(pipeline, :mean_duration, 0)
     }
   end
 end

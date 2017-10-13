@@ -28,7 +28,7 @@ defmodule WarpWeb.Router do
       get "/builds", API.BuildController, :index_by_project
     end
 
-    resources "/pipelines", API.PipelineController, only: [:show] do
+    resources "/pipelines", API.PipelineController, only: [:show, :update, :delete] do
       resources "/builds", API.BuildController, only: [:index, :create]
     end
 
